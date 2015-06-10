@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ResourceConfig.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.config</a> &gt; <span class="el_source">ResourceConfig.java</span></div><h1>ResourceConfig.java</h1><pre class="source lang-java linenums">package com.expensetracker.config;
+
+import com.expensetracker.manager.ResourceManager;
+
+public class ResourceConfig {
+	
+<span class="fc" id="L7">    private static ResourceConfig instance = new ResourceConfig();</span>
+<span class="fc" id="L8">	private String GLOBAL_CONFIG_PROPS = &quot;GlobalConfig.properties&quot;;</span>
+
+	/**
+     * Stores global resource.
+     */
+    private transient Resource globalResource;
+	
+    /**
+     * Prevent instantiation from external code.
+     */
+<span class="fc" id="L18">    private ResourceConfig() {</span>
+<span class="fc" id="L19">        init();</span>
+<span class="fc" id="L20">    }</span>
+
+	private void init() {
+<span class="fc" id="L23">        synchronized (ResourceConfig.class) {</span>
+            // Load the global configurations from bbassist.properties.
+<span class="fc" id="L25">            this.loadGlobalProperties();</span>
+<span class="pc" id="L26">        }</span>
+<span class="fc" id="L27">	}</span>
+
+	private void loadGlobalProperties() {
+		// TODO Auto-generated method stub
+<span class="fc" id="L31">		this.globalResource = ResourceManager.get(GLOBAL_CONFIG_PROPS);</span>
+<span class="fc" id="L32">	}</span>
+	
+	
+    public void setProperty(final String key, final String value) {
+
+<span class="nc" id="L37">        validateProperty(key);</span>
+
+<span class="nc" id="L39">        synchronized (this) {</span>
+<span class="nc" id="L40">            this.globalResource.putValue(key, value);</span>
+<span class="nc" id="L41">        }</span>
+<span class="nc" id="L42">    }</span>
+	
+    /**
+     * Returns a &lt;code&gt;GlobalConfig&lt;/code&gt; instance.
+     * 
+     * @return A &lt;code&gt;GlobalConfig&lt;/code&gt; instance.
+     */
+    public static ResourceConfig getInstance() {
+<span class="fc" id="L50">        return instance;</span>
+    }
+
+    /**
+     * Resets the global configuration map.
+     */
+    public void reset() {
+<span class="nc" id="L57">        globalResource.reset();</span>
+<span class="nc" id="L58">        init();</span>
+<span class="nc" id="L59">    }</span>
+
+    private static void validateProperty(final String key) {
+
+        try {
+<span class="nc" id="L64">            ResourceConfigKey.valueOf(key);</span>
+<span class="nc" id="L65">        } catch (IllegalArgumentException iae) {</span>
+<span class="nc" id="L66">            throw new RuntimeException(&quot;Unknown property &quot; + key);</span>
+<span class="nc" id="L67">        }</span>
+<span class="nc" id="L68">    }</span>
+    
+    public long getJobTimerPeriod() {
+<span class="nc" id="L71">    	return Long.valueOf(this.globalResource.getValue(ResourceConfigKey.JOB_TIMER_INTERVAL.name()));</span>
+    }
+    
+    public String getLogFilePath() {
+<span class="nc" id="L75">    	return this.globalResource.getValue(ResourceConfigKey.LOG_FILE_PATH.name());</span>
+    }
+    
+    public String getLogFileName() {
+<span class="nc" id="L79">    	return this.globalResource.getValue(ResourceConfigKey.LOG_FILE_NAME.name());</span>
+    }
+    
+    public String getDriverName() {
+<span class="fc" id="L83">    	return this.globalResource.getValue(ResourceConfigKey.DRIVER_NAME.name());</span>
+    }
+    
+    public String getDBConnectionURL() {
+<span class="fc" id="L87">    	return this.globalResource.getValue(ResourceConfigKey.URL.name());</span>
+    }
+    
+    public String getDBUsername() {
+<span class="fc" id="L91">    	return this.globalResource.getValue(ResourceConfigKey.USERNAME.name());</span>
+    }
+    
+    public String getDBPassword() {
+<span class="fc" id="L95">    	return this.globalResource.getValue(ResourceConfigKey.PASSWORD.name());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

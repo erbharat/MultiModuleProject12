@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ResourceManager.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.manager</a> &gt; <span class="el_source">ResourceManager.java</span></div><h1>ResourceManager.java</h1><pre class="source lang-java linenums">package com.expensetracker.manager;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import com.expensetracker.config.Resource;
+
+public class ResourceManager {
+	
+    /**
+     * The table of all Resources keyed by 'id'.
+     */
+<span class="fc" id="L13">    private static Map&lt;String, Resource&gt; bundles = new HashMap&lt;String, Resource&gt;();</span>
+    
+    
+	
+<span class="nc" id="L17">    private ResourceManager() {</span>
+        // Exists only to defeat instantiation.
+<span class="nc" id="L19">    }</span>
+    
+    public static void put(final String identifier, final Resource resource) {
+<span class="nc" id="L22">        bundles.put(identifier, resource);</span>
+<span class="nc" id="L23">    }</span>
+    
+    /**
+     * Get a Resource object.
+     * 
+     * @param identifier The file path of the Resource to be returned.
+     * @return The Resource object.
+     */
+    public static Resource get(final String identifier) {
+<span class="fc" id="L32">        Resource resource = null;</span>
+<span class="pc bpc" id="L33" title="1 of 2 branches missed.">        if (bundles.containsKey(identifier)) {</span>
+<span class="nc" id="L34">            resource = bundles.get(identifier);</span>
+        } else {
+<span class="fc" id="L36">            resource = new Resource(identifier);</span>
+<span class="fc" id="L37">            bundles.put(identifier, resource);</span>
+        }
+<span class="fc" id="L39">        return resource;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

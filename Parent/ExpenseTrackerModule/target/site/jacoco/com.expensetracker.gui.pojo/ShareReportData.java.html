@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ShareReportData.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.gui.pojo</a> &gt; <span class="el_source">ShareReportData.java</span></div><h1>ShareReportData.java</h1><pre class="source lang-java linenums">package com.expensetracker.gui.pojo;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ShareReportData {
+	private String userName;
+	private double amount;
+	private List&lt;String&gt; memberToList;
+	private List&lt;String&gt; amountToList;
+	private List&lt;String&gt; memberFromList;
+	private List&lt;String&gt; amountFromList;
+
+<span class="fc" id="L14">	public ShareReportData(){</span>
+<span class="fc" id="L15">		memberToList = new ArrayList&lt;String&gt;();</span>
+<span class="fc" id="L16">		amountToList = new ArrayList&lt;String&gt;();</span>
+<span class="fc" id="L17">		memberFromList = new ArrayList&lt;String&gt;();</span>
+<span class="fc" id="L18">		amountFromList = new ArrayList&lt;String&gt;();</span>
+<span class="fc" id="L19">	}</span>
+	
+	public ShareReportData(String userName, double amount, List&lt;String&gt; memberToList,
+			List&lt;String&gt; amountToList, List&lt;String&gt; memberFromList, List&lt;String&gt; amountFromList) {
+<span class="nc" id="L23">		super();</span>
+<span class="nc" id="L24">		this.userName = userName;</span>
+<span class="nc" id="L25">		this.amount = amount;</span>
+<span class="nc" id="L26">		this.memberToList = memberToList;</span>
+<span class="nc" id="L27">		this.amountToList = amountToList;</span>
+<span class="nc" id="L28">		this.memberFromList = memberFromList;</span>
+<span class="nc" id="L29">		this.amountFromList = amountFromList;</span>
+<span class="nc" id="L30">	}</span>
+
+	/**
+	 * @return the userName
+	 */
+	public String getUserName() {
+<span class="fc" id="L36">		return userName;</span>
+	}
+
+	/**
+	 * @param userName
+	 *            the userName to set
+	 */
+	public void setUserName(String userName) {
+<span class="fc" id="L44">		this.userName = userName;</span>
+<span class="fc" id="L45">	}</span>
+
+	/**
+	 * @return the amount
+	 */
+	public double getAmount() {
+<span class="fc" id="L51">		return amount;</span>
+	}
+
+	/**
+	 * @param amount
+	 *            the amount to set
+	 */
+	public void setAmount(double amount) {
+<span class="fc" id="L59">		this.amount = amount;</span>
+<span class="fc" id="L60">	}</span>
+
+	/**
+	 * @return the memberToList
+	 */
+	public List&lt;String&gt; getMemberToList() {
+<span class="fc" id="L66">		return memberToList;</span>
+	}
+
+	/**
+	 * @param memberToList
+	 *            the memberToList to set
+	 */
+	public void setMemberToList(List&lt;String&gt; memberToList) {
+<span class="nc" id="L74">		this.memberToList = memberToList;</span>
+<span class="nc" id="L75">	}</span>
+
+	/**
+	 * @return the amountToList
+	 */
+	public List&lt;String&gt; getAmountToList() {
+<span class="fc" id="L81">		return amountToList;</span>
+	}
+
+	/**
+	 * @param amountToList
+	 *            the amountToList to set
+	 */
+	public void setAmountToList(List&lt;String&gt; amountToList) {
+<span class="nc" id="L89">		this.amountToList = amountToList;</span>
+<span class="nc" id="L90">	}</span>
+
+	/**
+	 * @return the memberFromList
+	 */
+	public List&lt;String&gt; getMemberFromList() {
+<span class="fc" id="L96">		return memberFromList;</span>
+	}
+
+	/**
+	 * @param memberFromList
+	 *            the memberFromList to set
+	 */
+	public void setMemberFromList(List&lt;String&gt; memberFromList) {
+<span class="nc" id="L104">		this.memberFromList = memberFromList;</span>
+<span class="nc" id="L105">	}</span>
+
+	/**
+	 * @return the amountFromList
+	 */
+	public List&lt;String&gt; getAmountFromList() {
+<span class="fc" id="L111">		return amountFromList;</span>
+	}
+
+	/**
+	 * @param amountFromList
+	 *            the amountFromList to set
+	 */
+	public void setAmountFromList(List&lt;String&gt; amountFromList) {
+<span class="nc" id="L119">		this.amountFromList = amountFromList;</span>
+<span class="nc" id="L120">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

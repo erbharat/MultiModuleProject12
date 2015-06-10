@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DateUtil.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.gui.util</a> &gt; <span class="el_source">DateUtil.java</span></div><h1>DateUtil.java</h1><pre class="source lang-java linenums">package com.expensetracker.gui.util;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import com.expensetracker.logger.Logger;
+
+<span class="nc" id="L14">public class DateUtil {</span>
+
+<span class="fc" id="L16">	private static SimpleDateFormat formatter = new SimpleDateFormat(</span>
+			&quot;yyyy-mm-dd&quot;);
+
+	public static Date stringToDate(String date) {
+<span class="nc" id="L20">		Date returnDate = null;</span>
+		try {
+<span class="nc" id="L22">			returnDate = (Date) formatter.parseObject(date);</span>
+<span class="nc" id="L23">		} catch (ParseException e) {</span>
+			// TODO Auto-generated catch block
+<span class="nc" id="L25">			e.printStackTrace();</span>
+<span class="nc" id="L26">		}</span>
+
+<span class="nc" id="L28">		return returnDate;</span>
+	}
+
+	public static String dateToString(Date date) {
+<span class="nc" id="L32">		return formatter.format(date);</span>
+	}
+
+	public static Date getDateForSpecificDate(int date, int month, int year) {
+
+<span class="nc" id="L37">		Calendar cal = Calendar.getInstance();</span>
+<span class="nc" id="L38">		cal.clear();</span>
+<span class="nc" id="L39">		cal.set(Calendar.YEAR, year);</span>
+<span class="nc" id="L40">		cal.set(Calendar.MONTH, month);</span>
+<span class="nc" id="L41">		cal.set(Calendar.DATE, date);</span>
+<span class="nc" id="L42">		Date date1 = cal.getTime();</span>
+<span class="nc" id="L43">		return date1; //stringToDate(dateToString(cal.getTime()));</span>
+	}
+
+	public static Date getLastDateofMonth(int date, int month, int year) {
+<span class="nc" id="L47">		Calendar cal = Calendar.getInstance();</span>
+<span class="nc" id="L48">		cal.clear();</span>
+<span class="nc" id="L49">		cal.set(Calendar.YEAR, year);</span>
+<span class="nc" id="L50">		cal.set(Calendar.MONTH, month);</span>
+<span class="nc" id="L51">		cal.set(Calendar.DATE, date);</span>
+
+<span class="nc" id="L53">		Date lastDate = cal.getTime();</span>
+<span class="nc" id="L54">		cal.setTime(lastDate);</span>
+<span class="nc" id="L55">		cal.add(Calendar.MONTH, 1);</span>
+<span class="nc" id="L56">		cal.set(Calendar.DAY_OF_MONTH, 1);</span>
+<span class="nc" id="L57">		cal.add(Calendar.DATE, -1);</span>
+<span class="nc" id="L58">		return cal.getTime();//stringToDate(dateToString(cal.getTime()));</span>
+	}
+
+	public static Date getAsDate(LocalDate localDate) {
+<span class="nc bnc" id="L62" title="All 2 branches missed.">		if (localDate != null) {</span>
+<span class="nc" id="L63">			return Date.from(localDate.atStartOfDay()</span>
+<span class="nc" id="L64">					.atZone(ZoneId.systemDefault()).toInstant());</span>
+		}
+<span class="nc" id="L66">		return null;</span>
+	}
+
+	public static LocalDate asLocalDate(Date date) {
+<span class="nc" id="L70">		return Instant.ofEpochMilli(date.getTime())</span>
+<span class="nc" id="L71">				.atZone(ZoneId.systemDefault()).toLocalDate();</span>
+	}
+
+<span class="fc" id="L74">	private static int dateRestriction = 6;</span>
+<span class="fc" id="L75">	private static int monthRestriction = 1;</span>
+<span class="fc" id="L76">	private static int yearRestriction = 2015;</span>
+
+	public static boolean validateDate(Date date) {
+
+<span class="fc" id="L80">		Date currentDate = new Date();</span>
+<span class="fc" id="L81">		Date restrictedDate = null;</span>
+<span class="fc" id="L82">		int rDdate = 0;</span>
+<span class="fc" id="L83">		int rMonth = 0;</span>
+<span class="fc" id="L84">		int rYear = 0;</span>
+
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">		if (currentDate.getDate() &lt;= dateRestriction) {</span>
+<span class="nc" id="L87">			rDdate = 1;</span>
+		} else {
+<span class="fc" id="L89">			rDdate = currentDate.getDate() - dateRestriction;</span>
+		}
+
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">		if (currentDate.getMonth() &lt;= monthRestriction) {</span>
+<span class="nc" id="L93">			rMonth = 0;</span>
+		} else {
+<span class="fc" id="L95">			rMonth = currentDate.getMonth() - monthRestriction;</span>
+		}
+
+<span class="fc" id="L98">		rYear = yearRestriction;</span>
+<span class="fc" id="L99">		Calendar cal = new GregorianCalendar(rYear, rMonth, rDdate);</span>
+<span class="fc" id="L100">		restrictedDate = cal.getTime();</span>
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">		if (date.compareTo(currentDate) &lt; 0</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">				&amp;&amp; date.compareTo(restrictedDate) &gt;= 0) {</span>
+<span class="nc" id="L103">			Logger.logMessage(&quot;DateUtil.validateDate(.) : Dates compared and result is &quot; + true + &quot; for dates: date -&gt; &quot; + date + &quot; and current date -&gt; &quot; + currentDate + &quot; and restricted date -&gt; &quot;+ restrictedDate);</span>
+<span class="nc" id="L104">			return true;</span>
+		}
+<span class="fc" id="L106">		Logger.logMessage(&quot;DateUtil.validateDate(.) : Dates compared and result is &quot; + false + &quot; for dates: date -&gt; &quot; + date + &quot; and current date -&gt; &quot; + currentDate + &quot; and restricted date -&gt; &quot;+ restrictedDate);</span>
+<span class="fc" id="L107">		return false; </span>
+
+	}
+
+	public static boolean validateDate(Date toDate, Date fromDate) {
+		
+<span class="nc bnc" id="L113" title="All 6 branches missed.">		if (validateDate(fromDate) &amp;&amp; validateDate(toDate) &amp;&amp; (fromDate.compareTo(toDate) &lt; 0)) {</span>
+<span class="nc" id="L114">			Logger.logMessage(&quot;DateUtil.validateDate(..) : Dates compared and result is &quot; + true + &quot; for dates: toDate -&gt; &quot; + toDate + &quot; and fromDate -&gt; &quot; + fromDate);</span>
+<span class="nc" id="L115">			return true;</span>
+		}
+<span class="nc" id="L117">		Logger.logMessage(&quot;DateUtil.validateDate(..) : Dates compared and result is &quot; + false + &quot; for dates: toDate -&gt; &quot; + toDate + &quot; and fromDate -&gt; &quot; + fromDate);</span>
+<span class="nc" id="L118">		return false;</span>
+
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

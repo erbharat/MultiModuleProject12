@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ScreenController.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.gui.controller</a> &gt; <span class="el_source">ScreenController.java</span></div><h1>ScreenController.java</h1><pre class="source lang-java linenums">package com.expensetracker.gui.controller;
+
+import java.awt.AWTException;
+import java.awt.MenuItem;
+import java.awt.PopupMenu;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.URL;
+
+import javafx.application.Platform;
+import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+
+import javax.imageio.ImageIO;
+
+import com.expensetracker.gui.screen.DashboardScreen;
+import com.expensetracker.gui.screen.EditProfileScreen;
+import com.expensetracker.gui.screen.LoginScreen;
+import com.expensetracker.gui.screen.ProfileScreen;
+import com.expensetracker.gui.screen.ResetPasswordScreen;
+import com.expensetracker.gui.screen.ScreenConstant;
+import com.expensetracker.gui.screen.ViewProfileScreen;
+import com.expensetracker.gui.screen.WelcomeScreen;
+import com.expensetracker.gui.util.ControllerUtil;
+import com.expensetracker.gui.util.ImageUtil;
+import com.expensetracker.logger.Logger;
+import com.expensetracker.manager.JobManager;
+
+<span class="nc" id="L40">public class ScreenController {</span>
+
+	public static Stage stage;
+	private BorderPane rootLayout;
+	private VBox rootLayout1;
+
+<span class="nc" id="L46">	private ControllerUtil controllerUtil = ControllerUtil.controllerUtil;</span>
+	private boolean firstTime;
+	private TrayIcon trayIcon;
+
+	private void intializeScreens() {
+<span class="nc" id="L51">		Logger.logMessage(&quot;Initializing Screens...&quot;);</span>
+<span class="nc" id="L52">		WelcomeScreen.initializeWelcomeScreen(this);</span>
+<span class="nc" id="L53">		ProfileScreen.initializeProfileScreen(this);</span>
+<span class="nc" id="L54">		LoginScreen.initializeLoginScreen(this);</span>
+<span class="nc" id="L55">		DashboardScreen.initializeDashboardScreen(this);</span>
+<span class="nc" id="L56">		ViewProfileScreen.initializeViewProfileScreen(this);</span>
+<span class="nc" id="L57">		EditProfileScreen.initializeEditProfileScreen(this);</span>
+<span class="nc" id="L58">		ResetPasswordScreen.initializeResetPasswordScreen(this);</span>
+<span class="nc" id="L59">		createTrayIcon(stage);</span>
+<span class="nc" id="L60">		firstTime = true;</span>
+<span class="nc" id="L61">		Platform.setImplicitExit(false);</span>
+<span class="nc" id="L62">	}</span>
+
+	public void setPrimaryStage(Stage primaryStage) {
+		try {
+<span class="nc" id="L66">			Logger.logMessage(&quot;ScreenController.setPrimaryStage(.) : Setting primary stage.. &quot;);</span>
+<span class="nc" id="L67">			stage = primaryStage;</span>
+<span class="nc" id="L68">			stage.getIcons().add(new Image(ImageUtil.getAppIconPath()));</span>
+<span class="nc" id="L69">			stage.setTitle(&quot;ExpenseTracker&quot;);</span>
+<span class="nc" id="L70">			intializeScreens();</span>
+<span class="nc" id="L71">		} catch (Exception e) {</span>
+			// TODO: handle exception
+<span class="nc" id="L73">			e.printStackTrace();</span>
+<span class="nc" id="L74">		}</span>
+
+<span class="nc" id="L76">	}</span>
+
+	public FXMLLoader showMainScreen() {
+<span class="nc" id="L79">		FXMLLoader loader = null;</span>
+		try {
+			// Load the root layout from the fxml file
+			// loader = new FXMLLoader(WelcomeScreen.getWelcomeScreen()
+			// .getFXMLResource());
+			// rootLayout = (BorderPane) loader.load();
+<span class="nc" id="L85">			Logger.logMessage(&quot;ScreenController.showMainScreen() : Loading main screen &quot; + ScreenConstant.WELCOME_SCREEN);</span>
+<span class="nc" id="L86">			loader = new FXMLLoader(WelcomeScreen.getWelcomeScreen().getFXMLResource());</span>
+<span class="nc" id="L87">			rootLayout1 = (VBox) loader.load();</span>
+<span class="nc" id="L88">			Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();</span>
+<span class="nc" id="L89">			double width = visualBounds.getMaxX();</span>
+<span class="nc" id="L90">			double height = visualBounds.getMaxY();</span>
+<span class="nc" id="L91">			Scene scene = new Scene(rootLayout1);</span>
+<span class="nc" id="L92">			stage.setScene(scene);</span>
+<span class="nc" id="L93">			setController(loader, ScreenConstant.WELCOME_SCREEN);</span>
+<span class="nc" id="L94">			loadScreen(ScreenConstant.LOGIN_SCREEN, LoginScreen</span>
+<span class="nc" id="L95">					.getLoginScreen().getFXMLResource());</span>
+<span class="nc" id="L96">			stage.setResizable(false);</span>
+<span class="nc" id="L97">			stage.show();</span>
+<span class="nc" id="L98">			Logger.logMessage(&quot;ScreenController.showMainScreen() : Loaded main screen&quot;);</span>
+<span class="nc" id="L99">		} catch (IOException e) {</span>
+			// Exception gets thrown if the fxml file could not be loaded
+<span class="nc" id="L101">			e.printStackTrace();</span>
+<span class="nc" id="L102">			Logger.logMessage(&quot;ScreenController.showMainScreen() : Error Loading main screen, errortace --&gt; &quot; + e.getLocalizedMessage());</span>
+<span class="nc" id="L103">		}</span>
+
+<span class="nc" id="L105">		return loader;</span>
+	}
+
+	public boolean loadScreen(String screenName, URL url) {
+<span class="nc" id="L109">		boolean isLoaded = false;</span>
+<span class="nc" id="L110">		FXMLLoader loader = null;</span>
+		try {
+<span class="nc" id="L112">			loader = new FXMLLoader();</span>
+<span class="nc" id="L113">			loader.setLocation(url);</span>
+<span class="nc" id="L114">			StackPane layout = (StackPane) loader.load();</span>
+
+<span class="nc" id="L116">			WelcomeScreenController screenSwitchController = (WelcomeScreenController) controllerUtil</span>
+<span class="nc" id="L117">					.getController(ScreenConstant.WELCOME_SCREEN);</span>
+<span class="nc" id="L118">			screenSwitchController.screenSwitcher.getChildren().setAll(layout);</span>
+<span class="nc" id="L119">			setController(loader, screenName);</span>
+<span class="nc" id="L120">			isLoaded = true;</span>
+<span class="nc" id="L121">		} catch (IOException e) {</span>
+<span class="nc" id="L122">			e.printStackTrace();</span>
+<span class="nc" id="L123">		}</span>
+<span class="nc" id="L124">		return isLoaded;</span>
+	}
+
+	private void setController(FXMLLoader loader, String screenName) {
+<span class="nc bnc" id="L128" title="All 18 branches missed.">		switch (screenName) {</span>
+		case ScreenConstant.WELCOME_SCREEN:
+<span class="nc" id="L130">			controllerUtil.setController(ScreenConstant.WELCOME_SCREEN,</span>
+<span class="nc" id="L131">					loader.&lt;WelcomeScreenController&gt; getController());</span>
+<span class="nc" id="L132">			break;</span>
+		case ScreenConstant.LOGIN_SCREEN:
+<span class="nc" id="L134">			controllerUtil.setController(ScreenConstant.LOGIN_SCREEN,</span>
+<span class="nc" id="L135">					loader.&lt;LoginScreenController&gt; getController());</span>
+<span class="nc" id="L136">			break;</span>
+		case ScreenConstant.PROFILE_SCREEN:
+<span class="nc" id="L138">			controllerUtil.setController(ScreenConstant.PROFILE_SCREEN,</span>
+<span class="nc" id="L139">					loader.&lt;ProfileScreenController&gt; getController());</span>
+<span class="nc" id="L140">			break;</span>
+		case ScreenConstant.DASHBOARD_SCREEN:
+<span class="nc" id="L142">			controllerUtil.setController(ScreenConstant.DASHBOARD_SCREEN,</span>
+<span class="nc" id="L143">					loader.&lt;DashboardScreenController&gt; getController());</span>
+<span class="nc" id="L144">			break;</span>
+		default:
+			break;
+		}
+<span class="nc" id="L148">	}</span>
+
+	public void createTrayIcon(final Stage stage) {
+<span class="nc bnc" id="L151" title="All 2 branches missed.">		if (SystemTray.isSupported()) {</span>
+			// get the SystemTray instance
+<span class="nc" id="L153">			SystemTray tray = SystemTray.getSystemTray();</span>
+			// load an image
+<span class="nc" id="L155">			java.awt.Image image = null;</span>
+			try {
+<span class="nc" id="L157">				URL url = ImageUtil.getTrayIconURL();</span>
+<span class="nc" id="L158">				image = ImageIO.read(url);</span>
+<span class="nc" id="L159">			} catch (IOException ex) {</span>
+<span class="nc" id="L160">				Logger.logMessage(&quot;&quot;+ ex);</span>
+<span class="nc" id="L161">			}</span>
+
+<span class="nc" id="L163">			stage.setOnCloseRequest(new EventHandler&lt;WindowEvent&gt;() {</span>
+				@Override
+				public void handle(WindowEvent t) {
+<span class="nc" id="L166">					hide(stage);</span>
+<span class="nc" id="L167">				}</span>
+			});
+			// create a action listener to listen for default action executed on
+			// the tray icon
+<span class="nc" id="L171">			final ActionListener closeListener = new ActionListener() {</span>
+				@Override
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+<span class="nc" id="L174">					Logger.logMessage(&quot;Closing application... Saving all data&quot;);</span>
+<span class="nc" id="L175">					JobManager.getJobManager().saveObjectToDisk();</span>
+<span class="nc" id="L176">					System.exit(0);</span>
+<span class="nc" id="L177">				}</span>
+			};
+
+<span class="nc" id="L180">			ActionListener showListener = new ActionListener() {</span>
+				@Override
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+<span class="nc" id="L183">					Platform.runLater(new Runnable() {</span>
+						@Override
+						public void run() {
+<span class="nc" id="L186">							stage.show();</span>
+<span class="nc" id="L187">						}</span>
+					});
+<span class="nc" id="L189">				}</span>
+			};
+
+			// create a popup menu
+<span class="nc" id="L193">			PopupMenu popup = new PopupMenu();</span>
+<span class="nc" id="L194">			MenuItem showItem = new MenuItem(&quot;Show&quot;);</span>
+<span class="nc" id="L195">			showItem.addActionListener(showListener);</span>
+<span class="nc" id="L196">			popup.add(showItem);</span>
+
+<span class="nc" id="L198">			MenuItem closeItem = new MenuItem(&quot;Close&quot;);</span>
+<span class="nc" id="L199">			closeItem.addActionListener(closeListener);</span>
+<span class="nc" id="L200">			popup.add(closeItem);</span>
+
+			// construct a TrayIcon
+<span class="nc" id="L203">			trayIcon = new TrayIcon(image, &quot;ExpenseTracker&quot;, popup);</span>
+<span class="nc" id="L204">			trayIcon.addActionListener(showListener);</span>
+			// ...
+			// add the tray image
+			try {
+<span class="nc" id="L208">				tray.add(trayIcon);</span>
+<span class="nc" id="L209">			} catch (AWTException e) {</span>
+<span class="nc" id="L210">				System.err.println(e);</span>
+<span class="nc" id="L211">			}</span>
+			// ...
+		}
+<span class="nc" id="L214">	}</span>
+
+	public void showProgramIsMinimizedMsg() {
+<span class="nc bnc" id="L217" title="All 2 branches missed.">		if (firstTime) {</span>
+<span class="nc" id="L218">			trayIcon.displayMessage(&quot;Expense Tracker is hidden.&quot;,</span>
+					&quot;To re-open right click and click show.&quot;,
+					TrayIcon.MessageType.INFO);
+<span class="nc" id="L221">			firstTime = false;</span>
+		}
+<span class="nc" id="L223">	}</span>
+
+	private void hide(final Stage stage) {
+<span class="nc" id="L226">		Platform.runLater(new Runnable() {</span>
+			@Override
+			public void run() {
+<span class="nc bnc" id="L229" title="All 2 branches missed.">				if (SystemTray.isSupported()) {</span>
+<span class="nc" id="L230">					stage.hide();</span>
+<span class="nc" id="L231">					showProgramIsMinimizedMsg();</span>
+				} else {
+<span class="nc" id="L233">					System.exit(0);</span>
+				}
+<span class="nc" id="L235">			}</span>
+		});
+<span class="nc" id="L237">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

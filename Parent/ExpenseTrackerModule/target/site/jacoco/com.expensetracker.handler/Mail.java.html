@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Mail.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.handler</a> &gt; <span class="el_source">Mail.java</span></div><h1>Mail.java</h1><pre class="source lang-java linenums">package com.expensetracker.handler;
+
+import java.io.File;
+import java.util.List;
+import java.util.Properties;
+
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.BodyPart;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+
+import com.expensetracker.constants.Constants;
+import com.expensetracker.logger.Logger;
+
+<span class="nc" id="L25">public class Mail {</span>
+
+<span class="nc" id="L27">	private static Properties props = null;</span>
+
+	private static Session authenticateSession() {
+
+<span class="nc bnc" id="L31" title="All 2 branches missed.">		if (props == null) {</span>
+<span class="nc" id="L32">			props = new Properties();</span>
+<span class="nc" id="L33">			props.put(&quot;mail.smtp.auth&quot;, Constants.MAIL_SMTP_AUTH);</span>
+<span class="nc" id="L34">			props.put(&quot;mail.smtp.starttls.enable&quot;,</span>
+					Constants.MAIL_SMTP_STARTTLS_ENABLE);
+<span class="nc" id="L36">			props.put(&quot;mail.smtp.host&quot;, Constants.MAIL_SMTP_HOST);</span>
+<span class="nc" id="L37">			props.put(&quot;mail.smtp.port&quot;, Constants.MAIL_SMTP_PORT);</span>
+		}
+<span class="nc" id="L39">		Session session = Session.getInstance(props,</span>
+<span class="nc" id="L40">				new javax.mail.Authenticator() {</span>
+					protected PasswordAuthentication getPasswordAuthentication() {
+<span class="nc" id="L42">						return new PasswordAuthentication(</span>
+								Constants.REPORT_ADMIN_ID,
+								Constants.REPORT_ADMIN_PWD);
+					}
+				});
+
+<span class="nc" id="L48">		return session;</span>
+
+	}
+
+	public static void sendMail(String to, String msg) {
+<span class="nc" id="L53">		Session session = authenticateSession();</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">		if (session == null) {</span>
+<span class="nc" id="L55">			System.out.println(&quot;Seesion not created error&quot;);</span>
+		}
+
+		try {
+			// Create a default MimeMessage object.
+<span class="nc" id="L60">			MimeMessage message = new MimeMessage(session);</span>
+
+			// Set From: header field of the header.
+<span class="nc" id="L63">			message.setFrom(new InternetAddress(Constants.REPORT_ADMIN_ID));</span>
+
+			// Set To: header field of the header.
+<span class="nc" id="L66">			message.addRecipient(Message.RecipientType.TO, new InternetAddress(</span>
+					to));
+
+			// Set Subject: header field
+<span class="nc" id="L70">			message.setSubject(&quot;Expense Tracker Report for month&quot;);</span>
+
+			// Now set the actual message
+<span class="nc" id="L73">			message.setText(msg);</span>
+
+			// Send message
+<span class="nc" id="L76">			Transport.send(message);</span>
+<span class="nc" id="L77">			Logger.logMessage(&quot;Mail.sendmail(..) : Mail sent successfully.&quot;);</span>
+<span class="nc" id="L78">		} catch (MessagingException mex) {</span>
+<span class="nc" id="L79">			mex.printStackTrace();</span>
+<span class="nc" id="L80">		}</span>
+<span class="nc" id="L81">	}</span>
+
+	public static void sendMail(List&lt;String&gt; toList, String msg) {
+
+<span class="nc" id="L85">		Session session = authenticateSession();</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">		if (session == null) {</span>
+<span class="nc" id="L87">			Logger.logMessage(&quot;Mail.sendmail(..) : Seesion not created error&quot;);</span>
+		}
+
+		try {
+			// Create a default MimeMessage object.
+<span class="nc" id="L92">			MimeMessage message = new MimeMessage(session);</span>
+
+			// Set From: header field of the header.
+<span class="nc" id="L95">			message.setFrom(new InternetAddress(Constants.REPORT_ADMIN_ID));</span>
+
+			// Set To: header field of the header.
+<span class="nc bnc" id="L98" title="All 2 branches missed.">			for (String to : toList) {</span>
+<span class="nc" id="L99">				message.addRecipient(Message.RecipientType.TO,</span>
+						new InternetAddress(to));
+<span class="nc" id="L101">			}</span>
+
+			// Set Subject: header field
+<span class="nc" id="L104">			message.setSubject(&quot;Expense Tracker Report for month&quot;);</span>
+
+			// Now set the actual message
+<span class="nc" id="L107">			message.setText(msg);</span>
+
+			// Send message
+<span class="nc" id="L110">			Transport.send(message);</span>
+<span class="nc" id="L111">			Logger.logMessage(&quot;Mail.sendmail(..) : Mail sent successfully.&quot;);</span>
+<span class="nc" id="L112">		} catch (MessagingException mex) {</span>
+<span class="nc" id="L113">			mex.printStackTrace();</span>
+<span class="nc" id="L114">		}</span>
+<span class="nc" id="L115">	}</span>
+
+	public static void sendMail(List&lt;String&gt; toList, File file) {
+
+<span class="nc" id="L119">		Session session = authenticateSession();</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">		if (session == null) {</span>
+<span class="nc" id="L121">			Logger.logMessage(&quot;Mail.sendmail(..) : Seesion not created error&quot;);</span>
+		}
+
+		try {
+			// Create a default MimeMessage object.
+<span class="nc" id="L126">			MimeMessage message = new MimeMessage(session);</span>
+
+			// Set From: header field of the header.
+<span class="nc" id="L129">			message.setFrom(new InternetAddress(Constants.REPORT_ADMIN_ID));</span>
+
+			// Set To: header field of the header.
+<span class="nc bnc" id="L132" title="All 2 branches missed.">			for (String to : toList) {</span>
+<span class="nc" id="L133">				message.addRecipient(Message.RecipientType.TO,</span>
+						new InternetAddress(to));
+<span class="nc" id="L135">			}</span>
+
+			// Set Subject: header field
+<span class="nc" id="L138">			message.setSubject(&quot;Expense Tracker Report for month&quot;);</span>
+
+			// Create the message part
+<span class="nc" id="L141">			BodyPart messageBodyPart = new MimeBodyPart();</span>
+
+			// Now set the actual message
+<span class="nc" id="L144">			messageBodyPart</span>
+<span class="nc" id="L145">					.setText(&quot;Attached is the report for the this month&quot;);</span>
+
+			// Create a multipar message
+<span class="nc" id="L148">			Multipart multipart = new MimeMultipart();</span>
+
+			// Set text message part
+<span class="nc" id="L151">			multipart.addBodyPart(messageBodyPart);</span>
+
+			// Part two is attachment
+<span class="nc" id="L154">			messageBodyPart = new MimeBodyPart();</span>
+<span class="nc" id="L155">			DataSource source = new FileDataSource(file);</span>
+<span class="nc" id="L156">			messageBodyPart.setDataHandler(new DataHandler(source));</span>
+<span class="nc" id="L157">			messageBodyPart.setFileName(file.getName());</span>
+<span class="nc" id="L158">			multipart.addBodyPart(messageBodyPart);</span>
+
+			// Send the complete message parts
+<span class="nc" id="L161">			message.setContent(multipart);</span>
+
+			// Send message
+<span class="nc" id="L164">			Transport.send(message);</span>
+<span class="nc" id="L165">			Logger.logMessage(&quot;Mail.sendmail(..) : Mail sent successfully.&quot;);</span>
+<span class="nc" id="L166">		} catch (MessagingException mex) {</span>
+<span class="nc" id="L167">			mex.printStackTrace();</span>
+<span class="nc" id="L168">		}</span>
+<span class="nc" id="L169">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

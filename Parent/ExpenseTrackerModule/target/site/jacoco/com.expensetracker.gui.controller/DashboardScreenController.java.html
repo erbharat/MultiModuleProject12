@@ -1,0 +1,954 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DashboardScreenController.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.gui.controller</a> &gt; <span class="el_source">DashboardScreenController.java</span></div><h1>DashboardScreenController.java</h1><pre class="source lang-java linenums">package com.expensetracker.gui.controller;
+
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.Set;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ListChangeListener.Change;
+import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.geometry.Side;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.PieChart.Data;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
+
+import javax.imageio.ImageIO;
+
+import org.controlsfx.control.CheckComboBox;
+
+import com.expensetracker.constants.Constants;
+import com.expensetracker.gui.pojo.Job;
+import com.expensetracker.gui.pojo.Purchase;
+import com.expensetracker.gui.pojo.ReportRequest;
+import com.expensetracker.gui.pojo.User;
+import com.expensetracker.gui.pojo.UserUpdateRequest;
+import com.expensetracker.gui.popup.PopupWindow;
+import com.expensetracker.gui.screen.EditProfileScreen;
+import com.expensetracker.gui.screen.ResetPasswordScreen;
+import com.expensetracker.gui.screen.ScreenConstant;
+import com.expensetracker.gui.screen.ViewProfileScreen;
+import com.expensetracker.gui.util.ControllerUtil;
+import com.expensetracker.gui.util.DatabaseUtil;
+import com.expensetracker.gui.util.DateUtil;
+import com.expensetracker.gui.util.ImageUtil;
+import com.expensetracker.gui.util.UserUtil;
+import com.expensetracker.handler.Mail;
+import com.expensetracker.logger.Logger;
+import com.expensetracker.manager.JobManager;
+import com.expensetracker.manager.ReportManager;
+import com.expensetracker.manager.UserManager;
+import com.expensetracker.model.AggregateShare;
+import com.expensetracker.service.Service;
+import com.expensetracker.util.ConvertUtil;
+
+<span class="nc" id="L68">public class DashboardScreenController implements Initializable {</span>
+
+	/**
+	 * @return the memberTxt
+	 */
+	public TextField getMemberTxt() {
+<span class="nc" id="L74">		return memberTxt;</span>
+	}
+
+	@FXML
+	private Label usernameLabel, memberLabel, checkboxLabel,
+			contributorListLabel, amountSharedLabel, username, amount,
+			userLabelText, amountLabelText;
+
+	@FXML
+	private TextField totalAmountText, memberTxt, individualShareTxt, otherDetailText;
+
+	@FXML
+	private ComboBox&lt;String&gt; purchaseTypeComboBox, reportTypeCombo,
+			downloadCombo, emailCombo, monthCombo, yearCombo, userCombo,
+			operationCombo;
+
+	@FXML
+	private Button savePurchaseDetailBtn, resetBtn, downloadBtn, emailBtn,
+			viewUserBtn, activateUserBtn, deactivateUserBtn, deleteUserBtn,
+			editUserBtn, resetPasswordBtn, creditorPieChart, debtorPieChart;
+
+	@FXML
+	private CheckBox milkCurdCheckBox, kitchenItemsCheckBox,
+			vegetablesOrDalCheckBox, othersCheckBox;
+
+	@FXML
+	private DatePicker dateDatePicker, from, to;
+
+	@FXML
+	private Tooltip multipleChoiceTip, individualShareTip;
+
+	@FXML
+	private StackPane manageMemberStackPane;
+
+	@FXML
+	private PieChart pieChart;
+
+<span class="nc" id="L111">	final private String CREDITOR = &quot;CREDITOR&quot;;</span>
+<span class="nc" id="L112">	final private String DEBTOR = &quot;DEBTOR&quot;;</span>
+
+	public StackPane getManageMemberStackPane() {
+<span class="nc" id="L115">		return manageMemberStackPane;</span>
+	}
+
+	/*
+	 * private final String Constants.DAILY_PURCHASE_TYPE = &quot;DAILY PURCHASE&quot;;
+	 * private final String Constants.BULK_PURCHASE_TYPE = &quot;BULK PURCHASE&quot;;
+	 */
+<span class="nc" id="L122">	private String itemsList = null;</span>
+	@FXML
+	private CheckComboBox&lt;String&gt; contributorListCombo, othersDetailCombo;
+
+	public void initialize(URL location, ResourceBundle resources) {
+<span class="nc" id="L127">		Logger.logMessage(&quot;DashboardScreenController.initialize(..) : Initializing dashboard screen fields..&quot;);</span>
+<span class="nc" id="L128">		initializePurchaseType();</span>
+<span class="nc" id="L129">		initailzeReportType();</span>
+<span class="nc" id="L130">		intializeReportFormat();</span>
+<span class="nc" id="L131">		intializeOthersList();</span>
+<span class="nc" id="L132">		intializeMonthAndYear();</span>
+<span class="nc" id="L133">		intializeMemberList();</span>
+
+		/*
+		 * for (final PieChart.Data data : pieChart.getData()) {
+		 * data.getNode().addEventHandler(MouseEvent.MOUSE_PRESSED, new
+		 * EventHandler&lt;MouseEvent&gt;() {
+		 * 
+		 * @Override public void handle(MouseEvent e) {
+		 * userLabel.setText(data.getName()); expenseLabel.setText(&quot;&quot; +
+		 * data.getPieValue()); } }); }
+		 */
+
+<span class="nc" id="L145">		contributorListCombo.setOnMouseClicked(new EventHandler&lt;Event&gt;() {</span>
+
+			public void handle(Event event) {
+<span class="nc" id="L148">				intializeContibutorList();</span>
+<span class="nc" id="L149">			}</span>
+		});
+
+<span class="nc" id="L152">		contributorListCombo.getCheckModel().getCheckedItems()</span>
+<span class="nc" id="L153">				.addListener(new ListChangeListener&lt;String&gt;() {</span>
+					public void onChanged(
+							ListChangeListener.Change&lt;? extends String&gt; c) {
+<span class="nc" id="L156">						onContributionSelection();</span>
+<span class="nc" id="L157">					}</span>
+				});
+
+<span class="nc" id="L160">		othersDetailCombo.getCheckModel().getCheckedItems()</span>
+<span class="nc" id="L161">				.addListener(new ListChangeListener&lt;String&gt;() {</span>
+					public void onChanged(
+							ListChangeListener.Change&lt;? extends String&gt; c) {
+<span class="nc" id="L164">						onOthersSelection(c);</span>
+<span class="nc" id="L165">					}</span>
+				});
+<span class="nc" id="L167">	}</span>
+
+	// *****************OPERATION BASED ON EVENTS *****************/
+	@FXML
+	public void save(ActionEvent event) {
+<span class="nc bnc" id="L172" title="All 2 branches missed.">		if (event.getSource() == savePurchaseDetailBtn) {</span>
+<span class="nc" id="L173">			Logger.logMessage(&quot;DashboardScreenController.save(.) : Saving purchasing details.&quot;);</span>
+<span class="nc" id="L174">			Purchase detail = createPurchaseDetail();</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">			if (detail != null) {</span>
+<span class="nc" id="L176">				Logger.logMessage(&quot;DashboardScreenController.save(.) :Purchase details created sucessfully..&quot;</span>
+						+ detail);
+<span class="nc" id="L178">				Job job = new Job(Constants.COMMON_PURCHASE_DETAIL, detail);</span>
+<span class="nc" id="L179">				int ret = JobManager.getInstantJobHandler().processJob(job);</span>
+<span class="nc bnc" id="L180" title="All 2 branches missed.">				if (ret == Constants.JOB_PROCESSED_SUCCESSFULLY) {</span>
+<span class="nc" id="L181">					PopupWindow.popup.createInformationalPopup(&quot;Success!&quot;,</span>
+							&quot;Purchase detail saved successfully&quot;);
+
+				}
+			}
+
+<span class="nc bnc" id="L187" title="All 2 branches missed.">		} else if (event.getSource() == resetBtn) {</span>
+<span class="nc" id="L188">			PopupWindow.popup.createInformationalPopup(</span>
+					&quot;Reset purchase window fields&quot;,
+					&quot;Clearing purchase tab fields!&quot;);
+		}
+<span class="nc" id="L192">		clear();</span>
+<span class="nc" id="L193">	}</span>
+
+	@FXML
+	public void download(ActionEvent event) {
+<span class="nc" id="L197">		Job job = validateReportInput(Constants.INSTANT_REPORT_DOWNLOAD);</span>
+<span class="nc" id="L198">		File file = null;</span>
+<span class="nc bnc" id="L199" title="All 2 branches missed.">		if (job != null) {</span>
+<span class="nc" id="L200">			file = ReportManager.getInstantReportGenerator().generateReportNow(</span>
+					job);
+		}
+<span class="nc bnc" id="L203" title="All 2 branches missed.">		if (file != null) {</span>
+<span class="nc" id="L204">			Logger.logMessage(&quot;DashboardScreenController.download(.) : Report &quot;</span>
+<span class="nc" id="L205">					+ file.getName() + &quot; is downloded successfully at &quot;</span>
+<span class="nc" id="L206">					+ file.getPath());</span>
+<span class="nc" id="L207">			PopupWindow.popup.createInformationalPopup(&quot;Success!&quot;,</span>
+<span class="nc" id="L208">					&quot;Report &quot; + file.getName()</span>
+							+ &quot; created successfully, \n Please find it at \n&quot;
+<span class="nc" id="L210">							+ file.getAbsolutePath());</span>
+		}
+<span class="nc" id="L212">	}</span>
+
+	@FXML
+	public void email(ActionEvent event) {
+<span class="nc" id="L216">		Job job = validateReportInput(Constants.INSTANT_REPORT_EMAIL);</span>
+<span class="nc" id="L217">		File file = null;</span>
+<span class="nc bnc" id="L218" title="All 2 branches missed.">		if (job != null) {</span>
+<span class="nc" id="L219">			file = ReportManager.getInstantReportGenerator().generateReportNow(</span>
+					job);
+		}
+<span class="nc bnc" id="L222" title="All 2 branches missed.">		if (file != null) {</span>
+<span class="nc" id="L223">			Set&lt;User&gt; set = UserManager.getUserManager().getUserList();</span>
+<span class="nc" id="L224">			List&lt;String&gt; emailIDList = UserUtil.userEmailIdList(set);</span>
+<span class="nc" id="L225">			Mail.sendMail(emailIDList, file);</span>
+<span class="nc" id="L226">			Logger.logMessage(&quot;DashboardScreenController.emai(.) : Report &quot;</span>
+<span class="nc" id="L227">					+ file.getName()</span>
+					+ &quot; is generated successfully and sent to following mail id's &quot;
+<span class="nc" id="L229">					+ emailIDList.toString());</span>
+<span class="nc" id="L230">			PopupWindow.popup</span>
+<span class="nc" id="L231">					.createInformationalPopup(</span>
+							&quot;Success!&quot;,
+							&quot;Report &quot;
+<span class="nc" id="L234">									+ file.getName()</span>
+									+ &quot; created successfully,and sent to following mail id's \n&quot;
+<span class="nc" id="L236">									+ emailIDList.toString());</span>
+		}
+<span class="nc" id="L238">	}</span>
+
+	@FXML
+	public void onItemSelection(ActionEvent event) {
+<span class="nc" id="L242">		String itemSelected = purchaseTypeComboBox.getSelectionModel()</span>
+<span class="nc" id="L243">				.getSelectedItem();</span>
+<span class="nc bnc" id="L244" title="All 2 branches missed.">		if (itemSelected.equals(Constants.BULK_PURCHASE_TYPE)) {</span>
+<span class="nc" id="L245">			disableDailyPurchaseControls();</span>
+<span class="nc" id="L246">			enableBulkPurchaseControls();</span>
+<span class="nc" id="L247">			intializeContibutorList();</span>
+<span class="nc bnc" id="L248" title="All 2 branches missed.">		} else if (itemSelected.equals(Constants.DAILY_PURCHASE_TYPE)) {</span>
+<span class="nc" id="L249">			disableBulkPurchaseControls();</span>
+<span class="nc" id="L250">			enableDailsPurchaseControls();</span>
+		} else {
+<span class="nc" id="L252">			disableBulkPurchaseControls();</span>
+<span class="nc" id="L253">			disableDailyPurchaseControls();</span>
+		}
+<span class="nc" id="L255">	}</span>
+
+	@FXML
+	public void onCheckBoxSelected(MouseEvent event) {
+<span class="nc bnc" id="L259" title="All 2 branches missed.">		if (othersCheckBox.isSelected()) {</span>
+<span class="nc" id="L260">			othersDetailCombo.setDisable(false);</span>
+		} else {
+<span class="nc" id="L262">			othersDetailCombo.setDisable(true);</span>
+		}
+<span class="nc" id="L264">	}</span>
+
+	@FXML
+	public void onOperationSelection(ActionEvent event) {
+<span class="nc" id="L268">		String userSelected = userCombo.getSelectionModel().getSelectedItem();</span>
+<span class="nc" id="L269">		User user = UserManager.getUserManager().getUser(</span>
+<span class="nc" id="L270">				usernameLabel.getText());</span>
+<span class="nc" id="L271">		Button button = (Button) event.getSource();</span>
+<span class="nc bnc" id="L272" title="All 2 branches missed.">		if (!user.getUserName().equals(userSelected)) {</span>
+<span class="nc bnc" id="L273" title="All 2 branches missed.">			if (button != viewUserBtn) {</span>
+<span class="nc" id="L274">				PopupWindow.popup.createErrorPopup(&quot;Error!&quot;,</span>
+						&quot;You are not authorized person for this operations&quot;);
+<span class="nc" id="L276">				manageMemberStackPane.getChildren().clear();</span>
+<span class="nc" id="L277">				return;</span>
+			}
+		}
+<span class="nc bnc" id="L280" title="All 2 branches missed.">		if (userSelected != null) {</span>
+<span class="nc" id="L281">			FXMLLoader loader = null;</span>
+<span class="nc bnc" id="L282" title="All 2 branches missed.">			if (button == viewUserBtn) {</span>
+<span class="nc" id="L283">				loader = loadManagerUserProfileScreen(ViewProfileScreen</span>
+<span class="nc" id="L284">						.getViewProfileScreen().getFXMLResource());</span>
+<span class="nc" id="L285">				ControllerUtil.controllerUtil.setController(</span>
+						ScreenConstant.VIEW_PROFILE_SCREEN,
+<span class="nc" id="L287">						loader.&lt;ViewProfileController&gt; getController());</span>
+<span class="nc" id="L288">				setUserInfo(userSelected, loader);</span>
+
+<span class="nc bnc" id="L290" title="All 2 branches missed.">			} else if (button == editUserBtn) {</span>
+<span class="nc" id="L291">				loader = loadManagerUserProfileScreen(EditProfileScreen</span>
+<span class="nc" id="L292">						.getEditProfileScreen().getFXMLResource());</span>
+<span class="nc" id="L293">				ControllerUtil.controllerUtil.setController(</span>
+						ScreenConstant.EDIT_PROFILE_SCREEN,
+<span class="nc" id="L295">						loader.&lt;EditProfileController&gt; getController());</span>
+<span class="nc" id="L296">				EditProfileController controller = loader</span>
+<span class="nc" id="L297">						.&lt;EditProfileController&gt; getController();</span>
+<span class="nc" id="L298">				controller.disableUsernameTextfield();</span>
+<span class="nc" id="L299">				editUserInfo(userSelected, loader);</span>
+
+<span class="nc bnc" id="L301" title="All 2 branches missed.">			} else if (button == deleteUserBtn) {</span>
+
+<span class="nc" id="L303">				UserManager manager = UserManager.getUserManager();</span>
+<span class="nc" id="L304">				manager.removeUser(manager.getUser(userSelected));</span>
+<span class="nc bnc" id="L305" title="All 2 branches missed.">			} else if (button == resetPasswordBtn) {</span>
+<span class="nc" id="L306">				loader = loadManagerUserProfileScreen(ResetPasswordScreen</span>
+<span class="nc" id="L307">						.getResetPasswordScreen().getFXMLResource());</span>
+<span class="nc" id="L308">				ControllerUtil.controllerUtil.setController(</span>
+						ScreenConstant.RESET_PASSWORD_SCREEN,
+<span class="nc" id="L310">						loader.&lt;ResetPasswordController&gt; getController());</span>
+<span class="nc" id="L311">				ResetPasswordController controller = loader</span>
+<span class="nc" id="L312">						.&lt;ResetPasswordController&gt; getController();</span>
+<span class="nc" id="L313">				controller.getUsernameLabel().setText(userSelected);</span>
+<span class="nc bnc" id="L314" title="All 2 branches missed.">			} else if (button == activateUserBtn) {</span>
+<span class="nc" id="L315">				UserUpdateRequest request = new UserUpdateRequest(userSelected,</span>
+						(byte) 1, null);
+<span class="nc" id="L317">				Job job = new Job(Constants.ACTIVATE_USER, request);</span>
+<span class="nc" id="L318">				int ret = JobManager.getInstantJobHandler().processJob(job);</span>
+<span class="nc bnc" id="L319" title="All 2 branches missed.">				if (ret == Constants.JOB_PROCESSED_SUCCESSFULLY) {</span>
+<span class="nc" id="L320">					PopupWindow.popup.createInformationalPopup(&quot;Success!&quot;,</span>
+							&quot;User got Activated&quot;);
+				}
+<span class="nc bnc" id="L323" title="All 2 branches missed.">			} else if (button == deactivateUserBtn) {</span>
+<span class="nc" id="L324">				UserUpdateRequest request = new UserUpdateRequest(userSelected,</span>
+						(byte) 0, null);
+<span class="nc" id="L326">				Job job = new Job(Constants.DEACTIVATE_USER, request);</span>
+<span class="nc" id="L327">				int ret = JobManager.getInstantJobHandler().processJob(job);</span>
+<span class="nc bnc" id="L328" title="All 2 branches missed.">				if (ret == Constants.JOB_PROCESSED_SUCCESSFULLY) {</span>
+<span class="nc" id="L329">					PopupWindow.popup.createInformationalPopup(&quot;Success!&quot;,</span>
+							&quot;User got Deactivated&quot;);
+				}
+			}
+<span class="nc" id="L333">		} else {</span>
+<span class="nc" id="L334">			PopupWindow.popup.createErrorPopup(&quot;Error!&quot;,</span>
+					&quot;Please Select User first&quot;);
+		}
+<span class="nc" id="L337">	}</span>
+
+	@FXML
+	public void creditorPieChart(ActionEvent event) {
+		
+<span class="nc" id="L342">		pieChart.setData(null);</span>
+<span class="nc" id="L343">		userLabelText.setVisible(false);</span>
+<span class="nc" id="L344">		amountLabelText.setVisible(false);</span>
+<span class="nc" id="L345">		username.setText(&quot;&quot;);</span>
+<span class="nc" id="L346">		amount.setText(&quot;&quot;);</span>
+		
+<span class="nc" id="L348">		int erroCode = DatabaseUtil.checkDatabaseConnection();</span>
+<span class="nc" id="L349">		Logger.logMessage(&quot;DashboardScreenController.creditorPieChart(.) : database connection is alive ? &quot;</span>
+				+ erroCode);
+<span class="nc bnc" id="L351" title="All 2 branches missed.">		if (erroCode == Constants.DATABASE_CONNECTION_SUCCESS) {</span>
+<span class="nc" id="L352">			Job job = new Job(null, null);</span>
+<span class="nc" id="L353">			List&lt;AggregateShare&gt; list = null;</span>
+			try {
+<span class="nc" id="L355">				list = Service.getService().getShareReport(job);</span>
+<span class="nc" id="L356">				pieChart.setData(getChartData(list, CREDITOR));</span>
+<span class="nc" id="L357">				pieChart.setLegendSide(Side.LEFT);</span>
+<span class="nc" id="L358">			} catch (Exception e) {</span>
+				// TODO Auto-generated catch block
+<span class="nc" id="L360">				e.printStackTrace();</span>
+<span class="nc" id="L361">			}</span>
+
+<span class="nc bnc" id="L363" title="All 2 branches missed.">			for (final PieChart.Data data : pieChart.getData()) {</span>
+<span class="nc" id="L364">				data.getNode().addEventHandler(MouseEvent.MOUSE_PRESSED,</span>
+<span class="nc" id="L365">						new EventHandler&lt;MouseEvent&gt;() {</span>
+
+							public void handle(MouseEvent e) {
+<span class="nc" id="L368">								String name = data.getName();</span>
+<span class="nc" id="L369">								userLabelText.setVisible(true);</span>
+<span class="nc" id="L370">								amountLabelText.setVisible(true);</span>
+<span class="nc" id="L371">								username.setText(name);</span>
+<span class="nc" id="L372">								amount.setText(&quot;&quot; + data.getPieValue());</span>
+<span class="nc" id="L373">							}</span>
+						});
+<span class="nc" id="L375">			}</span>
+<span class="nc" id="L376">		} else {</span>
+<span class="nc" id="L377">			PopupWindow.popup.createErrorPopup(&quot;Error!&quot;,</span>
+					&quot;Database connection error, Please try again&quot;);
+		}
+<span class="nc" id="L380">	}</span>
+
+	@FXML
+	public void debtorPieChart(ActionEvent event) {
+		
+<span class="nc" id="L385">		pieChart.setData(null);</span>
+<span class="nc" id="L386">		userLabelText.setVisible(false);</span>
+<span class="nc" id="L387">		amountLabelText.setVisible(false);</span>
+<span class="nc" id="L388">		username.setText(&quot;&quot;);</span>
+<span class="nc" id="L389">		amount.setText(&quot;&quot;);</span>
+		
+<span class="nc" id="L391">		int erroCode = DatabaseUtil.checkDatabaseConnection();</span>
+<span class="nc" id="L392">		Logger.logMessage(&quot;DashboardScreenController.creditorPieChart(.) : database connection is alive ? &quot;</span>
+				+ erroCode);
+<span class="nc bnc" id="L394" title="All 2 branches missed.">		if (erroCode == Constants.DATABASE_CONNECTION_SUCCESS) {</span>
+<span class="nc" id="L395">			Job job = new Job(null, null);</span>
+<span class="nc" id="L396">			List&lt;AggregateShare&gt; list = null;</span>
+			try {
+<span class="nc" id="L398">				list = Service.getService().getShareReport(job);</span>
+<span class="nc" id="L399">				pieChart.setData(getChartData(list, DEBTOR));</span>
+<span class="nc" id="L400">				pieChart.setLegendSide(Side.LEFT);</span>
+<span class="nc" id="L401">			} catch (Exception e) {</span>
+				// TODO Auto-generated catch block
+<span class="nc" id="L403">				e.printStackTrace();</span>
+<span class="nc" id="L404">			}</span>
+
+<span class="nc bnc" id="L406" title="All 2 branches missed.">			for (final PieChart.Data data : pieChart.getData()) {</span>
+<span class="nc" id="L407">				data.getNode().addEventHandler(MouseEvent.MOUSE_PRESSED,</span>
+<span class="nc" id="L408">						new EventHandler&lt;MouseEvent&gt;() {</span>
+
+							public void handle(MouseEvent e) {
+<span class="nc" id="L411">								String name = data.getName();</span>
+<span class="nc" id="L412">								userLabelText.setVisible(true);</span>
+<span class="nc" id="L413">								amountLabelText.setVisible(true);</span>
+<span class="nc" id="L414">								username.setText(name);</span>
+<span class="nc" id="L415">								amount.setText(&quot;&quot; + data.getPieValue());</span>
+<span class="nc" id="L416">							}</span>
+						});
+<span class="nc" id="L418">			}</span>
+<span class="nc" id="L419">		} else {</span>
+<span class="nc" id="L420">			PopupWindow.popup.createErrorPopup(&quot;Error!&quot;,</span>
+					&quot;Database connection error, Please try again&quot;);
+		}
+<span class="nc" id="L423">	}</span>
+
+	// ******************Validation FUNCTIONS*******************
+
+	private boolean validatePurchaseInput() {
+<span class="nc" id="L428">		boolean isValid = true;</span>
+<span class="nc" id="L429">		String errorMessage = &quot;&quot;;</span>
+
+<span class="nc" id="L431">		String itemSelected = purchaseTypeComboBox.getSelectionModel()</span>
+<span class="nc" id="L432">				.getSelectedItem();</span>
+<span class="nc bnc" id="L433" title="All 2 branches missed.">		if (itemSelected != null) {</span>
+<span class="nc bnc" id="L434" title="All 2 branches missed.">			if (dateDatePicker.getValue() == null</span>
+<span class="nc bnc" id="L435" title="All 2 branches missed.">					|| !DateUtil.validateDate(DateUtil.getAsDate(dateDatePicker</span>
+<span class="nc" id="L436">							.getValue()))) {</span>
+<span class="nc" id="L437">				errorMessage += &quot;Selected Date is not valid - &quot;</span>
+<span class="nc" id="L438">						+ dateDatePicker.getValue()</span>
+						+ &quot;, Please Select proper date!\n&quot;;
+			}
+<span class="nc bnc" id="L441" title="All 2 branches missed.">			if (itemSelected.equals(Constants.DAILY_PURCHASE_TYPE)) {</span>
+<span class="nc bnc" id="L442" title="All 2 branches missed.">				if (!milkCurdCheckBox.isSelected()</span>
+<span class="nc bnc" id="L443" title="All 2 branches missed.">						&amp;&amp; !kitchenItemsCheckBox.isSelected()</span>
+<span class="nc bnc" id="L444" title="All 2 branches missed.">						&amp;&amp; !vegetablesOrDalCheckBox.isSelected()</span>
+<span class="nc bnc" id="L445" title="All 2 branches missed.">						&amp;&amp; !othersCheckBox.isSelected()) {</span>
+<span class="nc" id="L446">					errorMessage += &quot;None of the items selected\n&quot;;</span>
+				}
+<span class="nc bnc" id="L448" title="All 2 branches missed.">			} else if (itemSelected.equals(Constants.BULK_PURCHASE_TYPE)) {</span>
+<span class="nc bnc" id="L449" title="All 2 branches missed.">				if (getContributorLists().size() == 0) {</span>
+<span class="nc" id="L450">					errorMessage += &quot;Contributor list is empty. Select contributors!\n&quot;;</span>
+				}
+<span class="nc bnc" id="L452" title="All 2 branches missed.">				if (individualShareTxt.getText() == null</span>
+<span class="nc bnc" id="L453" title="All 2 branches missed.">						|| individualShareTxt.getText().length() == 0) {</span>
+<span class="nc" id="L454">					errorMessage += &quot;Individual share list is empty. Provide individual share!\n&quot;;</span>
+				}
+<span class="nc" id="L456">				if (getContributorLists().size() != getContributionList()</span>
+<span class="nc bnc" id="L457" title="All 2 branches missed.">						.size()) {</span>
+
+<span class="nc" id="L459">					errorMessage += &quot;Error in individual amount, please provide amount in comma separated\n Ex: 100, 200, 300&quot;;</span>
+
+				}
+<span class="nc bnc" id="L462" title="All 2 branches missed.">				if (!validateIndividualAmountList(getContributionList())) {</span>
+<span class="nc" id="L463">					errorMessage += &quot;Mismatch in individual share &quot;</span>
+<span class="nc" id="L464">							+ individualShareTxt.getText()</span>
+							+ &quot; and total amount &quot;
+<span class="nc" id="L466">							+ totalAmountText.getText()</span>
+							+ &quot;\n&quot;
+							+ &quot; Please check list of contributor and individual share amount are matching or not.&quot;;
+				}
+			}
+<span class="nc" id="L471">			String totalAmount = totalAmountText.getText();</span>
+<span class="nc bnc" id="L472" title="All 4 branches missed.">			if (totalAmount != null || totalAmount.length() == 0) {</span>
+				try {
+<span class="nc" id="L474">					Double.parseDouble(totalAmount);</span>
+<span class="nc bnc" id="L475" title="All 2 branches missed.">					if (totalAmount.length() &gt; 8</span>
+							&amp;&amp; itemSelected
+<span class="nc bnc" id="L477" title="All 2 branches missed.">									.equals(Constants.DAILY_PURCHASE_TYPE)) {</span>
+<span class="nc" id="L478">						errorMessage += &quot;Total amount is not valid totalAmountText &quot;</span>
+								+ totalAmount + &quot;\n&quot;;
+					}
+<span class="nc" id="L481">				} catch (Exception exc) {</span>
+<span class="nc" id="L482">					errorMessage += &quot;Total amount is not valid totalAmountText &quot;</span>
+							+ totalAmount + &quot;\n&quot;;
+<span class="nc" id="L484">				}</span>
+			}
+<span class="nc" id="L486">		} else {</span>
+<span class="nc" id="L487">			errorMessage += &quot;Purchase type not selected, please select\n&quot;;</span>
+		}
+
+<span class="nc bnc" id="L490" title="All 2 branches missed.">		if (errorMessage.length() == 0) {</span>
+<span class="nc" id="L491">			isValid = true;</span>
+		} else {
+			// Show the error message
+<span class="nc" id="L494">			PopupWindow.popup.createErrorPopup(&quot;Errors in expense details &quot;,</span>
+					errorMessage);
+<span class="nc" id="L496">			isValid = false;</span>
+		}
+<span class="nc" id="L498">		Logger.logMessage(&quot;DashboardScreenController.validatePurchaseInput() : Errors in purchase detail --&gt; &quot;</span>
+				+ errorMessage);
+<span class="nc" id="L500">		return isValid;</span>
+	}
+
+	private boolean validateIndividualAmountList(List&lt;String&gt; list) {
+<span class="nc" id="L504">		boolean retVal = false;</span>
+		try {
+<span class="nc" id="L506">			double amount = 0.0;</span>
+<span class="nc bnc" id="L507" title="All 2 branches missed.">			for (String val : list) {</span>
+<span class="nc" id="L508">				amount += Double.parseDouble(val);</span>
+<span class="nc" id="L509">			}</span>
+<span class="nc bnc" id="L510" title="All 2 branches missed.">			if (amount == Double.parseDouble(totalAmountText.getText())) {</span>
+<span class="nc" id="L511">				retVal = true;</span>
+			}
+<span class="nc" id="L513">		} catch (Exception exc) {</span>
+<span class="nc" id="L514">			retVal = false;</span>
+<span class="nc" id="L515">			Logger.logMessage(&quot;DashboardScreenController.validateIndividualAmountList(.) : Errors in validateIndividualAmountList --&gt; &quot;</span>
+<span class="nc" id="L516">					+ exc.getMessage());</span>
+<span class="nc" id="L517">		}</span>
+
+<span class="nc" id="L519">		return retVal;</span>
+	}
+
+	private Job validateReportInput(String reportOption) {
+<span class="nc" id="L523">		Job job = null;</span>
+
+<span class="nc" id="L525">		int selectedMonthIndex = 0;</span>
+<span class="nc" id="L526">		String reportTypeSelected = null;</span>
+<span class="nc" id="L527">		String monthSelected = null;</span>
+<span class="nc" id="L528">		String yearSelected = null;</span>
+<span class="nc" id="L529">		String downloadOption = null;</span>
+<span class="nc" id="L530">		String emailOption = null;</span>
+<span class="nc" id="L531">		String fileOption = null;</span>
+<span class="nc" id="L532">		String errorMessage = &quot;&quot;;</span>
+
+<span class="nc" id="L534">		Calendar now = Calendar.getInstance();</span>
+
+<span class="nc" id="L536">		reportTypeSelected = reportTypeCombo.getSelectionModel()</span>
+<span class="nc" id="L537">				.getSelectedItem();</span>
+<span class="nc bnc" id="L538" title="All 2 branches missed.">		if (reportTypeSelected != null) {</span>
+
+<span class="nc" id="L540">			monthSelected = monthCombo.getSelectionModel().getSelectedItem();</span>
+<span class="nc" id="L541">			yearSelected = yearCombo.getSelectionModel().getSelectedItem();</span>
+<span class="nc" id="L542">			selectedMonthIndex = monthCombo.getSelectionModel()</span>
+<span class="nc" id="L543">					.getSelectedIndex();</span>
+<span class="nc bnc" id="L544" title="All 4 branches missed.">			if (monthSelected == null || yearSelected == null) {</span>
+<span class="nc" id="L545">				errorMessage += &quot;Month/Year not selected, please select month and year&quot;</span>
+						+ &quot; \n&quot;;
+			} else {
+
+<span class="nc bnc" id="L549" title="All 2 branches missed.">				if (now.get(Calendar.YEAR) &gt;= Integer.parseInt(yearSelected)) {</span>
+<span class="nc" id="L550">					if (now.get(Calendar.YEAR) == Integer</span>
+<span class="nc bnc" id="L551" title="All 2 branches missed.">							.parseInt(yearSelected)</span>
+<span class="nc bnc" id="L552" title="All 2 branches missed.">							&amp;&amp; now.get(Calendar.MONTH) &gt; (selectedMonthIndex - 1)) {</span>
+
+					} else {
+<span class="nc" id="L555">						errorMessage += &quot;Wrong month selected, select month before now &quot;</span>
+								+ &quot; \n&quot;;
+					}
+				} else {
+<span class="nc" id="L559">					errorMessage += &quot;Wrong year selected, select current or older year &quot;</span>
+							+ &quot; \n&quot;;
+				}
+
+<span class="nc bnc" id="L563" title="All 2 branches missed.">				if (!DateUtil.validateDate(DateUtil.getAsDate(to.getValue()),</span>
+<span class="nc" id="L564">						DateUtil.getAsDate(from.getValue()))) {</span>
+<span class="nc" id="L565">					errorMessage += &quot;Selected date is not valid, Please select valid date within one month before now.&quot;;</span>
+				}
+			}
+<span class="nc" id="L568">			downloadOption = downloadCombo.getSelectionModel()</span>
+<span class="nc" id="L569">					.getSelectedItem();</span>
+<span class="nc" id="L570">			emailOption = emailCombo.getSelectionModel().getSelectedItem();</span>
+
+<span class="nc bnc" id="L572" title="All 2 branches missed.">			if (reportOption.equals(Constants.INSTANT_REPORT_DOWNLOAD)) {</span>
+<span class="nc bnc" id="L573" title="All 2 branches missed.">				if (downloadOption == null) {</span>
+<span class="nc" id="L574">					errorMessage += &quot;File format for download not selected, please select&quot;</span>
+							+ &quot; \n&quot;;
+				} else {
+
+<span class="nc" id="L578">					fileOption = downloadOption;</span>
+				}
+
+<span class="nc bnc" id="L581" title="All 2 branches missed.">			} else if (reportOption.equals(Constants.INSTANT_REPORT_EMAIL)) {</span>
+
+<span class="nc bnc" id="L583" title="All 2 branches missed.">				if (emailOption == null) {</span>
+<span class="nc" id="L584">					errorMessage += &quot;File format for email not selected, please select&quot;</span>
+							+ &quot; \n&quot;;
+				} else {
+<span class="nc" id="L587">					fileOption = emailOption;</span>
+				}
+			}
+		} else {
+<span class="nc" id="L591">			errorMessage += &quot;Report type not selected, please select&quot; + &quot; \n&quot;;</span>
+		}
+
+<span class="nc bnc" id="L594" title="All 2 branches missed.">		if (errorMessage.length() == 0) {</span>
+<span class="nc" id="L595">			String fromDate = from.getValue().format(</span>
+<span class="nc" id="L596">					DateTimeFormatter.ofPattern(&quot;yyyy-MM-dd&quot;));</span>
+<span class="nc" id="L597">			String toDate = to.getValue().format(</span>
+<span class="nc" id="L598">					DateTimeFormatter.ofPattern(&quot;yyyy-MM-dd&quot;));</span>
+<span class="nc" id="L599">			ReportRequest request = new ReportRequest(reportTypeSelected,</span>
+					monthSelected, yearSelected, fromDate, toDate, fileOption);
+<span class="nc" id="L601">			Logger.logMessage(&quot;DashboardScreenController.validateReportInput(.) : ReportRequest generated without error is &quot;</span>
+					+ request + &quot; and report option is &quot; + reportOption);
+<span class="nc" id="L603">			job = new Job(reportOption, request);</span>
+<span class="nc" id="L604">		} else {</span>
+<span class="nc" id="L605">			PopupWindow.popup.createErrorPopup(&quot;Errors in Report request &quot;,</span>
+					errorMessage);
+		}
+<span class="nc" id="L608">		Logger.logMessage(&quot;DashboardScreenController.validateReportInput(.) : Errors in report request detail --&gt; &quot;</span>
+				+ errorMessage);
+<span class="nc" id="L610">		return job;</span>
+	}
+
+	// ******************UTILITY FUNCTIONS*******************/
+
+	private void initializePurchaseType() {
+<span class="nc" id="L616">		String[] elements = { (String) Constants.DAILY_PURCHASE_TYPE,</span>
+				(String) Constants.BULK_PURCHASE_TYPE,
+				Constants.HOUSE_RENT_TYPE };
+<span class="nc" id="L619">		purchaseTypeComboBox.getItems().setAll(elements);</span>
+
+<span class="nc" id="L621">	}</span>
+
+	private void intializeReportFormat() {
+<span class="nc" id="L624">		String[] elements = { (String) Constants.PDF_FILE_REPORT,</span>
+				(String) Constants.DOCX_FILE_REPORT };
+<span class="nc" id="L626">		downloadCombo.getItems().setAll(elements);</span>
+<span class="nc" id="L627">		emailCombo.getItems().setAll(elements);</span>
+<span class="nc" id="L628">	}</span>
+
+	private void initailzeReportType() {
+<span class="nc" id="L631">		String[] elements = { Constants.PURCHASE_REPORT, Constants.SHARE_REPORT };</span>
+<span class="nc" id="L632">		reportTypeCombo.getItems().setAll(elements);</span>
+<span class="nc" id="L633">	}</span>
+
+	public void onContributionSelection() {
+<span class="nc" id="L636">		Logger.logMessage(&quot;DashboardScreenController.onContributionSelection() : Event occured&quot;</span>
+<span class="nc" id="L637">				+ contributorListCombo.getCheckModel().getCheckedItems());</span>
+<span class="nc" id="L638">	}</span>
+
+	public void onOthersSelection(Change&lt;? extends String&gt; c) {
+<span class="nc" id="L641">		Logger.logMessage(&quot;DashboardScreenController.onOthersSelection() : Event occured&quot;</span>
+<span class="nc" id="L642">				+ othersDetailCombo.getCheckModel().getCheckedItems());</span>
+		
+<span class="nc" id="L644">		List list  = c.getList();</span>
+<span class="nc bnc" id="L645" title="All 2 branches missed.">		if (list.contains(&quot;Others&quot;)) {</span>
+<span class="nc" id="L646">			otherDetailText.setDisable(false);</span>
+		} else {
+<span class="nc" id="L648">			otherDetailText.setDisable(true);</span>
+		}
+<span class="nc" id="L650">	}</span>
+
+	private void intializeContibutorList() {
+
+<span class="nc" id="L654">		List&lt;com.expensetracker.model.User&gt; modelUserList = null;</span>
+<span class="nc" id="L655">		Logger.logMessage(&quot;DashboardScreenController.intializeContibutorList() : Populating contributor combo..&quot;);</span>
+		try {
+
+<span class="nc" id="L658">			List&lt;User&gt; list = new ArrayList&lt;User&gt;(UserManager.getUserManager()</span>
+<span class="nc" id="L659">					.getUserList());</span>
+<span class="nc bnc" id="L660" title="All 2 branches missed.">			if (list == null) {</span>
+<span class="nc" id="L661">				modelUserList = Service.getService().getUserList();</span>
+<span class="nc" id="L662">				list = ConvertUtil.modelToPojo(modelUserList);</span>
+			}
+
+<span class="nc bnc" id="L665" title="All 2 branches missed.">			if (list != null) {</span>
+<span class="nc" id="L666">				String elements[] = new String[list.size()];</span>
+<span class="nc bnc" id="L667" title="All 2 branches missed.">				for (int i = 0; i &lt; list.size(); i++) {</span>
+<span class="nc" id="L668">					elements[i] = list.get(i).getUserName();</span>
+				}
+<span class="nc" id="L670">				contributorListCombo.getItems().setAll(elements);</span>
+<span class="nc" id="L671">			} else {</span>
+<span class="nc" id="L672">				Logger.logMessage(&quot;DashboardScreenController.intializeContibutorList() : No data received from database for populating contributor combo&quot;);</span>
+			}
+
+<span class="nc" id="L675">		} catch (Exception e) {</span>
+<span class="nc" id="L676">			Logger.logMessage(&quot;DashboardScreenController.intializeContibutorList() : Error in getting list of users from database for populating contributor combo &quot;</span>
+					+ e);
+<span class="nc" id="L678">		}</span>
+		/*
+		 * String[] elements = { &quot;BHARAT&quot;, &quot;AMRISH&quot;, &quot;PRATAP&quot;};
+		 * contributorListCombo.getItems().setAll(elements);
+		 */
+<span class="nc" id="L683">	}</span>
+
+	private void intializeMemberList() {
+		// database and store in local cache.
+
+<span class="nc" id="L688">		List&lt;com.expensetracker.model.User&gt; modelUserList = null;</span>
+<span class="nc" id="L689">		Logger.logMessage(&quot;DashboardScreenController.intializeMemberList() : Populating user combo..&quot;);</span>
+		try {
+
+<span class="nc" id="L692">			List&lt;User&gt; list = new ArrayList&lt;User&gt;(UserManager.getUserManager()</span>
+<span class="nc" id="L693">					.getUserList());</span>
+<span class="nc bnc" id="L694" title="All 2 branches missed.">			if (list == null) {</span>
+<span class="nc" id="L695">				modelUserList = Service.getService().getUserList();</span>
+<span class="nc" id="L696">				list = ConvertUtil.modelToPojo(modelUserList);</span>
+			}
+
+<span class="nc bnc" id="L699" title="All 2 branches missed.">			if (list != null) {</span>
+<span class="nc" id="L700">				String elements[] = new String[list.size()];</span>
+<span class="nc bnc" id="L701" title="All 2 branches missed.">				for (int i = 0; i &lt; list.size(); i++) {</span>
+<span class="nc" id="L702">					elements[i] = list.get(i).getUserName();</span>
+				}
+<span class="nc" id="L704">				userCombo.getItems().setAll(elements);</span>
+<span class="nc" id="L705">			} else {</span>
+<span class="nc" id="L706">				Logger.logMessage(&quot;DashboardScreenController.intializeMemberList() : No data received from database for populating user combo&quot;);</span>
+			}
+
+<span class="nc" id="L709">		} catch (Exception e) {</span>
+<span class="nc" id="L710">			Logger.logMessage(&quot;DashboardScreenController.intializeMemberList() : Error in getting list of users from database for populating user combo &quot;</span>
+					+ e);
+<span class="nc" id="L712">		}</span>
+		/*
+		 * String[] elements = { &quot;BHARAT&quot;, &quot;AMRISH&quot;, &quot;PRATAP&quot;};
+		 * contributorListCombo.getItems().setAll(elements);
+		 */
+<span class="nc" id="L717">	}</span>
+
+	private void intializeOthersList() {
+		// database and store in local cache.
+<span class="nc" id="L721">		String[] elements = { &quot;Water Bill&quot;, &quot;Electricity Bill&quot;, &quot;Cable bill&quot;,</span>
+				&quot;Internet Bill&quot;, &quot;Gas Bill&quot;, &quot;Others&quot;};
+<span class="nc" id="L723">		othersDetailCombo.getItems().setAll(elements);</span>
+<span class="nc" id="L724">	}</span>
+
+	private void intializeMonthAndYear() {
+<span class="nc" id="L727">		String[] monthElements = { &quot;JANUARY&quot;, &quot;FEBRUARY&quot;, &quot;MARCH&quot;, &quot;APRIL&quot;,</span>
+				&quot;MAY&quot;, &quot;JUNE&quot;, &quot;JULY&quot;, &quot;AUGUST&quot;, &quot;SEPTEMBER&quot;, &quot;OCTOBER&quot;,
+				&quot;NOVEMBER&quot;, &quot;DECEMBER&quot; };
+<span class="nc" id="L730">		String[] yearElements = { &quot;2015&quot;, &quot;2016&quot;, &quot;2017&quot;, &quot;2018&quot;, &quot;2019&quot;,</span>
+				&quot;2020&quot; };
+<span class="nc" id="L732">		monthCombo.getItems().setAll(monthElements);</span>
+<span class="nc" id="L733">		yearCombo.getItems().setAll(yearElements);</span>
+
+<span class="nc" id="L735">	}</span>
+
+	private void enableDailsPurchaseControls() {
+<span class="nc" id="L738">		memberTxt.setDisable(false);</span>
+<span class="nc" id="L739">		milkCurdCheckBox.setDisable(false);</span>
+<span class="nc" id="L740">		kitchenItemsCheckBox.setDisable(false);</span>
+<span class="nc" id="L741">		vegetablesOrDalCheckBox.setDisable(false);</span>
+<span class="nc" id="L742">		othersCheckBox.setDisable(false);</span>
+<span class="nc" id="L743">		memberLabel.setDisable(false);</span>
+<span class="nc" id="L744">		checkboxLabel.setDisable(false);</span>
+<span class="nc" id="L745">	}</span>
+
+	private void disableBulkPurchaseControls() {
+<span class="nc" id="L748">		contributorListCombo.setDisable(true);</span>
+<span class="nc" id="L749">		individualShareTxt.setDisable(true);</span>
+<span class="nc" id="L750">		contributorListLabel.setDisable(true);</span>
+<span class="nc" id="L751">		amountSharedLabel.setDisable(true);</span>
+<span class="nc" id="L752">	}</span>
+
+	private void enableBulkPurchaseControls() {
+<span class="nc" id="L755">		contributorListCombo.setDisable(false);</span>
+<span class="nc" id="L756">		individualShareTxt.setDisable(false);</span>
+<span class="nc" id="L757">		amountSharedLabel.setDisable(false);</span>
+<span class="nc" id="L758">		contributorListLabel.setDisable(false);</span>
+<span class="nc" id="L759">	}</span>
+
+	private void disableDailyPurchaseControls() {
+<span class="nc" id="L762">		memberTxt.setDisable(true);</span>
+<span class="nc" id="L763">		milkCurdCheckBox.setDisable(true);</span>
+<span class="nc" id="L764">		kitchenItemsCheckBox.setDisable(true);</span>
+<span class="nc" id="L765">		vegetablesOrDalCheckBox.setDisable(true);</span>
+<span class="nc" id="L766">		othersCheckBox.setDisable(true);</span>
+<span class="nc" id="L767">		memberLabel.setDisable(true);</span>
+<span class="nc" id="L768">		checkboxLabel.setDisable(true);</span>
+<span class="nc" id="L769">	}</span>
+
+	private Purchase createPurchaseDetail() {
+
+<span class="nc" id="L773">		String purchaseType = purchaseTypeComboBox.getValue();</span>
+<span class="nc" id="L774">		Purchase detail = null;</span>
+<span class="nc bnc" id="L775" title="All 2 branches missed.">		if (validatePurchaseInput()) {</span>
+<span class="nc" id="L776">			detail = new Purchase();</span>
+<span class="nc" id="L777">			detail.setPurchaseType(purchaseType);</span>
+<span class="nc" id="L778">			detail.setDate(dateDatePicker.getValue().format(</span>
+<span class="nc" id="L779">					DateTimeFormatter.ofPattern(&quot;yyyy-MM-dd&quot;)));</span>
+<span class="nc" id="L780">			detail.setTotalAmount(totalAmountText.getText());</span>
+<span class="nc bnc" id="L781" title="All 2 branches missed.">			if (purchaseType.equals(Constants.DAILY_PURCHASE_TYPE)) {</span>
+<span class="nc" id="L782">				createDailyItemList();</span>
+
+<span class="nc bnc" id="L784" title="All 2 branches missed.">			} else if (purchaseType.equals(Constants.BULK_PURCHASE_TYPE)) {</span>
+<span class="nc" id="L785">				detail.setContributorList(getContributorLists());</span>
+<span class="nc" id="L786">				detail.setContributionList(getContributionList());</span>
+			}
+<span class="nc" id="L788">			detail.setMember(memberTxt.getText());</span>
+<span class="nc" id="L789">			detail.setItemsList(itemsList);</span>
+		}
+<span class="nc" id="L791">		return detail;</span>
+	}
+
+	private List&lt;String&gt; getContributionList() {
+<span class="nc" id="L795">		List&lt;String&gt; list = new ArrayList&lt;String&gt;();</span>
+
+<span class="nc" id="L797">		String[] individualShare = individualShareTxt.getText().split(&quot;,&quot;);</span>
+<span class="nc bnc" id="L798" title="All 2 branches missed.">		for (String share : individualShare) {</span>
+<span class="nc" id="L799">			list.add(share.trim());</span>
+		}
+<span class="nc" id="L801">		return list;</span>
+	}
+
+	private List&lt;String&gt; getContributorLists() {
+<span class="nc" id="L805">		List&lt;String&gt; contributorList = new ArrayList&lt;String&gt;();</span>
+<span class="nc" id="L806">		ObservableList&lt;String&gt; list = contributorListCombo.getCheckModel()</span>
+<span class="nc" id="L807">				.getCheckedItems();</span>
+<span class="nc bnc" id="L808" title="All 2 branches missed.">		for (String contributor : list) {</span>
+<span class="nc" id="L809">			contributorList.add(contributor.trim());</span>
+<span class="nc" id="L810">		}</span>
+<span class="nc" id="L811">		return contributorList;</span>
+	}
+
+	private void createDailyItemList() {
+<span class="nc" id="L815">		itemsList = &quot;&quot;;</span>
+<span class="nc bnc" id="L816" title="All 2 branches missed.">		if (milkCurdCheckBox.isSelected()) {</span>
+<span class="nc" id="L817">			itemsList += &quot;Milk/Curd, &quot;;</span>
+		}
+<span class="nc bnc" id="L819" title="All 2 branches missed.">		if (kitchenItemsCheckBox.isSelected()) {</span>
+<span class="nc" id="L820">			itemsList += &quot;KitchenItems, &quot;;</span>
+		}
+<span class="nc bnc" id="L822" title="All 2 branches missed.">		if (vegetablesOrDalCheckBox.isSelected()) {</span>
+<span class="nc" id="L823">			itemsList += &quot;Vegetables/Dal, &quot;;</span>
+		}
+<span class="nc bnc" id="L825" title="All 2 branches missed.">		if (othersCheckBox.isSelected()) {</span>
+<span class="nc" id="L826">			itemsList += createOthersList() + &quot;, &quot;;</span>
+		}
+<span class="nc" id="L828">		itemsList = itemsList.substring(0, (itemsList.length() - 2));</span>
+<span class="nc" id="L829">	}</span>
+
+	private String createOthersList() {
+<span class="nc" id="L832">		String otherItemList = &quot;&quot;;</span>
+<span class="nc" id="L833">		ObservableList&lt;String&gt; list = othersDetailCombo.getCheckModel()</span>
+<span class="nc" id="L834">				.getCheckedItems();</span>
+<span class="nc bnc" id="L835" title="All 2 branches missed.">		for (String item : list) {</span>
+<span class="nc bnc" id="L836" title="All 2 branches missed.">			if (item.equals(&quot;Others&quot;)) {</span>
+<span class="nc" id="L837">				item = otherDetailText.getText();</span>
+			}
+			
+<span class="nc" id="L840">			otherItemList += item + &quot;, &quot;;</span>
+<span class="nc" id="L841">		}</span>
+
+<span class="nc" id="L843">		otherItemList = otherItemList</span>
+<span class="nc" id="L844">				.substring(0, (otherItemList.length() - 2));</span>
+<span class="nc" id="L845">		return otherItemList;</span>
+	}
+
+	public void setLabel(String usernamelabel) {
+<span class="nc" id="L849">		usernameLabel.setText(usernamelabel);</span>
+<span class="nc" id="L850">	}</span>
+
+	public void setMember(String memberName) {
+<span class="nc" id="L853">		memberTxt.setText(memberName);</span>
+<span class="nc" id="L854">	}</span>
+
+	private void setUserInfo(String userSelected, FXMLLoader loader) {
+
+<span class="nc" id="L858">		User user = UserManager.getUserManager().getUser(userSelected);</span>
+
+<span class="nc" id="L860">		ViewProfileController controller = loader</span>
+<span class="nc" id="L861">				.&lt;ViewProfileController&gt; getController();</span>
+<span class="nc" id="L862">		controller.setUsernameLabel(user.getUserName());</span>
+<span class="nc" id="L863">		controller.setFirstnameLabel(user.getFirstname());</span>
+<span class="nc" id="L864">		controller.setLastnameLabel(user.getLastName());</span>
+<span class="nc" id="L865">		controller.setEmailIdLabel(user.getEmailId());</span>
+<span class="nc" id="L866">		controller.setContactLabel(user.getMobileNumber());</span>
+<span class="nc" id="L867">		byte[] image = user.getImage();</span>
+<span class="nc bnc" id="L868" title="All 2 branches missed.">		if (image != null) {</span>
+<span class="nc" id="L869">			ByteArrayInputStream in = new ByteArrayInputStream(image);</span>
+			try {
+<span class="nc" id="L871">				BufferedImage read = ImageUtil.getScaledImage(ImageIO.read(in),</span>
+						150, 120);
+<span class="nc" id="L873">				controller.setUserImageView(SwingFXUtils.toFXImage(read, null));</span>
+<span class="nc" id="L874">			} catch (IOException e) {</span>
+				// TODO Auto-generated catch block
+<span class="nc" id="L876">				e.printStackTrace();</span>
+<span class="nc" id="L877">			}</span>
+		}
+<span class="nc" id="L879">	}</span>
+
+	private void editUserInfo(String userSelected, FXMLLoader loader) {
+
+<span class="nc" id="L883">		User user = UserManager.getUserManager().getUser(userSelected);</span>
+
+<span class="nc" id="L885">		EditProfileController controller = loader</span>
+<span class="nc" id="L886">				.&lt;EditProfileController&gt; getController();</span>
+<span class="nc" id="L887">		controller.setUsernameTxt(user.getUserName());</span>
+<span class="nc" id="L888">		controller.setFirstNameText(user.getFirstname());</span>
+<span class="nc" id="L889">		controller.setLastnameTxt(user.getLastName());</span>
+<span class="nc" id="L890">		controller.setEmailIdTxt(user.getEmailId());</span>
+<span class="nc" id="L891">		controller.setContactTxt(user.getMobileNumber());</span>
+<span class="nc" id="L892">		byte[] image = user.getImage();</span>
+<span class="nc bnc" id="L893" title="All 2 branches missed.">		if (image != null) {</span>
+<span class="nc" id="L894">			ByteArrayInputStream in = new ByteArrayInputStream(image);</span>
+			try {
+<span class="nc" id="L896">				BufferedImage read = ImageUtil.getScaledImage(ImageIO.read(in),</span>
+						150, 120);
+<span class="nc" id="L898">				controller.setUserImageView(SwingFXUtils.toFXImage(read, null));</span>
+<span class="nc" id="L899">			} catch (IOException e) {</span>
+				// TODO Auto-generated catch block
+<span class="nc" id="L901">				e.printStackTrace();</span>
+<span class="nc" id="L902">			}</span>
+		}
+<span class="nc" id="L904">	}</span>
+
+	public FXMLLoader loadManagerUserProfileScreen(URL url) {
+<span class="nc" id="L907">		FXMLLoader loader = null;</span>
+		try {
+<span class="nc" id="L909">			loader = new FXMLLoader();</span>
+<span class="nc" id="L910">			loader.setLocation(url);</span>
+<span class="nc" id="L911">			StackPane layout = (StackPane) loader.load();</span>
+
+<span class="nc" id="L913">			manageMemberStackPane.getChildren().setAll(layout);</span>
+<span class="nc" id="L914">		} catch (IOException e) {</span>
+<span class="nc" id="L915">			e.printStackTrace();</span>
+<span class="nc" id="L916">		}</span>
+<span class="nc" id="L917">		return loader;</span>
+	}
+
+	private ObservableList&lt;Data&gt; getChartData(List&lt;AggregateShare&gt; list,
+			String type) {
+		// TODO Auto-generated method stub
+		ObservableList&lt;PieChart.Data&gt; pieChartData = FXCollections
+<span class="nc" id="L924">				.observableArrayList();</span>
+<span class="nc" id="L925">		PieChart.Data data = null;</span>
+<span class="nc bnc" id="L926" title="All 2 branches missed.">		for (AggregateShare share : list) {</span>
+<span class="nc bnc" id="L927" title="All 4 branches missed.">			if (type.equals(CREDITOR) &amp;&amp; share.getCurrentShare() &gt;= 0) {</span>
+<span class="nc" id="L928">				data = new PieChart.Data(share.getUserName(),</span>
+<span class="nc" id="L929">						Math.ceil(Math.abs(share.getCurrentShare())));</span>
+<span class="nc" id="L930">				pieChartData.add(data);</span>
+<span class="nc bnc" id="L931" title="All 4 branches missed.">			} else if (type.equals(DEBTOR) &amp;&amp; share.getCurrentShare() &lt; 0) {</span>
+<span class="nc" id="L932">				data = new PieChart.Data(share.getUserName(),</span>
+<span class="nc" id="L933">						Math.ceil(Math.abs(share.getCurrentShare())));</span>
+<span class="nc" id="L934">				pieChartData.add(data);</span>
+			}
+<span class="nc" id="L936">		}</span>
+
+<span class="nc" id="L938">		return pieChartData;</span>
+	}
+
+	private void clear() {
+<span class="nc" id="L942">		dateDatePicker.setValue(null);</span>
+<span class="nc" id="L943">		milkCurdCheckBox.setSelected(false);</span>
+<span class="nc" id="L944">		kitchenItemsCheckBox.setSelected(false);</span>
+<span class="nc" id="L945">		vegetablesOrDalCheckBox.setSelected(false);</span>
+<span class="nc" id="L946">		othersCheckBox.setSelected(false);</span>
+<span class="nc" id="L947">		othersDetailCombo.getCheckModel().clearChecks();</span>
+<span class="nc" id="L948">		contributorListCombo.getCheckModel().clearChecks();</span>
+<span class="nc" id="L949">		othersDetailCombo.setDisable(true);</span>
+<span class="nc" id="L950">		individualShareTxt.clear();</span>
+<span class="nc" id="L951">		totalAmountText.clear();</span>
+<span class="nc" id="L952">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

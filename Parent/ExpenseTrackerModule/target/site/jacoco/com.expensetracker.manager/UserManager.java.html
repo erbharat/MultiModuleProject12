@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>UserManager.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.manager</a> &gt; <span class="el_source">UserManager.java</span></div><h1>UserManager.java</h1><pre class="source lang-java linenums">package com.expensetracker.manager;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import com.expensetracker.constants.Constants;
+import com.expensetracker.gui.pojo.Job;
+import com.expensetracker.gui.pojo.User;
+import com.expensetracker.gui.popup.PopupWindow;
+import com.expensetracker.gui.util.DatabaseUtil;
+import com.expensetracker.logger.Logger;
+import com.expensetracker.service.Service;
+import com.expensetracker.util.ConvertUtil;
+
+<span class="nc" id="L19">public class UserManager {</span>
+
+<span class="nc" id="L21">	private Set&lt;User&gt; userList = new HashSet&lt;User&gt;();</span>
+<span class="nc" id="L22">	private Map&lt;String, User&gt; userMap = new HashMap&lt;String, User&gt;();</span>
+<span class="nc" id="L23">	private static UserManager userManager = new UserManager();</span>
+
+	/**
+	 * @return the userList
+	 */
+	public Set&lt;User&gt; getUserList() {
+<span class="nc" id="L29">		return userList;</span>
+	}
+
+	/**
+	 * @param userList
+	 *            the userList to set
+	 */
+	public void setUserList(Set&lt;User&gt; userList) {
+<span class="nc" id="L37">		this.userList = userList;</span>
+<span class="nc" id="L38">	}</span>
+
+	/**
+	 * @return the userManager
+	 */
+	public static UserManager getUserManager() {
+<span class="nc" id="L44">		return userManager;</span>
+	}
+
+	/**
+	 * @param userManager
+	 *            the userManager to set
+	 */
+	public static void setUserManager(UserManager userManager) {
+<span class="nc" id="L52">		UserManager.userManager = userManager;</span>
+<span class="nc" id="L53">	}</span>
+
+	public User getUser(String username) {
+<span class="nc" id="L56">		return userMap.get(username);</span>
+	}
+
+	public int addUser(User user) {
+<span class="nc" id="L60">		int jobStatus = Constants.ERROR;</span>
+<span class="nc" id="L61">		Job job = new Job(Constants.NEW_PROFILE, user);</span>
+<span class="nc" id="L62">		jobStatus = JobManager.getInstantJobHandler().processJob(job);</span>
+
+<span class="nc" id="L64">		userList.add(user);</span>
+<span class="nc" id="L65">		userMap.put(user.getUserName(), user);</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">		if (jobStatus == Constants.JOB_PROCESSED_SUCCESSFULLY) {</span>
+<span class="nc" id="L67">			Logger.logMessage(&quot;UserManager.addUser(.) : Added user into userlist cache &quot;</span>
+					+ user);
+		}
+<span class="nc" id="L70">		return jobStatus;</span>
+	}
+
+	public void removeUser(User user) {
+<span class="nc" id="L74">		Job job = new Job(Constants.REMOVE_USER, user);</span>
+<span class="nc" id="L75">		JobManager.getInstantJobHandler().processJob(job);</span>
+<span class="nc" id="L76">		userList.remove(user);</span>
+<span class="nc" id="L77">		userMap.put(user.getUserName(), user);</span>
+<span class="nc" id="L78">		Logger.logMessage(&quot;UserManager.removeUser(.) : Removed user into userlist cache &quot;</span>
+				+ user);
+<span class="nc" id="L80">	}</span>
+
+	public void addAll(Set&lt;User&gt; set) {
+<span class="nc" id="L83">		userList.addAll(set);</span>
+<span class="nc" id="L84">	}</span>
+
+	public void removeAll() {
+<span class="nc" id="L87">		userList.clear();</span>
+<span class="nc" id="L88">	}</span>
+
+	public void populateUserListFromDatabase() {
+		// TODO Service call for user info to populate userlist.
+<span class="nc" id="L92">		List&lt;com.expensetracker.model.User&gt; modelUserList = null;</span>
+<span class="nc" id="L93">		Logger.logMessage(&quot;UserManager.populateUserListFromDatabase() : Populating user list cache..&quot;);</span>
+		try {
+<span class="nc" id="L95">			modelUserList = Service.getService().getUserList();</span>
+<span class="nc" id="L96">			List&lt;User&gt; list = ConvertUtil.modelToPojo(modelUserList);</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">			if (list != null) {</span>
+<span class="nc" id="L98">				userList.addAll(list);</span>
+<span class="nc" id="L99">				populateUserMap(list);</span>
+			} else {
+<span class="nc" id="L101">				Logger.logMessage(&quot;UserManager.populateUserListFromDatabase() : No data received from database for populating userlist cache&quot;);</span>
+			}
+<span class="nc" id="L103">		} catch (Exception e) {</span>
+<span class="nc" id="L104">			Logger.logMessage(&quot;UserManager.populateUserListFromDatabase() : Error in getting list of users from database for populating userlist cache &quot;</span>
+					+ e);
+<span class="nc" id="L106">		}</span>
+<span class="nc" id="L107">	}</span>
+
+	private void populateUserMap(List&lt;User&gt; list) {
+		// TODO Auto-generated method stub
+<span class="nc bnc" id="L111" title="All 2 branches missed.">		for (User user : list) {</span>
+<span class="nc" id="L112">			userMap.put(user.getUserName(), user);</span>
+<span class="nc" id="L113">		}</span>
+
+<span class="nc" id="L115">	}</span>
+
+	public boolean authenticateUser(String username, String password) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L119">		boolean isAuthenticated = false;</span>
+<span class="nc" id="L120">		boolean db_error = true;</span>
+<span class="nc" id="L121">		Logger.logMessage(&quot;UserManager.authenticateUser(..) : authenticate user &quot;</span>
+				+ username);
+<span class="nc bnc" id="L123" title="All 2 branches missed.">		if (DatabaseUtil.checkDatabaseConnection() == Constants.DATABASE_CONNECTION_SUCCESS) {</span>
+<span class="nc" id="L124">			isAuthenticated = Service.getService().userAuthentication(username,</span>
+					password);
+<span class="nc bnc" id="L126" title="All 2 branches missed.">			if (userList.size() == 0) {</span>
+<span class="nc" id="L127">				populateUserListFromDatabase();</span>
+			}
+<span class="nc" id="L129">			db_error = false;</span>
+		} else {
+<span class="nc" id="L131">			PopupWindow.popup.createInformationalPopup(&quot;Login Error&quot;,</span>
+					&quot;Not connected to database, database server is down.&quot;);
+<span class="nc" id="L133">			Logger.logMessage(&quot;UserManager.authenticateUser(..) : database connection not alive authenticating from in memory cache &quot;</span>
+					+ username);
+/*			User user = userMap.get(username);
+			if (user != null) {
+				isAuthenticated = true;
+				db_error = false;
+			}*/
+		}
+<span class="nc bnc" id="L141" title="All 4 branches missed.">		if (!isAuthenticated &amp;&amp; !db_error) {</span>
+<span class="nc" id="L142">			PopupWindow.popup.createInformationalPopup(&quot;Login Error&quot;,</span>
+					&quot;Username/Password don not match&quot;);
+		}
+<span class="nc" id="L145">		return isAuthenticated;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

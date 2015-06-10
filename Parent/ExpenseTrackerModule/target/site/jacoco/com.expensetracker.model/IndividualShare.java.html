@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>IndividualShare.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.model</a> &gt; <span class="el_source">IndividualShare.java</span></div><h1>IndividualShare.java</h1><pre class="source lang-java linenums">package com.expensetracker.model;
+
+import java.util.Date;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.Cascade;
+@Entity
+@Table(name=&quot;individualshare&quot;)
+<span class="nc" id="L20">public class IndividualShare {</span>
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name=&quot;SHAREID&quot;,nullable=false)
+	private int shareId;
+	@Column(name=&quot;USERNAME&quot;,nullable=false)
+	private String userName;
+	@Column(name=&quot;AMOUNT&quot;)
+	private double amount;
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+
+	@Column(name=&quot;DATE&quot;, nullable=false)
+	@Temporal(TemporalType.DATE)
+	private Date date;
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name=&quot;PURCHASEID&quot;)
+	private Purchase purchaseId;
+	
+	public int getShareId() {
+<span class="nc" id="L41">		return shareId;</span>
+	}
+	public void setShareId(int shareId) {
+<span class="nc" id="L44">		this.shareId = shareId;</span>
+<span class="nc" id="L45">	}</span>
+	public String getUserName() {
+<span class="nc" id="L47">		return userName;</span>
+	}
+	public void setUserName(String userName) {
+<span class="nc" id="L50">		this.userName = userName;</span>
+<span class="nc" id="L51">	}</span>
+	public double getAmount() {
+<span class="nc" id="L53">		return amount;</span>
+	}
+	public void setAmount(double amount) {
+<span class="nc" id="L56">		this.amount = amount;</span>
+<span class="nc" id="L57">	}</span>
+	public Date getDate() {
+<span class="nc" id="L59">		return date;</span>
+	}
+	public void setDate(Date date) {
+<span class="nc" id="L62">		this.date = date;</span>
+<span class="nc" id="L63">	}</span>
+	public Purchase getPurchaseId() {
+<span class="nc" id="L65">		return purchaseId;</span>
+	}
+	public void setPurchaseId(Purchase purchaseId) {
+<span class="nc" id="L68">		this.purchaseId = purchaseId;</span>
+<span class="nc" id="L69">	}</span>
+	
+	@Override
+	public String toString() {
+<span class="nc" id="L73">		return &quot;IndividualShare [shareId=&quot; + shareId + &quot;, userName=&quot; + userName</span>
+				+ &quot;, amount=&quot; + amount + &quot;, date=&quot; + date + &quot;, purchaseId=&quot;
+				+ purchaseId + &quot;]&quot;;
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

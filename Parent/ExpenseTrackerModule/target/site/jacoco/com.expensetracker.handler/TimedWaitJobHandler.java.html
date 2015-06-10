@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>TimedWaitJobHandler.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.handler</a> &gt; <span class="el_source">TimedWaitJobHandler.java</span></div><h1>TimedWaitJobHandler.java</h1><pre class="source lang-java linenums">package com.expensetracker.handler;
+
+import java.io.File;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import com.expensetracker.constants.Constants;
+import com.expensetracker.gui.pojo.Job;
+import com.expensetracker.gui.pojo.PurchaseReportData;
+import com.expensetracker.gui.pojo.ReportRequest;
+import com.expensetracker.gui.pojo.ShareReportData;
+import com.expensetracker.gui.pojo.User;
+import com.expensetracker.gui.popup.PopupWindow;
+import com.expensetracker.gui.util.DatabaseUtil;
+import com.expensetracker.gui.util.ReportUtil;
+import com.expensetracker.gui.util.UserUtil;
+import com.expensetracker.logger.Logger;
+import com.expensetracker.manager.UserManager;
+import com.expensetracker.model.AggregateShare;
+import com.expensetracker.model.Purchase;
+import com.expensetracker.service.Service;
+
+<span class="nc" id="L27">public class TimedWaitJobHandler {</span>
+<span class="nc" id="L28">	private final static TimedWaitJobHandler timedWaitJobHandler = new TimedWaitJobHandler();</span>
+<span class="nc" id="L29">	private LinkedList&lt;Job&gt; waitingJobList = new LinkedList&lt;Job&gt;();</span>
+<span class="nc" id="L30">	private Timer timer = null;</span>
+
+	public void createAndStartTimer() {
+<span class="nc" id="L33">		timer = new Timer();</span>
+<span class="nc" id="L34">		timer.schedule(new ProcessWaitingJobs(), new Date(),</span>
+				Constants.JOB_TIMER_INTERVAL);
+<span class="nc" id="L36">		Logger.logMessage(&quot;TimedWaitJobHandler.createAndStartTimer() : Timer created and scheduled for time interval &quot;</span>
+				+ Constants.JOB_TIMER_INTERVAL);
+<span class="nc" id="L38">	}</span>
+
+	public static TimedWaitJobHandler getTimedwaitjobhandler() {
+<span class="nc" id="L41">		return timedWaitJobHandler;</span>
+	}
+
+	public LinkedList&lt;Job&gt; getWaitingJobList() {
+<span class="nc" id="L45">		return waitingJobList;</span>
+	}
+
+	public void addJobToList(Job job) {
+<span class="nc" id="L49">		waitingJobList.add(job);</span>
+<span class="nc" id="L50">	}</span>
+
+<span class="nc" id="L52">	class ProcessWaitingJobs extends TimerTask {</span>
+
+		@Override
+		public void run() {
+			try {
+<span class="nc" id="L57">				Logger.logMessage(&quot;TimedWaitJobHandler.run() : Process waiting list if not empty : &quot;</span>
+<span class="nc" id="L58">						+ waitingJobList.size());</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">				if (DatabaseUtil.checkDatabaseConnection() == Constants.DATABASE_CONNECTION_SUCCESS) {</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">					for (Job job : waitingJobList) {</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">						if (processJob(job) == Constants.JOB_PROCESSED_SUCCESSFULLY) {</span>
+<span class="nc" id="L62">							waitingJobList.remove(job);</span>
+<span class="nc" id="L63">							Logger.logMessage(&quot;TimedWaitJobHandler.run Removing job from waiting list : &quot;</span>
+<span class="nc" id="L64">									+ job.getJob()</span>
+									+ &quot; size of list now : &quot;
+<span class="nc" id="L66">									+ +waitingJobList.size());</span>
+						}
+<span class="nc" id="L68">					}</span>
+				}
+<span class="nc" id="L70">			} catch (Exception e) {</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">				if (e instanceof InterruptedException) {</span>
+<span class="nc" id="L72">					timer.cancel();</span>
+				}
+<span class="nc" id="L74">			}</span>
+<span class="nc" id="L75">		}</span>
+
+		private int processJob(Job job) {
+<span class="nc" id="L78">			int retVal = Constants.JOB_IN_WAITING_LIST;</span>
+			try {
+<span class="nc bnc" id="L80" title="All 22 branches missed.">				switch (job.getJobType()) {</span>
+				case Constants.NEW_PROFILE:
+					try {
+<span class="nc" id="L83">						Service.getService().saveUser(job);</span>
+<span class="nc" id="L84">					} catch (Exception e) {</span>
+<span class="nc" id="L85">						retVal = Constants.JOB_FAILED_DUE_TO_EXCEPTION;</span>
+<span class="nc" id="L86">						Logger.logMessage(&quot;TimedWaitJobHandler.processJob(.) : &quot;</span>
+<span class="nc" id="L87">								+ job + &quot; &quot; + e.getMessage());</span>
+
+<span class="nc" id="L89">					}</span>
+<span class="nc" id="L90">					break;</span>
+
+				case Constants.COMMON_PURCHASE_DETAIL:
+					try {
+
+<span class="nc" id="L95">						Service.getService().savePurchase(job);</span>
+<span class="nc" id="L96">					} catch (Exception e) {</span>
+<span class="nc" id="L97">						retVal = Constants.JOB_FAILED_DUE_TO_EXCEPTION;</span>
+<span class="nc" id="L98">						Logger.logMessage(&quot;TimedWaitJobHandler.processJob(.) : &quot;</span>
+<span class="nc" id="L99">								+ job + &quot; &quot; + e.getMessage());</span>
+<span class="nc" id="L100">					}</span>
+<span class="nc" id="L101">					break;</span>
+
+				case Constants.UPDATE_PROFILE:
+					try {
+
+<span class="nc" id="L106">						Service.getService().updateUser(job);</span>
+<span class="nc" id="L107">					} catch (Exception e) {</span>
+<span class="nc" id="L108">						e.printStackTrace();</span>
+<span class="nc" id="L109">						retVal = Constants.JOB_FAILED_DUE_TO_EXCEPTION;</span>
+<span class="nc" id="L110">						Logger.logMessage(&quot;TimedWaitJobHandler.processJob(.) : &quot;</span>
+<span class="nc" id="L111">								+ job + &quot; error &quot; + e.getMessage());</span>
+<span class="nc" id="L112">					}</span>
+<span class="nc" id="L113">					break;</span>
+
+				case Constants.RESET_PROFILE_PASSWORD:
+					try {
+<span class="nc" id="L117">						String data[] = (String[]) job.getJob();</span>
+<span class="nc" id="L118">						Service.getService().updateUser(data[0], data[1]);</span>
+<span class="nc" id="L119">					} catch (Exception e) {</span>
+<span class="nc" id="L120">						e.printStackTrace();</span>
+<span class="nc" id="L121">						retVal = Constants.JOB_FAILED_DUE_TO_EXCEPTION;</span>
+<span class="nc" id="L122">						Logger.logMessage(&quot;TimedWaitJobHandler.processJob(.) : &quot;</span>
+<span class="nc" id="L123">								+ job + &quot; error &quot; + e.getMessage());</span>
+<span class="nc" id="L124">					}</span>
+<span class="nc" id="L125">					break;</span>
+
+				case Constants.INSTANT_REPORT_EMAIL:
+
+<span class="nc" id="L129">					File file = null;</span>
+<span class="nc bnc" id="L130" title="All 10 branches missed.">					switch (((ReportRequest) job.getJob()).getReportType()) {</span>
+					case Constants.PURCHASE_REPORT:
+<span class="nc" id="L132">						List&lt;Purchase&gt; purchase = null;</span>
+						try {
+<span class="nc" id="L134">							purchase = Service.getService().getPurchaseReport(</span>
+									job);
+<span class="nc" id="L136">						} catch (Exception e) {</span>
+<span class="nc" id="L137">							retVal = Constants.JOB_FAILED_DUE_TO_EXCEPTION;</span>
+<span class="nc" id="L138">							Logger.logMessage(&quot;TimedWaitJobHandler.processJob(.) : &quot;</span>
+<span class="nc" id="L139">									+ job + &quot; &quot; + e.getMessage());</span>
+<span class="nc" id="L140">						}</span>
+<span class="nc" id="L141">						List&lt;PurchaseReportData&gt; purchaseList = DatabaseUtil</span>
+<span class="nc" id="L142">								.convertPurchaseModelToReportData(purchase);</span>
+<span class="nc" id="L143">						file = ReportUtil.generatePurchaseReport(purchaseList,</span>
+								job);
+<span class="nc" id="L145">						break;</span>
+					case Constants.SHARE_REPORT:
+<span class="nc" id="L147">						List&lt;AggregateShare&gt; share = null;</span>
+						try {
+<span class="nc" id="L149">							share = Service.getService().getShareReport(job);</span>
+<span class="nc" id="L150">						} catch (Exception e) {</span>
+<span class="nc" id="L151">							retVal = Constants.JOB_FAILED_DUE_TO_EXCEPTION;</span>
+<span class="nc" id="L152">							Logger.logMessage(&quot;TimedWaitJobHandler.processJob(.) : &quot;</span>
+<span class="nc" id="L153">									+ job + &quot; &quot; + e.getMessage());</span>
+<span class="nc" id="L154">						}</span>
+<span class="nc" id="L155">						List&lt;ShareReportData&gt; shareList = DatabaseUtil</span>
+<span class="nc" id="L156">								.convertAggregateShareModelToShareData(share);</span>
+<span class="nc" id="L157">						file = ReportUtil.generateShareReport(shareList, job);</span>
+<span class="nc" id="L158">						break;</span>
+					default:
+						break;
+					}
+
+<span class="nc bnc" id="L163" title="All 2 branches missed.">					if (file != null) {</span>
+<span class="nc" id="L164">						Set&lt;User&gt; set = UserManager.getUserManager()</span>
+<span class="nc" id="L165">								.getUserList();</span>
+<span class="nc" id="L166">						List&lt;String&gt; emailIDList = UserUtil</span>
+<span class="nc" id="L167">								.userEmailIdList(set);</span>
+<span class="nc" id="L168">						Mail.sendMail(emailIDList, file);</span>
+<span class="nc" id="L169">						PopupWindow.popup</span>
+<span class="nc" id="L170">								.createInformationalPopup(</span>
+										&quot;Success!&quot;,
+										&quot;Your Report &quot;
+<span class="nc" id="L173">												+ file.getName()</span>
+												+ &quot; successfully generated and sent to your email id&quot;);
+<span class="nc" id="L175">					}</span>
+
+					break;
+
+				default:
+					break;
+				}
+
+<span class="nc bnc" id="L183" title="All 2 branches missed.">				if (retVal == Constants.JOB_IN_WAITING_LIST) {</span>
+<span class="nc" id="L184">					retVal = Constants.JOB_PROCESSED_SUCCESSFULLY;</span>
+<span class="nc" id="L185">					Logger.logMessage(&quot;TimedWaitJobHandler.processJob (.): Job processed successfully from waiting list &quot;</span>
+							+ job);
+				}
+<span class="nc" id="L188">			} catch (Exception exc) {</span>
+<span class="nc" id="L189">				retVal = Constants.JOB_FAILED_DUE_TO_EXCEPTION;</span>
+<span class="nc" id="L190">				Logger.logMessage(&quot;TimedWaitJobHandler.processJob(.) : Exception in processing Job from timed wait list &quot;</span>
+<span class="nc" id="L191">						+ job + &quot; &quot; + exc.getMessage());</span>
+<span class="nc" id="L192">			}</span>
+
+<span class="nc" id="L194">			return retVal;</span>
+		}
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

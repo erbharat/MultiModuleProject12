@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ReportRequest.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.gui.pojo</a> &gt; <span class="el_source">ReportRequest.java</span></div><h1>ReportRequest.java</h1><pre class="source lang-java linenums">package com.expensetracker.gui.pojo;
+
+import java.io.Serializable;
+import java.util.Date;
+
+public class ReportRequest implements Serializable{
+
+	private String reportType;
+	private String month;
+	private String year;
+	private String fromDate;
+	private String toDate;
+	private String fileOption;
+	
+	public ReportRequest(String reportType, String month, String year,
+			String fromDate, String toDate, String fileOption) {
+<span class="fc" id="L17">		super();</span>
+<span class="fc" id="L18">		this.reportType = reportType;</span>
+<span class="fc" id="L19">		this.month = month;</span>
+<span class="fc" id="L20">		this.year = year;</span>
+<span class="fc" id="L21">		this.fromDate = fromDate;</span>
+<span class="fc" id="L22">		this.toDate = toDate;</span>
+<span class="fc" id="L23">		this.fileOption = fileOption;</span>
+<span class="fc" id="L24">	}</span>
+
+	/**
+	 * @return the fileOption
+	 */
+	public String getFileOption() {
+<span class="nc" id="L30">		return fileOption;</span>
+	}
+
+	/**
+	 * @param fileOption the fileOption to set
+	 */
+	public void setFileOption(String fileOption) {
+<span class="nc" id="L37">		this.fileOption = fileOption;</span>
+<span class="nc" id="L38">	}</span>
+
+	/**
+	 * @return the reportType
+	 */
+	public String getReportType() {
+<span class="nc" id="L44">		return reportType;</span>
+	}
+	/**
+	 * @param reportType the reportType to set
+	 */
+	public void setReportType(String reportType) {
+<span class="nc" id="L50">		this.reportType = reportType;</span>
+<span class="nc" id="L51">	}</span>
+	/**
+	 * @return the fromDate
+	 */
+	public String getFromDate() {
+<span class="nc" id="L56">		return fromDate;</span>
+	}
+	/**
+	 * @param fromDate the fromDate to set
+	 */
+	public void setFromDate(String fromDate) {
+<span class="nc" id="L62">		this.fromDate = fromDate;</span>
+<span class="nc" id="L63">	}</span>
+	/**
+	 * @return the toDate
+	 */
+	public String getToDate() {
+<span class="nc" id="L68">		return toDate;</span>
+	}
+	/**
+	 * @param toDate the toDate to set
+	 */
+	public void setToDate(String toDate) {
+<span class="nc" id="L74">		this.toDate = toDate;</span>
+<span class="nc" id="L75">	}</span>
+	
+	/**
+	 * @return the month
+	 */
+	public String getMonth() {
+<span class="nc" id="L81">		return month;</span>
+	}
+	/**
+	 * @param month the month to set
+	 */
+	public void setMonth(String month) {
+<span class="nc" id="L87">		this.month = month;</span>
+<span class="nc" id="L88">	}</span>
+	/**
+	 * @return the year
+	 */
+	public String getYear() {
+<span class="nc" id="L93">		return year;</span>
+	}
+	/**
+	 * @param year the year to set
+	 */
+	public void setYear(String year) {
+<span class="nc" id="L99">		this.year = year;</span>
+<span class="nc" id="L100">	}</span>
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+<span class="nc" id="L106">		return &quot;ReportRequest [reportType=&quot; + reportType + &quot;, fromDate=&quot;</span>
+				+ fromDate + &quot;, toDate=&quot; + toDate + &quot;]&quot;;
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

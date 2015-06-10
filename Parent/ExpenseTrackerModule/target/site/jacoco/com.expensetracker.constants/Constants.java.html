@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Constants.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.constants</a> &gt; <span class="el_source">Constants.java</span></div><h1>Constants.java</h1><pre class="source lang-java linenums">package com.expensetracker.constants;
+
+<span class="nc" id="L3">public class Constants {</span>
+
+	/******************* TIMER CONSTANT *******************/
+	public final static long JOB_TIMER_INTERVAL = 10 * 60 * 1000;
+	public final static long REPORT_TIMER_INTERVAL = 5 * 60 * 1000;
+
+	/****************** JOB/SERVICE CONSTANT *******************/
+	public final static String NEW_PROFILE = &quot;NEW_PROFILE&quot;;
+	public static final String REMOVE_USER = &quot;REMOVE_USER&quot;;
+	public final static String COMMON_PURCHASE_DETAIL = &quot;COMMON_PURCHASE_DETAIL&quot;;
+	public static final String UPDATE_PROFILE =&quot;UPDATE_PROFILE&quot;;
+	public static final String RESET_PROFILE_PASSWORD = &quot;RESET_PROFILE_PASSWORD&quot;;
+	public static final String ACTIVATE_USER = &quot;ACTIVATE_USER&quot;;
+	public static final String DEACTIVATE_USER = &quot;DEACTIVATE_USER&quot;;
+	public static final String PERSIST_DIRECTORY_PATH = &quot;C:\\ProgramData\\ExpenseTracker&quot;;
+	public static final String PERSIST_FILE_NAME = &quot;expensetrackerdata.ser&quot;;
+	public static final int JOB_PROCESSED_SUCCESSFULLY = 100;
+	public static final int JOB_FAILED_DUE_TO_DB_CONN_ERROR = 101;
+	public static final int JOB_FAILED_DUE_TO_EXCEPTION = 102;
+	public static final int JOB_IN_WAITING_LIST = 103;
+	public static final int JOB_REPORT_GENERATION_ERR = 104;
+
+	/******************* REPORT CONSTANT *******************/
+	public final static String REPORT_FILE_PATH = &quot;report\\&quot;;
+	public final static String INSTANT_REPORT_DOWNLOAD = &quot;INSTANT_REPORT_DOWNLOAD&quot;;
+	public final static String INSTANT_REPORT_EMAIL = &quot;INSTANT_REPORT_EMAIL&quot;;
+	public final static String PURCHASE_REPORT = &quot;PURCHASE REPORT&quot;;
+	public final static String SHARE_REPORT = &quot;SHARE REPORT&quot;;
+	public final static String PDF_FILE_REPORT = &quot;PDF&quot;;
+	public final static String DOCX_FILE_REPORT = &quot;DOCX&quot;;
+
+	/********************** EMAIL CONSTANTS ********************/
+	public final static String REPORT_ADMIN_ID = &quot;expensetrackerreport@gmail.com&quot;;
+	public final static String REPORT_ADMIN_FROM = &quot;expensetrackerreport@gmail.com&quot;;
+	public final static String REPORT_ADMIN_PWD = &quot;donotreply!&quot;;
+	public final static String MAIL_SMTP_AUTH = &quot;true&quot;;
+	public final static String MAIL_SMTP_STARTTLS_ENABLE = &quot;true&quot;;
+	public final static String MAIL_SMTP_HOST = &quot;smtp.gmail.com&quot;;
+	public final static String MAIL_SMTP_PORT = &quot;587&quot;;
+
+	/********************** ERROR CONSTANTS ********************/
+	public final static int DATABASE_CONNECTION_SUCCESS = 1000;
+	public final static int DATABASE_CONNECTION_ERROR = 1001;
+	public static final int SUCCESS = 0;
+	public static final int ERROR = -1;
+
+	/***************** PURCHASE/USER CONSTANTS ****************/
+	public static final String BULK_PURCHASE_TYPE = &quot;BULK PURCHASE&quot;;
+	public static final String DAILY_PURCHASE_TYPE = &quot;DAILY PURCHASE&quot;;
+	public static final String HOUSE_RENT_TYPE = &quot;HOUSE RENT&quot;;
+
+	/******************** LOGGER CONSTANTS ********************/
+	public static final String LOG_FILE_PATH = &quot;\\&quot;;
+	public static final String LOG_FILE_NAME = &quot;ExpenceTrackerLog&quot;;
+	public static final int LOG_FILE_SIZE_LIMIT = 10 * 1024 * 1024;
+
+	/********************** DAO CONSTANTS *********************/
+	public static final String USER_DAO = &quot;USER_DAO&quot;;
+	public static final String PURCHASE_DAO = &quot;PURCHASE_DAO&quot;;
+	public static final String INDIVIDUAL_SHARE_DAO = &quot;INDIVIDUAL_SHARE_DAO&quot;;
+	public static final String AGGREGATE_SHARE_DAO = &quot;AGGREGATE_SHARE_DAO&quot;;
+	
+	/**********************USERS OPERATIONS********************/
+	public static final String VIEW_PROFILE = &quot;VIEW PROFILE&quot;;
+	public static final String EDIT_PROFILE = &quot;EDIT PROFILE&quot;;
+	public static final String SET_USER_ACTIVE = &quot;MAKE USER ACTIVE&quot;;
+	public static final String SET_USER_INACTIVE = &quot;MAKE USER INACTIVE&quot;;
+	public static final String DELETE_USER = &quot;DELETE USER&quot;;
+	public static final String RESET_PASSWORD = &quot;RESET PASSWORD&quot;;
+	
+	/******************* DB Properties *******************/
+	public static final String DRIVER_NAME_PROPERTY_KEY = &quot;hibernate.connection.driver_class&quot;;
+	public static final String URL_PROPERTY_KEY = &quot;hibernate.connection.url&quot;;
+	public static final String USERNAME_PROPERTY_KEY = &quot;hibernate.connection.username&quot;;
+	public static final String PASSWORD_PROPERTY_KEY = &quot;hibernate.connection.password&quot;;
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

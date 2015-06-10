@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Popup.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.gui.popup</a> &gt; <span class="el_source">Popup.java</span></div><h1>Popup.java</h1><pre class="source lang-java linenums">package com.expensetracker.gui.popup;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.stage.Window;
+
+public class Popup {
+    /**
+     * Error icon.
+     */
+    public static final int ICON_ERROR = 0x01000000;
+    /**
+     * Warning icon.
+     */
+    public static final int ICON_WARNING = 0x02000000;
+    /**
+     * Information icon.
+     */
+    public static final int ICON_INFORMATION = 0x04000000;
+    /**
+     * Question icon.
+     */
+    public static final int ICON_QUESTION = 0x08000000;
+
+    // ///////////////////////////////////////////////////
+    // Types of button.
+    /**
+     * OK button.
+     */
+    public static final int OK = 0x00010000;
+    /**
+     * Cancel button.
+     */
+    public static final int CANCEL = 0x00020000;
+    /**
+     * Yes button.
+     */
+    public static final int YES = 0x00040000;
+    /**
+     * No button.
+     */
+    public static final int NO = 0x00080000;
+    /**
+     * Abort button.
+     */
+    public static final int ABORT = 0x00100000;
+    /**
+     * Retry button.
+     */
+    public static final int RETRY = 0x00200000;
+    /**
+     * Ignore button.
+     */
+    public static final int IGNORE = 0x00400000;
+
+    // ///////////////////////////////////////////////////
+    // Control for default button.
+    /**
+     * Set first button as default button.
+     */
+    public static final int DEFAULT_BUTTON1 = 0x00000100;
+    /**
+     * Set second button as default button.
+     */
+    public static final int DEFAULT_BUTTON2 = 0x00000200;
+    /**
+     * Set third button as default button.
+     */
+    public static final int DEFAULT_BUTTON3 = 0x00000400;
+    /**
+     * Set fourth button as default button.
+     */
+    public static final int DEFAULT_BUTTON4 = 0x00000800;
+
+    /**
+     * Hide constructor.
+     */
+<span class="nc" id="L88">    protected Popup() {</span>
+        // Do nothing.
+<span class="nc" id="L90">    }</span>
+
+    /**
+     * Display MessageBox.
+     * 
+     * @param parent
+     *            Parent window object. If null was set, dialog may be modeless.
+     * @param message
+     *            Message string for dialog.
+     * @param title
+     *            Title string for dialog.
+     * @param option
+     *            Display option. The option value is either one of the option
+     *            constants OR'ing together (using the int &quot;|&quot; operator) two or
+     *            more of those MessageBox option constants. ex.
+     *            MessageBox.ICON_INFORMATION | MessageBox.OK |
+     *            MessageBox.CANCEL
+     * @return Selected button value. Default value is MessageBox.CANCEL.
+     *         Selected button value is one of MessageBox.OK, MessageBox.CANCEL,
+     *         MessageBox.YES, MessageBox.NO, MessageBox.ABORT,
+     *         MessageBox.RETRY, MessageBox.IGNORE.
+     */
+    public static int show(final Window parent, final String message, final String title, final int option) {
+        // Default return value is CANCEL.
+<span class="nc" id="L114">        final int[] result = new int[] { CANCEL };</span>
+
+        // Create stage without iconized button.
+<span class="nc" id="L117">        final Stage dialog = new Stage(StageStyle.UNIFIED);</span>
+<span class="nc" id="L118">        dialog.setTitle(title);</span>
+<span class="nc" id="L119">        dialog.setResizable(false);</span>
+<span class="nc" id="L120">        dialog.initModality(Modality.WINDOW_MODAL);</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">        if (parent != null) {</span>
+            // Only set in case of not null.
+<span class="nc" id="L123">            dialog.initOwner(parent);</span>
+        }
+
+<span class="nc" id="L126">        final VBox totalPane = new VBox();</span>
+<span class="nc" id="L127">        dialog.setScene(new Scene(totalPane));</span>
+<span class="nc" id="L128">        totalPane.setAlignment(Pos.CENTER);</span>
+<span class="nc" id="L129">        totalPane.setSpacing(2);</span>
+
+<span class="nc" id="L131">        final HBox pane = new HBox();</span>
+<span class="nc" id="L132">        totalPane.getChildren().add(pane);</span>
+
+<span class="nc" id="L134">        pane.setSpacing(10);</span>
+
+        // Pad left space.
+<span class="nc" id="L137">        pane.getChildren().add(new Label(&quot;&quot;)); //$NON-NLS-1$</span>
+<span class="nc" id="L138">        pane.getChildren().add(new Label(&quot;&quot;)); //$NON-NLS-1$</span>
+
+        {
+<span class="nc" id="L141">            final VBox vbox = new VBox();</span>
+<span class="nc" id="L142">            pane.getChildren().add(vbox);</span>
+<span class="nc" id="L143">            vbox.setAlignment(Pos.CENTER);</span>
+
+<span class="nc bnc" id="L145" title="All 2 branches missed.">            if ((option &amp; ICON_ERROR) == ICON_ERROR) {</span>
+<span class="nc" id="L146">                final Group group = MessageIconBuilder.drawErrorIcon(3);</span>
+<span class="nc" id="L147">                vbox.getChildren().add(group);</span>
+<span class="nc bnc" id="L148" title="All 2 branches missed.">            } else if ((option &amp; ICON_WARNING) == ICON_WARNING) {</span>
+<span class="nc" id="L149">                final Group group = MessageIconBuilder.drawWarningIcon(3);</span>
+<span class="nc" id="L150">                vbox.getChildren().add(group);</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">            } else if ((option &amp; ICON_INFORMATION) == ICON_INFORMATION) {</span>
+<span class="nc" id="L152">                final Group group = MessageIconBuilder.drawInformationIcon(3);</span>
+<span class="nc" id="L153">                vbox.getChildren().add(group);</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">            } else if ((option &amp; ICON_QUESTION) == ICON_QUESTION) {</span>
+<span class="nc" id="L155">                final Group group = MessageIconBuilder.drawQuestionIcon(3);</span>
+<span class="nc" id="L156">                vbox.getChildren().add(group);</span>
+            }
+        }
+
+        {
+<span class="nc" id="L161">            final VBox vbox = new VBox();</span>
+<span class="nc" id="L162">            pane.getChildren().add(vbox);</span>
+
+<span class="nc" id="L164">            vbox.setAlignment(Pos.CENTER);</span>
+
+<span class="nc" id="L166">            vbox.getChildren().add(new Label(&quot;&quot;));//$NON-NLS-1$</span>
+<span class="nc" id="L167">            vbox.getChildren().add(new Label(message));</span>
+
+            // Pad right space.
+<span class="nc" id="L170">            pane.getChildren().add(new Label(&quot;&quot;)); //$NON-NLS-1$</span>
+<span class="nc" id="L171">            pane.getChildren().add(new Label(&quot;&quot;)); //$NON-NLS-1$</span>
+
+            // Pad message and buttons.
+<span class="nc" id="L174">            vbox.getChildren().add(new Label(&quot;&quot;)); //$NON-NLS-1$</span>
+<span class="nc" id="L175">            vbox.getChildren().add(new Label(&quot;&quot;)); //$NON-NLS-1$</span>
+
+<span class="nc" id="L177">            boolean isButtonExists = false;</span>
+
+<span class="nc" id="L179">            final int[] BUTTON_LIST = new int[] { OK, YES, NO, ABORT, RETRY, IGNORE, CANCEL };</span>
+<span class="nc" id="L180">            final String[] BUTTON_STRING_LIST = new String[] {</span>
+<span class="nc" id="L181">                    Messages.getString(&quot;MessageBox.OK&quot;), Messages.getString(&quot;MessageBox.YES&quot;), Messages.getString(&quot;MessageBox.NO&quot;), Messages.getString(&quot;MessageBox.ABORT&quot;), Messages.getString(&quot;MessageBox.RETRY&quot;), Messages.getString(&quot;MessageBox.IGNORE&quot;), Messages.getString(&quot;MessageBox.CANCEL&quot;) }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$</span>
+
+<span class="nc" id="L183">            final HBox hboxButtons = new HBox();</span>
+<span class="nc" id="L184">            totalPane.getChildren().add(hboxButtons);</span>
+<span class="nc" id="L185">            hboxButtons.setSpacing(10);</span>
+<span class="nc" id="L186">            hboxButtons.setAlignment(Pos.CENTER);</span>
+<span class="nc" id="L187">            hboxButtons.getChildren().add(new Label(&quot;&quot;)); //$NON-NLS-1$</span>
+
+<span class="nc" id="L189">            int buttonCounter = 0;</span>
+<span class="nc bnc" id="L190" title="All 2 branches missed.">            for (int index = 0; index &lt; BUTTON_LIST.length; index++) {</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">                if ((option &amp; BUTTON_LIST[index]) == BUTTON_LIST[index]) {</span>
+<span class="nc" id="L192">                    final Button btnAdd = new Button();</span>
+<span class="nc" id="L193">                    btnAdd.setText(BUTTON_STRING_LIST[index]);</span>
+<span class="nc" id="L194">                    isButtonExists = true;</span>
+<span class="nc" id="L195">                    final int resultValue = BUTTON_LIST[index];</span>
+<span class="nc" id="L196">                    btnAdd.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+                        @Override
+                        public void handle(ActionEvent e) {
+<span class="nc" id="L199">                            dialog.close();</span>
+<span class="nc" id="L200">                            result[0] = resultValue;</span>
+<span class="nc" id="L201">                        }</span>
+                    });
+<span class="nc" id="L203">                    hboxButtons.getChildren().add(btnAdd);</span>
+<span class="nc" id="L204">                    buttonCounter++;</span>
+
+<span class="nc bnc" id="L206" title="All 2 branches missed.">                    if ((option &amp; CANCEL) == CANCEL) {</span>
+<span class="nc" id="L207">                        btnAdd.setCancelButton(true);</span>
+                    }
+
+<span class="nc" id="L210">                    setupDefaultButton(option, buttonCounter, btnAdd);</span>
+                }
+            }
+
+            // In case of no button found.
+<span class="nc bnc" id="L215" title="All 2 branches missed.">            if (isButtonExists == false) {</span>
+<span class="nc" id="L216">                final Button btnAdd = new Button();</span>
+<span class="nc" id="L217">                hboxButtons.getChildren().add(btnAdd);</span>
+<span class="nc" id="L218">                btnAdd.setText(BUTTON_STRING_LIST[0]);</span>
+<span class="nc" id="L219">                btnAdd.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+                    @Override
+                    public void handle(ActionEvent e) {
+<span class="nc" id="L222">                        dialog.close();</span>
+<span class="nc" id="L223">                        result[0] = OK;</span>
+<span class="nc" id="L224">                    }</span>
+                });
+<span class="nc" id="L226">                btnAdd.setCancelButton(true);</span>
+            }
+
+<span class="nc" id="L229">            hboxButtons.getChildren().add(new Label(&quot;&quot;)); //$NON-NLS-1$</span>
+
+<span class="nc" id="L231">            totalPane.getChildren().add(new Label(&quot;&quot;));//$NON-NLS-1$</span>
+        }
+
+        // Below method is supported JavaFX 2.2 or lator.
+<span class="nc" id="L235">        dialog.showAndWait();</span>
+
+<span class="nc" id="L237">        return result[0];</span>
+    }
+
+    /**
+     * Set up default button.
+     * 
+     * @param option
+     * @param buttonCounter
+     * @param btnAdd
+     */
+    private static void setupDefaultButton(final int option, final int buttonCounter, final Button btnAdd) {
+<span class="nc bnc" id="L248" title="All 5 branches missed.">        switch (buttonCounter) {</span>
+        case 1:
+<span class="nc bnc" id="L250" title="All 2 branches missed.">            if ((option &amp; DEFAULT_BUTTON1) == DEFAULT_BUTTON1) {</span>
+<span class="nc" id="L251">                btnAdd.setDefaultButton(true);</span>
+            }
+            break;
+        case 2:
+<span class="nc bnc" id="L255" title="All 2 branches missed.">            if ((option &amp; DEFAULT_BUTTON2) == DEFAULT_BUTTON2) {</span>
+<span class="nc" id="L256">                btnAdd.setDefaultButton(true);</span>
+            }
+            break;
+        case 3:
+<span class="nc bnc" id="L260" title="All 2 branches missed.">            if ((option &amp; DEFAULT_BUTTON3) == DEFAULT_BUTTON3) {</span>
+<span class="nc" id="L261">                btnAdd.setDefaultButton(true);</span>
+            }
+            break;
+        case 4:
+<span class="nc bnc" id="L265" title="All 2 branches missed.">            if ((option &amp; DEFAULT_BUTTON4) == DEFAULT_BUTTON4) {</span>
+<span class="nc" id="L266">                btnAdd.setDefaultButton(true);</span>
+            }
+            break;
+        }
+<span class="nc" id="L270">    }</span>
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

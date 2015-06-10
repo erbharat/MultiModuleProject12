@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane prefHeight="340.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.expensetracker.gui.controller.ProfileScreenController">
+   <children>
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="340.0" prefWidth="600.0" style="-fx-background-color: lightgrey;">
+         <children>
+            <Label layoutX="144.0" layoutY="26.0" style="-fx-background-color: lightgray;" text="Create your profile and become member of family ">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="firstNameLabel" layoutX="124.0" layoutY="77.0" text="First Name" />
+            <Label fx:id="lastNameLabel" layoutX="124.0" layoutY="105.0" text="Last Name" />
+            <Label fx:id="usernameLabel" layoutX="124.0" layoutY="134.0" text="Username" />
+            <Label fx:id="passwordLabel" layoutX="124.0" layoutY="164.0" text="Password" />
+            <Label fx:id="confirmPasswordLabel" layoutX="124.0" layoutY="191.0" text="Confirm Password" />
+            <Label fx:id="emailIdPassword" layoutX="124.0" layoutY="223.0" text="Email Id" />
+            <Label fx:id="mobileNumberLabel" layoutX="124.0" layoutY="253.0" text="Mobile Number" />
+            <Button fx:id="saveBtn" layoutX="178.0" layoutY="295.0" mnemonicParsing="false" onAction="#save" onKeyPressed="#save" style="-fx-background-color: lightgreen;" text="Save" />
+            <Button fx:id="cancelBtn" cancelButton="true" layoutX="312.0" layoutY="295.0" mnemonicParsing="false" onAction="#cancel" style="-fx-background-color: lightcyan;" text="Cancel" />
+            <TextField fx:id="firstNameText" layoutX="248.0" layoutY="75.0" />
+            <TextField fx:id="lastNameText" layoutX="248.0" layoutY="104.0" />
+            <TextField fx:id="usernameText" layoutX="248.0" layoutY="134.0" />
+            <TextField fx:id="emailIdText" layoutX="248.0" layoutY="224.0" prefHeight="25.0" prefWidth="149.0" />
+            <TextField fx:id="mobileNumberText" layoutX="248.0" layoutY="254.0" />
+            <Label fx:id="cnfmPasswordErrorLabel" layoutX="434.0" layoutY="191.0" />
+            <Label fx:id="passwordErrorLabel" layoutX="434.0" layoutY="164.0" />
+            <PasswordField fx:id="passwordText" layoutX="248.0" layoutY="164.0" />
+            <PasswordField fx:id="confirmPasswordText" layoutX="248.0" layoutY="194.0" />
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>

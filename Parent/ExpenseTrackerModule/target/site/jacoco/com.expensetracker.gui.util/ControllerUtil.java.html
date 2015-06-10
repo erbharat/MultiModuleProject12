@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ControllerUtil.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.gui.util</a> &gt; <span class="el_source">ControllerUtil.java</span></div><h1>ControllerUtil.java</h1><pre class="source lang-java linenums">package com.expensetracker.gui.util;
+
+import java.util.HashMap;
+import java.util.Map;
+
+<span class="nc" id="L6">public class ControllerUtil {</span>
+	
+<span class="nc" id="L8">	public final static ControllerUtil controllerUtil = new ControllerUtil();</span>
+<span class="nc" id="L9">	private static Map&lt;Object, Object&gt; controllerMap = new HashMap&lt;Object, Object&gt;();</span>
+	
+	public void setController(Object controllerKey, Object controller) {
+<span class="nc" id="L12">		controllerMap.put(controllerKey, controller);</span>
+<span class="nc" id="L13">	}</span>
+	
+	public Object getController(Object key) {
+<span class="nc" id="L16">		return controllerMap.get(key);</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

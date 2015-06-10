@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.embed.swing.*?>
+<?import javafx.scene.web.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="410.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.expensetracker.gui.controller.ViewProfileController">
+   <children>
+      <AnchorPane>
+         <children>
+            <StackPane fx:id="userImage" layoutX="7.0" layoutY="36.0" prefHeight="120.0" prefWidth="145.0" />
+            <Label layoutX="168.0" layoutY="36.0" text="Username " />
+            <Label layoutX="167.0" layoutY="72.0" text="First Name" />
+            <Label layoutX="168.0" layoutY="112.0" text="Last Name" />
+            <Label layoutX="168.0" layoutY="183.0" text="Contact No." />
+            <Label layoutX="168.0" layoutY="145.0" text="Email Id" />
+            <Label fx:id="usernameLabel" layoutX="262.0" layoutY="36.0" text="Label" />
+            <Label fx:id="firstnameLabel" layoutX="262.0" layoutY="72.0" text="Label" />
+            <Label fx:id="lastnameLabel" layoutX="262.0" layoutY="112.0" text="Label" />
+            <Label fx:id="emailIdLabel" layoutX="262.0" layoutY="148.0" text="Label" />
+            <Label fx:id="contactLabel" layoutX="262.0" layoutY="185.0" text="Label" />
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>

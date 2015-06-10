@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.collections.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.controlsfx.control.CheckComboBox?>
+
+<StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="340.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.expensetracker.gui.controller.DashboardScreenController">
+   <children>
+      <AnchorPane prefHeight="340.0" prefWidth="600.0">
+         <children>
+            <TabPane fx:id="AppTabPane" layoutY="30.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="310.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                  <Tab fx:id="AddPurchaseTab" text="Add Purchase Detail">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="310.0" prefWidth="600.0">
+                           <children>
+                              <Label fx:id="memberLabel" layoutX="70.0" layoutY="105.0" text="Member" />
+                              <Label fx:id="purchaseTypeLabel" layoutX="70.0" layoutY="20.0" text="Purchase Type" />
+                              <Label fx:id="dateLabel" layoutX="72.0" layoutY="61.0" prefHeight="17.0" prefWidth="28.0" text="Date" />
+                              <DatePicker fx:id="dateDatePicker" layoutX="170.0" layoutY="57.0" promptText="Enter Date" />
+                              <ComboBox fx:id="purchaseTypeComboBox" layoutX="170.0" layoutY="16.0" onAction="#onItemSelection" prefWidth="150.0" promptText="Purchase Type" />   
+                              <Label fx:id="totalAmountLabel" layoutX="72.0" layoutY="209.0" text="Total Amount" />
+                              <TextField fx:id="totalAmountText" layoutX="174.0" layoutY="205.0" promptText="Total Amount" />
+                              <Button fx:id="savePurchaseDetailBtn" layoutX="93.0" layoutY="242.0" mnemonicParsing="false" onAction="#save" text="Save Purchase Detail" />
+                              <Button fx:id="resetBtn" layoutX="286.0" layoutY="242.0" mnemonicParsing="false" onAction="#save" text="Reset" />
+                              <TextField fx:id="memberTxt" layoutX="174.0" layoutY="101.0" />
+                              <CheckBox fx:id="milkCurdCheckBox" layoutX="72.0" layoutY="172.0" mnemonicParsing="false" onMouseClicked="#onCheckBoxSelected" text="Milk/Curd" />
+                              <CheckBox fx:id="kitchenItemsCheckBox" layoutX="164.0" layoutY="172.0" mnemonicParsing="false" onMouseClicked="#onCheckBoxSelected" text="Kitchen Items" />
+                              <CheckBox fx:id="vegetablesOrDalCheckBox" layoutX="271.0" layoutY="172.0" mnemonicParsing="false" onMouseClicked="#onCheckBoxSelected" text="Vegetables/Dal" />
+                              <CheckBox fx:id="othersCheckBox" layoutX="391.0" layoutY="172.0" mnemonicParsing="false" onMouseClicked="#onCheckBoxSelected" text="Others" />
+                              <Label fx:id="checkboxLabel" layoutX="71.0" layoutY="141.0" text="Tick for Items purchased" />
+                              <Label fx:id="contributorListLabel" disable="true" layoutX="350.0" layoutY="105.0" text="Contributor List" />
+                              <CheckComboBox fx:id="contributorListCombo" disable="false" layoutX="437.0" layoutY="102.0">
+                              	<tooltip>
+                                	<Tooltip fx:id="multipleChoiceTip" text="Multiple Choice Enabled" />
+                                </tooltip>
+                              </CheckComboBox>
+                              <Label fx:id="amountSharedLabel" disable="true" layoutX="350.0" layoutY="132.0" text="Amount Shared" />
+                              <TextField fx:id="individualShareTxt" disable="false" layoutX="437.0" layoutY="128.0" promptText="Individual share in , separated">
+                                 <tooltip>
+                                    <Tooltip fx:id="individualShareTip" text="Enter Values comma separated and in order of Contribution List" />
+                                 </tooltip>
+                              </TextField>                             
+                              <CheckComboBox fx:id="othersDetailCombo" disable="true" layoutX="391.0" layoutY="199.0">
+                              	<tooltip>
+                                	<Tooltip fx:id="multipleChoiceTip" text="Multiple Choice Enabled" />
+                                </tooltip>
+                              </CheckComboBox>
+                              <TextField fx:id="otherDetailText" layoutX="465.0" layoutY="168.0" prefHeight="25.0" prefWidth="129.0" promptText="Others Detail" />
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </Tab>
+                <Tab fx:id="ExpenseReportTab" text="Expense Report">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <Label fx:id="reportTypeLabel" layoutX="42.0" layoutY="51.0" text="Report Type" />
+                              <ComboBox fx:id="reportTypeCombo" layoutX="121.0" layoutY="47.0" prefWidth="150.0" promptText="Type of Report" />
+                              <Label fx:id="fromDateLabel" layoutX="42.0" layoutY="104.0" text="Month" />
+                              <Label fx:id="toDateLabel" layoutX="312.0" layoutY="104.0" text="Year" />
+                              <ComboBox fx:id="downloadCombo" layoutX="121.0" layoutY="164.0" prefWidth="150.0" promptText="Download Format" />
+                              <Label fx:id="downloadLabel" layoutX="42.0" layoutY="168.0" text="Download as" />
+                              <Label fx:id="emailLabel" layoutX="312.0" layoutY="168.0" text="Email as" />
+                              <ComboBox fx:id="emailCombo" layoutX="376.0" layoutY="164.0" prefWidth="150.0" promptText="Download Format" />
+                              <Button fx:id="downloadBtn" layoutX="107.0" layoutY="223.0" mnemonicParsing="false" onAction="#download" text="Download" />
+                              <Button fx:id="emailBtn" layoutX="370.0" layoutY="223.0" mnemonicParsing="false" onAction="#email" text="Email" />
+                              <ComboBox fx:id="monthCombo" layoutX="121.0" layoutY="100.0" prefWidth="150.0" promptText="Month" />
+                              <ComboBox fx:id="yearCombo" layoutX="376.0" layoutY="100.0" prefWidth="150.0" promptText="Year" />
+                              <DatePicker fx:id="from" layoutX="121.0" layoutY="128.0" promptText="Start Date" />
+                              <DatePicker fx:id="to" layoutX="376.0" layoutY="128.0" promptText="End Date" />
+                           </children></AnchorPane>
+                  </content>
+                </Tab>
+                <Tab fx:id="CurrentExpensesTab" text="Current Expenses">
+                     <content>
+                        <AnchorPane prefHeight="281.0" prefWidth="600.0">
+                           <children>
+                              <SplitPane dividerPositions="0.24247491638795987" prefHeight="281.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <items>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                       <children>
+                                          <Label layoutX="23.0" layoutY="57.0" text="Choose Operation" />
+                                          <Button fx:id="creditorPieChart" layoutX="16.0" layoutY="101.0" mnemonicParsing="false" onAction="#creditorPieChart" text="Creditor Pie Chart" />
+                                          <Button fx:id="debtorPieChart" layoutX="16.0" layoutY="150.0" mnemonicParsing="false" onAction="#debtorPieChart" prefHeight="25.0" prefWidth="112.0" text="Debtor Pie Chart" />
+                                       </children>
+                                    </AnchorPane>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                       <children>
+                                          <PieChart fx:id="pieChart" layoutX="0" layoutY="0" prefHeight="279.0" prefWidth="350.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="0.0" />
+                                          <Label fx:id="userLabelText" layoutX="360.0" layoutY="22.0" text="User" visible="false" />
+                                          <Label fx:id="username" layoutX="360.0" layoutY="45.0" />
+                                          <Label fx:id="amountLabelText" layoutX="360.0" layoutY="68.0" text="Amount" visible="false" />
+                                          <Label fx:id="amount" layoutX="360.0" layoutY="91.0" />
+                                       </children>
+                                    </AnchorPane>
+                                </items>
+                              </SplitPane>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                </Tab>
+                  <Tab fx:id="ManageMembersTab" text="Manage Members">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <SplitPane dividerPositions="0.3076923076923077" prefHeight="281.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <items>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="279.0" prefWidth="193.0">
+                                       <children>
+                                          <ComboBox fx:id="userCombo" layoutX="14.0" layoutY="69.0" prefWidth="150.0" promptText="Select User" />
+                                          <Label fx:id="userLabel" layoutX="16.0" layoutY="41.0" text="Select User" />
+                                          <Label fx:id="operationLabel" layoutX="16.0" layoutY="110.0" text="Select Operation" />
+                                          <Label layoutX="37.0" layoutY="14.0" text="Manage Your Profile" />
+                                          <Button fx:id="viewUserBtn" layoutX="7.0" layoutY="140.0" mnemonicParsing="false" onAction="#onOperationSelection" prefHeight="25.0" prefWidth="80.0" text="View User" />
+                                          <Button fx:id="activateUserBtn" layoutX="8.0" layoutY="172.0" mnemonicParsing="false" onAction="#onOperationSelection" prefHeight="25.0" prefWidth="80.0" text="Activate" />
+                                          <Button fx:id="deactivateUserBtn" layoutX="92.0" layoutY="172.0" mnemonicParsing="false" onAction="#onOperationSelection" prefHeight="25.0" prefWidth="80.0" text="De-Activate" />
+                                          <Button fx:id="deleteUserBtn" layoutX="8.0" layoutY="204.0" mnemonicParsing="false" onAction="#onOperationSelection" text="Delete User" />
+                                          <Button fx:id="editUserBtn" layoutX="92.0" layoutY="140.0" mnemonicParsing="false" onAction="#onOperationSelection" prefHeight="25.0" prefWidth="80.0" text="Edit User" />
+                                          <Button fx:id="resetPasswordBtn" layoutX="8.0" layoutY="236.0" mnemonicParsing="false" onAction="#onOperationSelection" prefHeight="25.0" prefWidth="100.0" text="Reset Password" />
+                                       </children></AnchorPane>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="279.0" prefWidth="417.0">
+                                       <children>
+                                          <StackPane fx:id="manageMemberStackPane" layoutX="1.0" prefHeight="280.0" prefWidth="410.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                       </children>
+                                    </AnchorPane>
+                                </items>
+                              </SplitPane>
+                           </children></AnchorPane>
+                    </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+            <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="30.0" prefWidth="600.0" style="-fx-background-color: darkGray;">
+               <children>
+                  <Label fx:id="welcomeMsg" layoutX="14.0" layoutY="6.0" text="Welcome" />
+                  <Label fx:id="usernameLabel" layoutX="73.0" layoutY="8.0" prefHeight="17.0" prefWidth="83.0" />
+                  <Label fx:id="userStatus" layoutX="551.0" layoutY="6.0" text="Online" textFill="#3d9e13" />
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>

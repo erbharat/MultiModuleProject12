@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>JobManager.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.manager</a> &gt; <span class="el_source">JobManager.java</span></div><h1>JobManager.java</h1><pre class="source lang-java linenums">package com.expensetracker.manager;
+
+import java.util.List;
+
+import com.expensetracker.gui.pojo.Job;
+import com.expensetracker.gui.util.PersistenceUtil;
+import com.expensetracker.handler.InstantJobHandler;
+import com.expensetracker.handler.TimedWaitJobHandler;
+import com.expensetracker.logger.Logger;
+
+<span class="nc" id="L11">public class JobManager {</span>
+
+<span class="nc" id="L13">	private final static JobManager manager = new JobManager();</span>
+	private final static InstantJobHandler instantJobHandler = InstantJobHandler
+<span class="nc" id="L15">			.getInstantjobhandler();</span>
+<span class="nc" id="L16">	private final static TimedWaitJobHandler timedWaitJobHandler = TimedWaitJobHandler</span>
+<span class="nc" id="L17">			.getTimedwaitjobhandler();</span>
+
+	public static JobManager getJobManager() {
+<span class="nc" id="L20">		return manager;</span>
+	}
+
+	public static InstantJobHandler getInstantJobHandler() {
+<span class="nc" id="L24">		return instantJobHandler;</span>
+	}
+
+	public static TimedWaitJobHandler getTimedwaitJobHandler() {
+<span class="nc" id="L28">		return timedWaitJobHandler;</span>
+	}
+
+	public int addJob(Job job) {
+<span class="nc" id="L32">		int errorType = 0;</span>
+<span class="nc" id="L33">		errorType = instantJobHandler.processJob(job);</span>
+<span class="nc" id="L34">		Logger.logMessage(&quot;JobManager.addJob(.) : added job to job handler for processing.&quot;);</span>
+<span class="nc" id="L35">		return errorType;</span>
+	}
+
+	public void removeJob(Job job) {
+		// TODO
+<span class="nc" id="L40">	}</span>
+
+	public void saveObjectToDisk() {
+<span class="nc" id="L43">		Logger.logMessage(&quot;JobManager.saveObjectToDisk() : Serializing object to disk.&quot;);</span>
+<span class="nc" id="L44">		PersistenceUtil.saveObject(timedWaitJobHandler.getWaitingJobList());</span>
+<span class="nc" id="L45">	}</span>
+	
+	public void readObjectFromDisk() {
+<span class="nc" id="L48">		Logger.logMessage(&quot;JobManager.readObjectFromDisk() : Reading serialized object from disk.&quot;);</span>
+<span class="nc" id="L49">		List&lt;Job&gt; list = (List&lt;Job&gt;)PersistenceUtil.readObject();</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">		if (list != null) {</span>
+<span class="nc" id="L51">			timedWaitJobHandler.getWaitingJobList().addAll(list);</span>
+		}
+<span class="nc" id="L53">		Logger.logMessage(&quot;JobManager.readObjectFromDisk() : Serialized object &quot; + list);</span>
+<span class="nc" id="L54">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

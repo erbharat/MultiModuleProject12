@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Constants.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.util</a> &gt; <span class="el_source">Constants.java</span></div><h1>Constants.java</h1><pre class="source lang-java linenums">package com.expensetracker.util;
+
+<span class="nc" id="L3">public class Constants {</span>
+	/*******************TIMER CONSTANT*******************/
+	public final static long JOB_TIMER_INTERVAL = 60*1000;
+	public final static long REPORT_TIMER_INTERVAL = 5*60*1000;
+
+	/******************JOB/SERVICE CONSTANT*******************/
+	public final static String NEW_PROFILE = &quot;NEW_PROFILE&quot;;
+	public final static String COMMON_PURCHASE_DETAIL = &quot;COMMON_PURCHASE_DETAIL&quot;;
+	public final static String INSTANT_REPORT = &quot;INSTANT_REPORT&quot;;
+	public static final String PERSIST_DIRECTORY_PATH = &quot;C:\\ProgramData\\ExpenseTracker&quot;;
+	public static final String PERSIST_FILE_NAME = &quot;expensetrackerdata.ser&quot;;
+	
+	/**********************EMAIL CONSTANTS********************/
+	public final static String REPORT_ADMIN_ID = &quot;expensetrackerreport@gamil.com&quot;;
+	public final static String REPORT_ADMIN_FROM = &quot;expensetrackerreport@gamil.com&quot;;
+	public final static String REPORT_ADMIN_PWD = &quot;donotreply!&quot;;
+	public final static String MAIL_SMTP_AUTH = &quot;true&quot;;
+	public final static String MAIL_SMTP_STARTTLS_ENABLE = &quot;true&quot;;
+	public final static String MAIL_SMTP_HOST = &quot;smtp.gmail.com&quot;;
+	public final static String MAIL_SMTP_PORT = &quot;587&quot;;
+	
+	/**********************ERROR CONSTANTS********************/
+	public final static int DATABASE_CONNECTION_SUCCESS = 1000;
+	public final static int DATABASE_CONNECTION_ERROR = 1001;
+	public static final int SUCCESS = 0;
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

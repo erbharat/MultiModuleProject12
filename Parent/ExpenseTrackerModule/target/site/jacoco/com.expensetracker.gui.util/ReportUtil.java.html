@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ReportUtil.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.gui.util</a> &gt; <span class="el_source">ReportUtil.java</span></div><h1>ReportUtil.java</h1><pre class="source lang-java linenums">package com.expensetracker.gui.util;
+
+import static net.sf.dynamicreports.report.builder.DynamicReports.cmp;
+import static net.sf.dynamicreports.report.builder.DynamicReports.col;
+import static net.sf.dynamicreports.report.builder.DynamicReports.stl;
+import static net.sf.dynamicreports.report.builder.DynamicReports.type;
+
+import java.awt.Color;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+
+import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
+import net.sf.dynamicreports.report.builder.DynamicReports;
+import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
+import net.sf.dynamicreports.report.builder.style.StyleBuilder;
+import net.sf.dynamicreports.report.constant.HorizontalAlignment;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
+import com.expensetracker.constants.Constants;
+import com.expensetracker.gui.pojo.Job;
+import com.expensetracker.gui.pojo.PurchaseReportData;
+import com.expensetracker.gui.pojo.ReportRequest;
+import com.expensetracker.gui.pojo.ShareReportData;
+import com.expensetracker.logger.Logger;
+
+<span class="nc" id="L30">public class ReportUtil {</span>
+<span class="nc" id="L31">	private static StyleBuilder columnTitleStyle = null;</span>
+<span class="nc" id="L32">	private static StyleBuilder boldCenteredStyle = null;</span>
+	static {
+<span class="nc" id="L34">		StyleBuilder boldStyle = stl.style().bold();</span>
+
+<span class="nc" id="L36">		boldCenteredStyle = stl.style(boldStyle).setHorizontalAlignment(</span>
+				HorizontalAlignment.CENTER);
+
+<span class="nc" id="L39">		columnTitleStyle = stl.style(boldCenteredStyle)</span>
+<span class="nc" id="L40">				.setBorder(stl.pen1Point())</span>
+<span class="nc" id="L41">				.setBackgroundColor(Color.LIGHT_GRAY);</span>
+<span class="nc" id="L42">	}</span>
+
+	public static File generatePurchaseReport(List&lt;PurchaseReportData&gt; list,
+			Job job) {
+
+<span class="nc" id="L47">		TextColumnBuilder&lt;String&gt; usernameCol = col.column(&quot;Member Username&quot;,</span>
+<span class="nc" id="L48">				&quot;userName&quot;, type.stringType());</span>
+<span class="nc" id="L49">		TextColumnBuilder&lt;Integer&gt; purchaseIdCol = col.column(&quot;Purchase Id&quot;,</span>
+<span class="nc" id="L50">				&quot;purchaseId&quot;, type.integerType());</span>
+<span class="nc" id="L51">		TextColumnBuilder&lt;String&gt; purchaseTypeCol = col.column(&quot;Purchase Type&quot;,</span>
+<span class="nc" id="L52">				&quot;purchaseType&quot;, type.stringType());</span>
+<span class="nc" id="L53">		TextColumnBuilder&lt;List&gt; itemListCol = col.column(&quot;ItemList&quot;,</span>
+<span class="nc" id="L54">				&quot;itemList&quot;, type.listType());</span>
+<span class="nc" id="L55">		TextColumnBuilder&lt;List&gt; contributorListCol = col.column(</span>
+<span class="nc" id="L56">				&quot;Contributor List&quot;, &quot;contributorList&quot;, type.listType());</span>
+<span class="nc" id="L57">		TextColumnBuilder&lt;List&gt; contributionListCol = col.column(</span>
+<span class="nc" id="L58">				&quot;Contribution List&quot;, &quot;contributionList&quot;,type.listType());</span>
+<span class="nc" id="L59">		TextColumnBuilder&lt;Date&gt; dateCol = col.column(&quot;Date&quot;, &quot;date&quot;,</span>
+<span class="nc" id="L60">				type.dateType());</span>
+<span class="nc" id="L61">		TextColumnBuilder&lt;Double&gt; totalAmountCol = col.column(&quot;Total Amount&quot;, &quot;totalAmount&quot;,</span>
+<span class="nc" id="L62">				type.doubleType());</span>
+		 
+					JasperReportBuilder report = DynamicReports
+<span class="nc" id="L65">					.report()</span>
+<span class="nc" id="L66">					.setColumnTitleStyle(columnTitleStyle)</span>
+<span class="nc" id="L67">					.highlightDetailEvenRows()</span>
+<span class="nc" id="L68">					.columns(usernameCol, purchaseIdCol, purchaseTypeCol,</span>
+							itemListCol, contributorListCol, contributionListCol,
+							dateCol, totalAmountCol)
+<span class="nc" id="L71">					.title(cmp.text(</span>
+							&quot;Expense Tracker Purchase Report &quot;
+<span class="nc" id="L73">									+ ((ReportRequest) job.getJob()).getMonth()</span>
+									+ &quot;-&quot;
+<span class="nc" id="L75">									+ ((ReportRequest) job.getJob()).getYear())</span>
+<span class="nc" id="L76">							.setStyle(boldCenteredStyle))</span>
+<span class="nc" id="L77">					.pageFooter(cmp.pageXofY().setStyle(boldCenteredStyle))</span>
+<span class="nc" id="L78">					.setDataSource(createDataSource(list));</span>
+	
+
+<span class="nc" id="L81">		return createFile(report, job); </span>
+	}
+
+	public static File generateShareReport(List&lt;ShareReportData&gt; list, Job job) {
+<span class="nc" id="L85">		TextColumnBuilder&lt;String&gt; usernameCol = col.column(&quot;Member Username&quot;,</span>
+<span class="nc" id="L86">				&quot;userName&quot;, type.stringType());</span>
+<span class="nc" id="L87">		TextColumnBuilder&lt;Double&gt; amountCol = col.column(&quot;Amount&quot;,</span>
+<span class="nc" id="L88">				&quot;amount&quot;, type.doubleType());</span>
+<span class="nc" id="L89">		TextColumnBuilder&lt;List&gt; memberToListCol = col.column(&quot;To Member List&quot;,</span>
+<span class="nc" id="L90">				&quot;memberToList&quot;, type.listType());</span>
+<span class="nc" id="L91">		TextColumnBuilder&lt;List&gt; amountToListCol = col.column(&quot;To Amount List&quot;,</span>
+<span class="nc" id="L92">				&quot;amountToList&quot;, type.listType());</span>
+<span class="nc" id="L93">		TextColumnBuilder&lt;List&gt; memberFromListCol = col.column(</span>
+<span class="nc" id="L94">				&quot;From Member List&quot;, &quot;memberFromList&quot;, type.listType());</span>
+<span class="nc" id="L95">		TextColumnBuilder&lt;List&gt; amountFromListCol = col.column(</span>
+<span class="nc" id="L96">				&quot;From Amount List&quot;, &quot;amountFromList&quot;, type.listType());</span>
+		JasperReportBuilder report = DynamicReports
+<span class="nc" id="L98">				.report()</span>
+<span class="nc" id="L99">				.setColumnTitleStyle(columnTitleStyle)</span>
+<span class="nc" id="L100">				.highlightDetailEvenRows()</span>
+<span class="nc" id="L101">				.columns(usernameCol, amountCol, memberToListCol,</span>
+						amountToListCol, memberFromListCol, amountFromListCol)
+<span class="nc" id="L103">				.title(cmp.text(</span>
+						&quot;Expense Tracker Share Report &quot;
+<span class="nc" id="L105">								+ ((ReportRequest) job.getJob()).getMonth()</span>
+								+ &quot;-&quot;
+<span class="nc" id="L107">								+ ((ReportRequest) job.getJob()).getYear())</span>
+<span class="nc" id="L108">						.setStyle(boldCenteredStyle))</span>
+<span class="nc" id="L109">				.pageFooter(cmp.pageXofY().setStyle(boldCenteredStyle))</span>
+<span class="nc" id="L110">				.setDataSource(createDataSource(list));</span>
+
+<span class="nc" id="L112">		return createFile(report, job);</span>
+	}
+
+	private static File createFile(JasperReportBuilder report, Job job) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L117">		File file = null;</span>
+<span class="nc" id="L118">		FileOutputStream fout = null;</span>
+		try {
+
+<span class="nc bnc" id="L121" title="All 10 branches missed.">			switch (((ReportRequest) job.getJob()).getFileOption()) {</span>
+			case &quot;PDF&quot;:
+<span class="nc" id="L123">				file = new File(Constants.REPORT_FILE_PATH + &quot;EXPENSE TRACKER &quot; + ((ReportRequest) job.getJob()).getReportType() + &quot;(&quot;</span>
+<span class="nc" id="L124">						+ ((ReportRequest) job.getJob()).getMonth() + &quot;, &quot;</span>
+<span class="nc" id="L125">						+ ((ReportRequest) job.getJob()).getYear() + &quot;).pdf&quot;);</span>
+<span class="nc" id="L126">				fout = new FileOutputStream(file);</span>
+<span class="nc" id="L127">				report.toPdf(fout);</span>
+<span class="nc" id="L128">				break;</span>
+
+			case &quot;DOCX&quot;:
+<span class="nc" id="L131">				file = new File(Constants.REPORT_FILE_PATH + &quot;EXPENSE TRACKER &quot; + ((ReportRequest) job.getJob()).getReportType() + &quot;(&quot;</span>
+<span class="nc" id="L132">						+ ((ReportRequest) job.getJob()).getMonth() + &quot;, &quot;</span>
+<span class="nc" id="L133">						+ ((ReportRequest) job.getJob()).getYear() + &quot;).docx&quot;);</span>
+<span class="nc" id="L134">				fout = new FileOutputStream(file);</span>
+<span class="nc" id="L135">				report.toDocx(fout);</span>
+<span class="nc" id="L136">				break;</span>
+
+			default:
+				break;
+			}
+<span class="nc" id="L141">		} catch (Exception e) {</span>
+			// TODO: handle exception
+<span class="nc" id="L143">			e.printStackTrace();</span>
+<span class="nc" id="L144">			Logger.logMessage(&quot;ReportUtil.createFile(..) : Error trace &quot; + e);</span>
+		} finally {
+<span class="nc bnc" id="L146" title="All 6 branches missed.">			if (fout != null) {</span>
+				try {
+<span class="nc" id="L148">					fout.close();</span>
+<span class="nc" id="L149">				} catch (IOException e) {</span>
+					// TODO Auto-generated catch block
+<span class="nc" id="L151">					e.printStackTrace();</span>
+<span class="nc" id="L152">				}</span>
+			}
+		}
+<span class="nc" id="L155">		return file;</span>
+	}
+
+	private static JRDataSource createDataSource(List&lt;?&gt; list) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L160">		return  new JRBeanCollectionDataSource(list);</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

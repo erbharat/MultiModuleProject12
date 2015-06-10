@@ -1,0 +1,12 @@
+-------------------------------------------------------------------------------
+Test set: com.accomplice.jacoco.MathOperationTest
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.019 sec <<< FAILURE! - in com.accomplice.jacoco.MathOperationTest
+testMultiply(com.accomplice.jacoco.MathOperationTest)  Time elapsed: 0.018 sec  <<< FAILURE!
+junit.framework.AssertionFailedError: expected not same
+	at junit.framework.Assert.fail(Assert.java:47)
+	at junit.framework.Assert.failSame(Assert.java:266)
+	at junit.framework.Assert.assertNotSame(Assert.java:252)
+	at junit.framework.Assert.assertNotSame(Assert.java:259)
+	at com.accomplice.jacoco.MathOperationTest.testMultiply(MathOperationTest.java:31)
+

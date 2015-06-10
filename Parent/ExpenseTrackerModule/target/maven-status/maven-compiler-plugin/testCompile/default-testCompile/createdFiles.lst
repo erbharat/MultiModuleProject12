@@ -1,0 +1,5 @@
+com\expensetracker\dao\test\ServiceLayerTest.class
+com\expensetracker\util\test\DatabaseUtilTest.class
+com\expensetracker\dao\test\UserDaoTest.class
+com\expensetracker\gui\util\test\DateUtilTest.class
+com\expensetracker\gui\util\test\ReportUtilTest.class

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.expensetracker.gui.controller.WelcomeScreenController">
+   <children>
+      <AnchorPane prefHeight="30.0" prefWidth="600.0" VBox.vgrow="NEVER">
+         <children>
+            <MenuBar prefHeight="30.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <menus>
+                <Menu id="homeMenu" mnemonicParsing="false" text="Home">
+            		<items>
+              			<MenuItem fx:id="closeMenuItem" mnemonicParsing="false" text="Close" />
+            		</items>
+          		</Menu>
+         		<Menu id="profileMenu" mnemonicParsing="false" text="Profile">
+            		<items>
+              			<MenuItem fx:id="deleteMenuItem" mnemonicParsing="false" text="Delete" />
+            		</items>
+          		</Menu>
+          		<Menu id="helpMenu" mnemonicParsing="false" text="Help">
+            		<items>
+              			<MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" text="About" />
+            		</items>
+          		</Menu>
+              </menus>
+            </MenuBar>
+         </children>
+      </AnchorPane>
+      <StackPane fx:id="screenSwitcher" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="340.0" prefWidth="600.0" VBox.vgrow="ALWAYS" />
+      <AnchorPane prefHeight="30.0" prefWidth="600.0" style="-fx-background-color: skyblue;">
+         <children>
+            <Pane layoutX="25.0" layoutY="2.0" prefHeight="31.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Button fx:id="signUpBtn" disable="false" layoutX="30.0" mnemonicParsing="false" onAction="#signUp" prefHeight="30.0" prefWidth="75.0" style="-fx-background-color: deepskyblue;" text="Sign up" />
+                  <Button fx:id="logoutBtn" layoutX="262.5" mnemonicParsing="false" onAction="#logout" prefHeight="30.0" prefWidth="75.0" style="-fx-background-color: deepskyblue;" text="Logout" visible="false" />
+                  <Button fx:id="homeBtn" layoutX="495.0" mnemonicParsing="false" onAction="#login" prefHeight="30.0" prefWidth="75.0" style="-fx-background-color: deepskyblue;" text="Login" />
+               </children>
+            </Pane>
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>

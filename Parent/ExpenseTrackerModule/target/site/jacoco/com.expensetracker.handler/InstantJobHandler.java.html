@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>InstantJobHandler.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.handler</a> &gt; <span class="el_source">InstantJobHandler.java</span></div><h1>InstantJobHandler.java</h1><pre class="source lang-java linenums">package com.expensetracker.handler;
+
+import com.expensetracker.constants.Constants;
+import com.expensetracker.gui.pojo.Job;
+import com.expensetracker.gui.pojo.User;
+import com.expensetracker.gui.pojo.UserUpdateRequest;
+import com.expensetracker.gui.popup.PopupWindow;
+import com.expensetracker.gui.util.DatabaseUtil;
+import com.expensetracker.logger.Logger;
+import com.expensetracker.manager.JobManager;
+import com.expensetracker.service.Service;
+
+<span class="nc" id="L13">public class InstantJobHandler {</span>
+
+<span class="nc" id="L15">	private final static InstantJobHandler instantJobHandler = new InstantJobHandler();</span>
+
+	public int processJob(Job job) {
+<span class="nc" id="L18">		int erroCode = DatabaseUtil.checkDatabaseConnection();</span>
+<span class="nc" id="L19">		Logger.logMessage(&quot;InstantJobHandler.processJob(.) : database connection is alive ? &quot;</span>
+				+ erroCode);
+<span class="nc bnc" id="L21" title="All 2 branches missed.">		if (erroCode == Constants.DATABASE_CONNECTION_SUCCESS) {</span>
+<span class="nc bnc" id="L22" title="All 30 branches missed.">			switch (job.getJobType()) {</span>
+			case Constants.NEW_PROFILE:
+				try {
+<span class="nc" id="L25">					Service.getService().saveUser(job);</span>
+<span class="nc" id="L26">				} catch (Exception e) {</span>
+<span class="nc" id="L27">					erroCode = Constants.JOB_FAILED_DUE_TO_EXCEPTION;</span>
+<span class="nc" id="L28">					Logger.logMessage(&quot;InstantJobHandler.processJob(.) : &quot;</span>
+<span class="nc" id="L29">							+ job + &quot; error &quot; + e.getMessage());</span>
+<span class="nc" id="L30">					e.printStackTrace();</span>
+<span class="nc" id="L31">				}</span>
+<span class="nc" id="L32">				break;</span>
+
+			case Constants.COMMON_PURCHASE_DETAIL:
+				try {
+
+<span class="nc" id="L37">					Service.getService().savePurchase(job);</span>
+<span class="nc" id="L38">				} catch (Exception e) {</span>
+<span class="nc" id="L39">					e.printStackTrace();</span>
+<span class="nc" id="L40">					erroCode = Constants.JOB_FAILED_DUE_TO_EXCEPTION;</span>
+<span class="nc" id="L41">					Logger.logMessage(&quot;InstantJobHandler.processJob(.) : &quot;</span>
+<span class="nc" id="L42">							+ job + &quot; error &quot; + e.getMessage());</span>
+<span class="nc" id="L43">				}</span>
+<span class="nc" id="L44">				break;</span>
+
+			case Constants.UPDATE_PROFILE:
+				try {
+
+<span class="nc" id="L49">					Service.getService().updateUser(job);</span>
+<span class="nc" id="L50">				} catch (Exception e) {</span>
+<span class="nc" id="L51">					e.printStackTrace();</span>
+<span class="nc" id="L52">					erroCode = Constants.JOB_FAILED_DUE_TO_EXCEPTION;</span>
+<span class="nc" id="L53">					Logger.logMessage(&quot;InstantJobHandler.processJob(.) : &quot;</span>
+<span class="nc" id="L54">							+ job + &quot; error &quot; + e.getMessage());</span>
+<span class="nc" id="L55">				}</span>
+<span class="nc" id="L56">				break;</span>
+
+			case Constants.RESET_PROFILE_PASSWORD:
+				try {
+<span class="nc" id="L60">					UserUpdateRequest data = (UserUpdateRequest) job.getJob();</span>
+<span class="nc" id="L61">					Service.getService().updateUser(data.getUsername(),</span>
+<span class="nc" id="L62">							data.getNewPassword());</span>
+<span class="nc" id="L63">				} catch (Exception e) {</span>
+<span class="nc" id="L64">					e.printStackTrace();</span>
+<span class="nc" id="L65">					erroCode = Constants.JOB_FAILED_DUE_TO_EXCEPTION;</span>
+<span class="nc" id="L66">					Logger.logMessage(&quot;InstantJobHandler.processJob(.) : &quot;</span>
+<span class="nc" id="L67">							+ job + &quot; error &quot; + e.getMessage());</span>
+<span class="nc" id="L68">				}</span>
+<span class="nc" id="L69">				break;</span>
+
+			case Constants.ACTIVATE_USER:
+				try {
+
+<span class="nc" id="L74">					Service.getService().updateUserStatus(job);</span>
+<span class="nc" id="L75">				} catch (Exception e) {</span>
+<span class="nc" id="L76">					e.printStackTrace();</span>
+<span class="nc" id="L77">					erroCode = Constants.JOB_FAILED_DUE_TO_EXCEPTION;</span>
+<span class="nc" id="L78">					Logger.logMessage(&quot;InstantJobHandler.processJob(.) : &quot;</span>
+<span class="nc" id="L79">							+ job + &quot; error &quot; + e.getMessage());</span>
+<span class="nc" id="L80">				}</span>
+<span class="nc" id="L81">				break;</span>
+
+			case Constants.DEACTIVATE_USER:
+				try {
+<span class="nc" id="L85">					Service.getService().updateUserStatus(job);</span>
+<span class="nc" id="L86">				} catch (Exception e) {</span>
+<span class="nc" id="L87">					e.printStackTrace();</span>
+<span class="nc" id="L88">					erroCode = Constants.JOB_FAILED_DUE_TO_EXCEPTION;</span>
+<span class="nc" id="L89">					Logger.logMessage(&quot;InstantJobHandler.processJob(.) : &quot;</span>
+<span class="nc" id="L90">							+ job + &quot; error &quot; + e.getMessage());</span>
+<span class="nc" id="L91">				}</span>
+<span class="nc" id="L92">				break;</span>
+				
+			case Constants.REMOVE_USER:
+				try {
+<span class="nc" id="L96">					Service.getService().deleteUser(((User)job.getJob()).getUserName());</span>
+<span class="nc" id="L97">				} catch (Exception e) {</span>
+<span class="nc" id="L98">					e.printStackTrace();</span>
+<span class="nc" id="L99">					erroCode = Constants.JOB_FAILED_DUE_TO_EXCEPTION;</span>
+<span class="nc" id="L100">					Logger.logMessage(&quot;InstantJobHandler.processJob(.) : &quot;</span>
+<span class="nc" id="L101">							+ job + &quot; error &quot; + e.getMessage());</span>
+<span class="nc" id="L102">				}</span>
+<span class="nc" id="L103">				break;</span>
+			default:
+				break;
+			}
+<span class="nc bnc" id="L107" title="All 2 branches missed.">			if (erroCode == Constants.DATABASE_CONNECTION_SUCCESS) {</span>
+<span class="nc" id="L108">				erroCode = Constants.JOB_PROCESSED_SUCCESSFULLY;</span>
+<span class="nc" id="L109">				Logger.logMessage(&quot;InstantJobHandler.processJob(.) : job processed, errorcode : &quot;</span>
+						+ erroCode + &quot; : &quot; + job);
+<span class="nc" id="L111">				PopupWindow.popup.createInformationalPopup(&quot;Success!&quot;,</span>
+						&quot;Job processed successfully.&quot;);
+			}
+		} else {
+<span class="nc" id="L115">			erroCode = Constants.JOB_IN_WAITING_LIST;</span>
+<span class="nc" id="L116">			Logger.logMessage(&quot;InstantJobHandler.processJob(.) : Instant job process failed due to database connection error  &quot;</span>
+					+ job + &quot; adding to timed wait process queue.&quot;);
+<span class="nc" id="L118">			JobManager.getTimedwaitJobHandler().addJobToList(job);</span>
+<span class="nc" id="L119">			PopupWindow.popup</span>
+<span class="nc" id="L120">					.createErrorPopup(&quot;Database connection error!&quot;,</span>
+							&quot;Not connected to database! \n Added request to waiting queue!.&quot;);
+		}
+<span class="nc bnc" id="L123" title="All 2 branches missed.">		if (erroCode == Constants.JOB_FAILED_DUE_TO_EXCEPTION) {</span>
+<span class="nc" id="L124">			PopupWindow.popup.createErrorPopup(&quot;Severe error!&quot;,</span>
+					&quot;Report to admin related to this error.&quot;);
+		}
+
+<span class="nc" id="L128">		return erroCode;</span>
+	}
+
+	public static InstantJobHandler getInstantjobhandler() {
+<span class="nc" id="L132">		return instantJobHandler;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

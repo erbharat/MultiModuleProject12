@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>InstantReportGenerator.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.handler</a> &gt; <span class="el_source">InstantReportGenerator.java</span></div><h1>InstantReportGenerator.java</h1><pre class="source lang-java linenums">package com.expensetracker.handler;
+
+import java.io.File;
+import java.util.List;
+
+import com.expensetracker.constants.Constants;
+import com.expensetracker.gui.pojo.Job;
+import com.expensetracker.gui.pojo.PurchaseReportData;
+import com.expensetracker.gui.pojo.ReportRequest;
+import com.expensetracker.gui.pojo.ShareReportData;
+import com.expensetracker.gui.popup.PopupWindow;
+import com.expensetracker.gui.util.DatabaseUtil;
+import com.expensetracker.gui.util.ReportUtil;
+import com.expensetracker.logger.Logger;
+import com.expensetracker.manager.JobManager;
+import com.expensetracker.model.AggregateShare;
+import com.expensetracker.model.Purchase;
+import com.expensetracker.service.Service;
+
+<span class="nc" id="L20">public class InstantReportGenerator {</span>
+<span class="nc" id="L21">	private final static InstantReportGenerator instantReportHandler = new InstantReportGenerator();</span>
+
+	/**
+	 * @return the instantReportHandler
+	 */
+	public static InstantReportGenerator getInstantReportHandler() {
+<span class="nc" id="L27">		return instantReportHandler;</span>
+	}
+
+	public File generateReportNow(Job job) {
+<span class="nc" id="L31">		File file = null;</span>
+		try {
+<span class="nc" id="L33">			int errorCode = DatabaseUtil.checkDatabaseConnection();</span>
+<span class="nc" id="L34">			Logger.logMessage(&quot;InstantReportGenerator.generateReportNow() : is database connectin alive ? &quot;</span>
+					+ errorCode);
+<span class="nc bnc" id="L36" title="All 2 branches missed.">			if (errorCode == Constants.DATABASE_CONNECTION_SUCCESS) {</span>
+
+<span class="nc bnc" id="L38" title="All 10 branches missed.">				switch (((ReportRequest) job.getJob()).getReportType()) {</span>
+				case Constants.PURCHASE_REPORT:
+
+<span class="nc" id="L41">					List&lt;Purchase&gt; purchase = null;</span>
+					try {
+<span class="nc" id="L43">						purchase = Service.getService().getPurchaseReport(job);</span>
+<span class="nc" id="L44">					} catch (Exception e) {</span>
+<span class="nc" id="L45">						errorCode = Constants.JOB_FAILED_DUE_TO_EXCEPTION;</span>
+<span class="nc" id="L46">						Logger.logMessage(&quot;InstantReportGenerator.generateReportNow() : &quot;</span>
+<span class="nc" id="L47">								+ job + &quot; &quot; + e.getMessage());</span>
+<span class="nc" id="L48">					}</span>
+<span class="nc" id="L49">					List&lt;PurchaseReportData&gt; purchaseList = null;</span>
+					try {
+<span class="nc" id="L51">						purchaseList = DatabaseUtil</span>
+<span class="nc" id="L52">								.convertPurchaseModelToReportData(purchase);</span>
+<span class="nc" id="L53">						file = ReportUtil.generatePurchaseReport(purchaseList,</span>
+								job);
+<span class="nc" id="L55">					} catch (Exception exc) {</span>
+<span class="nc" id="L56">						errorCode = Constants.JOB_REPORT_GENERATION_ERR;</span>
+<span class="nc" id="L57">						exc.printStackTrace();</span>
+<span class="nc" id="L58">						Logger.logMessage(&quot;InstantReportGenerator.generateReportNow() : Error trace &quot;</span>
+								+ exc);
+<span class="nc" id="L60">					}</span>
+
+<span class="nc" id="L62">					Logger.logMessage(&quot;InstantReportGenerator.generateReportNow() : file generated  &quot;</span>
+							+ file
+							+ &quot; converted pojo purchase list &quot;
+							+ purchaseList);
+<span class="nc" id="L66">					break;</span>
+				case Constants.SHARE_REPORT:
+
+<span class="nc" id="L69">					List&lt;AggregateShare&gt; share = null;</span>
+					try {
+<span class="nc" id="L71">						share = Service.getService().getShareReport(job);</span>
+<span class="nc" id="L72">					} catch (Exception e) {</span>
+<span class="nc" id="L73">						errorCode = Constants.JOB_FAILED_DUE_TO_EXCEPTION;</span>
+<span class="nc" id="L74">						Logger.logMessage(&quot;InstantReportGenerator.generateReportNow() : &quot;</span>
+<span class="nc" id="L75">								+ job + &quot; &quot; + e.getMessage());</span>
+<span class="nc" id="L76">					}</span>
+
+<span class="nc" id="L78">					Logger.logMessage(&quot;InstantReportGenerator.generateReportNow() : share list returned from database &quot;</span>
+							+ share);
+<span class="nc" id="L80">					List&lt;ShareReportData&gt; shareList = null;</span>
+					try {
+<span class="nc" id="L82">						shareList = DatabaseUtil</span>
+<span class="nc" id="L83">								.convertAggregateShareModelToShareData(share);</span>
+<span class="nc" id="L84">						file = ReportUtil.generateShareReport(shareList, job);</span>
+
+<span class="nc" id="L86">					} catch (Exception exc) {</span>
+<span class="nc" id="L87">						errorCode = Constants.JOB_REPORT_GENERATION_ERR;</span>
+<span class="nc" id="L88">						exc.printStackTrace();</span>
+<span class="nc" id="L89">						Logger.logMessage(&quot;InstantReportGenerator.generateReportNow() : Error trace &quot;</span>
+								+ exc);
+<span class="nc" id="L91">					}</span>
+
+<span class="nc" id="L93">					Logger.logMessage(&quot;InstantReportGenerator.generateReportNow() : file generated  &quot;</span>
+							+ file + &quot; converted pojo share list &quot; + shareList);
+<span class="nc" id="L95">					break;</span>
+				default:
+					break;
+				}
+
+<span class="nc bnc" id="L100" title="All 4 branches missed.">				if (errorCode == Constants.DATABASE_CONNECTION_SUCCESS</span>
+						&amp;&amp; file != null) {
+<span class="nc" id="L102">					errorCode = Constants.JOB_PROCESSED_SUCCESSFULLY;</span>
+<span class="nc" id="L103">					Logger.logMessage(&quot;InstantReportGenerator.generateReportNow() : Report &quot;</span>
+<span class="nc" id="L104">							+ file.getName()</span>
+							+ &quot; created successfully, \n Please find it at &quot;
+<span class="nc" id="L106">							+ file.getAbsolutePath());</span>
+
+				}
+			} else {
+
+<span class="nc" id="L111">				errorCode = Constants.JOB_IN_WAITING_LIST;</span>
+<span class="nc" id="L112">				Logger.logMessage(&quot;InstantReportGenerator.generateReportNow() : Database connection error!&quot;</span>
+						+ &quot;\nAdded request to waiting queue! \nReport will be mailed once connected to database&quot;);
+<span class="nc" id="L114">				job.setJobType(Constants.INSTANT_REPORT_EMAIL);</span>
+<span class="nc" id="L115">				((ReportRequest)job.getJob()).setFileOption(Constants.PDF_FILE_REPORT);</span>
+<span class="nc" id="L116">				JobManager.getTimedwaitJobHandler().addJobToList(job);</span>
+<span class="nc" id="L117">				PopupWindow.popup</span>
+<span class="nc" id="L118">						.createErrorPopup(</span>
+								&quot;Database connection error!&quot;,
+								&quot;Not connected to database! \n Added request to waiting queue! \n Report will be mailed once connected to database!&quot;);
+			}
+<span class="nc bnc" id="L122" title="All 4 branches missed.">			if (errorCode == Constants.JOB_REPORT_GENERATION_ERR</span>
+					|| errorCode == Constants.JOB_FAILED_DUE_TO_EXCEPTION) {
+<span class="nc" id="L124">				Logger.logMessage(&quot;InstantReportGenerator.generateReportNow() : Severe code/database error : job &quot;</span>
+						+ job + &quot; &quot;);
+<span class="nc" id="L126">				PopupWindow.popup.createErrorPopup(&quot;Database or code error &quot;,</span>
+						&quot;Database or code error report to admin!&quot;);
+			}
+<span class="nc" id="L129">		} catch (Exception exc) {</span>
+<span class="nc" id="L130">			exc.printStackTrace();</span>
+<span class="nc" id="L131">		}</span>
+<span class="nc" id="L132">		return file;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

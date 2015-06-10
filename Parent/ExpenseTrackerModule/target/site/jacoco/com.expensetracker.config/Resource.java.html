@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Resource.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.config</a> &gt; <span class="el_source">Resource.java</span></div><h1>Resource.java</h1><pre class="source lang-java linenums">package com.expensetracker.config;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Properties;
+
+public class Resource {
+
+	private String fileName;
+	private HashMap&lt;String, String&gt; bundleMap;
+
+	Properties prop;
+
+<span class="fc" id="L18">	public Resource(final String aFileName) {</span>
+<span class="fc" id="L19">		this.fileName = aFileName;</span>
+<span class="fc" id="L20">		prop = new Properties();</span>
+
+		try {
+<span class="fc" id="L23">			ClassLoader classloader = Thread.currentThread().getContextClassLoader();</span>
+<span class="fc" id="L24">	    	InputStream is = classloader.getResourceAsStream(aFileName);</span>
+			//FileInputStream is = new FileInputStream(aFileName);
+			
+<span class="fc" id="L27">			prop.load(is);</span>
+<span class="fc" id="L28">			populateMap(prop);</span>
+<span class="nc" id="L29">		} catch (FileNotFoundException e) {</span>
+			// TODO Auto-generated catch block
+<span class="nc" id="L31">			e.printStackTrace();</span>
+<span class="nc" id="L32">		} catch (IOException e) {</span>
+			// TODO Auto-generated catch block
+<span class="nc" id="L34">			e.printStackTrace();</span>
+<span class="pc" id="L35">		}</span>
+<span class="fc" id="L36">	}</span>
+
+	private void populateMap(Properties bundle) {
+<span class="fc" id="L39">		HashMap&lt;String, String&gt; map = null;</span>
+<span class="pc bpc" id="L40" title="1 of 2 branches missed.">		if (bundle != null) {</span>
+			/*
+			 * final Enumeration&lt;String&gt; keys = bundle.getKeys(); String key =
+			 * &quot;&quot;; while (keys.hasMoreElements()) { key = keys.nextElement(); if
+			 * (map == null) { map = new HashMap&lt;String, String&gt;(); }
+			 * map.put(key, bundle.getString(key)); }
+			 */
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">			if (map == null) {</span>
+<span class="fc" id="L48">				map = new HashMap&lt;String, String&gt;();</span>
+			}
+<span class="fc bfc" id="L50" title="All 2 branches covered.">			for (String key : bundle.stringPropertyNames()) {</span>
+<span class="fc" id="L51">				String value = bundle.getProperty(key);</span>
+<span class="fc" id="L52">				map.put(key, value);</span>
+<span class="fc" id="L53">			}</span>
+		}
+<span class="fc" id="L55">		this.bundleMap = map;</span>
+<span class="fc" id="L56">	}</span>
+
+	/**
+	 * Gets the value.
+	 * 
+	 * @param key
+	 *            The key.
+	 * @return String The value.
+	 */
+	public final String getValue(final String key) {
+<span class="fc" id="L66">		String val = null;</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">		if (bundleMap != null) {</span>
+<span class="fc" id="L68">			val = bundleMap.get(key);</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">			if (val != null) {</span>
+<span class="fc" id="L70">				val = val.trim();</span>
+			}
+		}
+<span class="fc" id="L73">		return val;</span>
+	}
+
+	/**
+	 * Puts the key-value pair.
+	 * 
+	 * @param key
+	 *            The key.
+	 * @param value
+	 *            The value.
+	 */
+	public final void putValue(final String key, final String value) {
+<span class="nc bnc" id="L85" title="All 2 branches missed.">		if (bundleMap != null) {</span>
+<span class="nc" id="L86">			bundleMap.put(key, value);</span>
+		}
+<span class="nc" id="L88">	}</span>
+
+	/**
+	 * Resets the resource by reloading it.
+	 */
+	public final void reset() {
+<span class="nc bnc" id="L94" title="All 2 branches missed.">		if (bundleMap != null) {</span>
+<span class="nc" id="L95">			bundleMap.clear();</span>
+			// populateMap(ResourceBundle.getBundle(fileName));
+		}
+<span class="nc" id="L98">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

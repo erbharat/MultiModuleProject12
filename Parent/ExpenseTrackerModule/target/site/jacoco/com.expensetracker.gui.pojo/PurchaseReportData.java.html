@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PurchaseReportData.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.gui.pojo</a> &gt; <span class="el_source">PurchaseReportData.java</span></div><h1>PurchaseReportData.java</h1><pre class="source lang-java linenums">package com.expensetracker.gui.pojo;
+
+import java.util.Date;
+import java.util.List;
+
+public class PurchaseReportData {
+	private int purchaseId;
+	private String userName;
+	private String purchaseType;
+	private List&lt;String&gt; itemList;
+	private List&lt;String&gt; contributorList;
+	private List&lt;String&gt; contributionList;
+	private Date date;
+	private double totalAmount;
+
+<span class="nc" id="L16">	public PurchaseReportData() {</span>
+<span class="nc" id="L17">	}</span>
+	public PurchaseReportData(int purchaseId, String userName,
+			String purchaseType, List&lt;String&gt; itemList, List&lt;String&gt; contributorList,
+			List&lt;String&gt; contributionList, Date date, double totalAmount) {
+<span class="fc" id="L21">		super();</span>
+<span class="fc" id="L22">		this.purchaseId = purchaseId;</span>
+<span class="fc" id="L23">		this.userName = userName;</span>
+<span class="fc" id="L24">		this.purchaseType = purchaseType;</span>
+<span class="fc" id="L25">		this.itemList = itemList;</span>
+<span class="fc" id="L26">		this.contributorList = contributorList;</span>
+<span class="fc" id="L27">		this.contributionList = contributionList;</span>
+<span class="fc" id="L28">		this.date = date;</span>
+<span class="fc" id="L29">		this.totalAmount = totalAmount;</span>
+<span class="fc" id="L30">	}</span>
+
+	/**
+	 * @return the totalAmount
+	 */
+	public double getTotalAmount() {
+<span class="nc" id="L36">		return totalAmount;</span>
+	}
+
+
+
+	/**
+	 * @param totalAmount the totalAmount to set
+	 */
+	public void setTotalAmount(double totalAmount) {
+<span class="nc" id="L45">		this.totalAmount = totalAmount;</span>
+<span class="nc" id="L46">	}</span>
+
+	/**
+	 * @return the userName
+	 */
+	public String getUserName() {
+<span class="nc" id="L52">		return userName;</span>
+	}
+
+	/**
+	 * @param userName
+	 *            the userName to set
+	 */
+	public void setUserName(String userName) {
+<span class="nc" id="L60">		this.userName = userName;</span>
+<span class="nc" id="L61">	}</span>
+
+	/**
+	 * @return the purchaseType
+	 */
+	public String getPurchaseType() {
+<span class="nc" id="L67">		return purchaseType;</span>
+	}
+
+	/**
+	 * @param purchaseType
+	 *            the purchaseType to set
+	 */
+	public void setPurchaseType(String purchaseType) {
+<span class="nc" id="L75">		this.purchaseType = purchaseType;</span>
+<span class="nc" id="L76">	}</span>
+
+	/**
+	 * @return the itemList
+	 */
+	public List&lt;String&gt; getItemList() {
+<span class="nc" id="L82">		return itemList;</span>
+	}
+
+	/**
+	 * @param itemList
+	 *            the itemList to set
+	 */
+	public void setItemList(List&lt;String&gt; itemList) {
+<span class="nc" id="L90">		this.itemList = itemList;</span>
+<span class="nc" id="L91">	}</span>
+
+	/**
+	 * @return the contributorList
+	 */
+	public List&lt;String&gt; getContributorList() {
+<span class="nc" id="L97">		return contributorList;</span>
+	}
+
+	/**
+	 * @param contributorList
+	 *            the contributorList to set
+	 */
+	public void setContributorList(List&lt;String&gt; contributorList) {
+<span class="nc" id="L105">		this.contributorList = contributorList;</span>
+<span class="nc" id="L106">	}</span>
+
+	/**
+	 * @return the contributionList
+	 */
+	public List&lt;String&gt; getContributionList() {
+<span class="nc" id="L112">		return contributionList;</span>
+	}
+
+	/**
+	 * @param contributionList
+	 *            the contributionList to set
+	 */
+	public void setContributionList(List&lt;String&gt; contributionList) {
+<span class="nc" id="L120">		this.contributionList = contributionList;</span>
+<span class="nc" id="L121">	}</span>
+
+	/**
+	 * @return the date
+	 */
+	public Date getDate() {
+<span class="nc" id="L127">		return date;</span>
+	}
+
+	/**
+	 * @param date
+	 *            the date to set
+	 */
+	public void setDate(Date date) {
+<span class="nc" id="L135">		this.date = date;</span>
+<span class="nc" id="L136">	}</span>
+
+	/**
+	 * @return the purchaseId
+	 */
+	public int getPurchaseId() {
+<span class="nc" id="L142">		return purchaseId;</span>
+	}
+
+	/**
+	 * @param purchaseId
+	 *            the purchaseId to set
+	 */
+	public void setPurchaseId(int purchaseId) {
+<span class="nc" id="L150">		this.purchaseId = purchaseId;</span>
+<span class="nc" id="L151">	}</span>
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+<span class="nc" id="L160">		return &quot;PurchaseReportData [userName=&quot; + userName + &quot;, purchaseType=&quot;</span>
+				+ purchaseType + &quot;, itemList=&quot; + itemList
+				+ &quot;, contributorList=&quot; + contributorList
+				+ &quot;, contributionList=&quot; + contributionList + &quot;, date=&quot; + date
+				+ &quot;, purchaseId=&quot; + purchaseId + &quot;]&quot;;
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

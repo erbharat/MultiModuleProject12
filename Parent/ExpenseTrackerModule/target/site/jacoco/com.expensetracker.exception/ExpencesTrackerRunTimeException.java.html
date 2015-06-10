@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ExpencesTrackerRunTimeException.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.exception</a> &gt; <span class="el_source">ExpencesTrackerRunTimeException.java</span></div><h1>ExpencesTrackerRunTimeException.java</h1><pre class="source lang-java linenums">package com.expensetracker.exception;
+
+public class ExpencesTrackerRunTimeException extends Exception {
+
+	
+	private static final long serialVersionUID = 1L;
+	private int errorMessage ;
+	private Exception cause;
+	public final static int DATABASE_CONNECTION_SUCCESS = 1000;
+	public final static int DATABASE_CONNECTION_FAIL = 1001;
+	public final static int USER_CREDENTIAL_IS_VALID =100;
+	public final static int USER_CREDENTIAL_NOT_VALID = 101;
+	
+<span class="nc" id="L14">	public ExpencesTrackerRunTimeException(int errorMessage ,Exception cause ) {</span>
+<span class="nc" id="L15">		this.errorMessage = errorMessage;</span>
+<span class="nc" id="L16">		this.cause = cause;</span>
+<span class="nc" id="L17">	}</span>
+	public int authenticationException(){
+<span class="nc" id="L19">		return errorMessage;</span>
+	}
+	
+	public int getConnectionException(){
+<span class="nc" id="L23">		return errorMessage;</span>
+	}
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

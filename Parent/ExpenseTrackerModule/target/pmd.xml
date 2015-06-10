@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="5.2.3" timestamp="2015-06-10T13:17:42.912">
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\config\Resource.java">
+<violation beginline="3" endline="3" begincolumn="1" endcolumn="31" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.config" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.io.FileInputStream'
+</violation>
+<violation beginline="7" endline="7" begincolumn="1" endcolumn="20" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.config" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.net.URL'
+</violation>
+<violation beginline="13" endline="13" begincolumn="24" endcolumn="31" rule="UnusedPrivateField" ruleset="Unused Code" package="com.expensetracker.config" class="Resource" variable="fileName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'fileName'.
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\dao\GenericDao.java">
+<violation beginline="5" endline="5" begincolumn="16" endcolumn="55" rule="UnusedModifier" ruleset="Unused Code" package="com.expensetracker.dao" class="GenericDao" method="read" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedModifier" priority="3">
+Avoid modifiers which are implied by the context
+</violation>
+<violation beginline="6" endline="6" begincolumn="16" endcolumn="55" rule="UnusedModifier" ruleset="Unused Code" package="com.expensetracker.dao" class="GenericDao" method="delete" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedModifier" priority="3">
+Avoid modifiers which are implied by the context
+</violation>
+<violation beginline="7" endline="7" begincolumn="16" endcolumn="66" rule="UnusedModifier" ruleset="Unused Code" package="com.expensetracker.dao" class="GenericDao" method="update" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedModifier" priority="3">
+Avoid modifiers which are implied by the context
+</violation>
+<violation beginline="8" endline="8" begincolumn="16" endcolumn="57" rule="UnusedModifier" ruleset="Unused Code" package="com.expensetracker.dao" class="GenericDao" method="save" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedModifier" priority="3">
+Avoid modifiers which are implied by the context
+</violation>
+<violation beginline="9" endline="9" begincolumn="16" endcolumn="42" rule="UnusedModifier" ruleset="Unused Code" package="com.expensetracker.dao" class="GenericDao" method="update" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedModifier" priority="3">
+Avoid modifiers which are implied by the context
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\dao\IndividualShareDao.java">
+<violation beginline="3" endline="3" begincolumn="1" endcolumn="40" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.dao" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'org.hibernate.HibernateException'
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\dao\PurchaseDao.java">
+<violation beginline="3" endline="3" begincolumn="1" endcolumn="34" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.dao" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.text.SimpleDateFormat'
+</violation>
+<violation beginline="4" endline="4" begincolumn="1" endcolumn="22" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.dao" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.util.Date'
+</violation>
+<violation beginline="7" endline="7" begincolumn="1" endcolumn="53" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.dao" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'org.apache.commons.lang3.time.DateFormatUtils'
+</violation>
+<violation beginline="9" endline="9" begincolumn="1" endcolumn="40" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.dao" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'org.hibernate.HibernateException'
+</violation>
+<violation beginline="16" endline="16" begincolumn="1" endcolumn="44" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.dao" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'com.expensetracker.gui.util.DateUtil'
+</violation>
+<violation beginline="94" endline="94" begincolumn="26" endcolumn="34" rule="UnusedLocalVariable" ruleset="Unused Code" package="com.expensetracker.dao" class="PurchaseDao" method="save" variable="purchases" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedLocalVariable" priority="3">
+Avoid unused local variables such as 'purchases'.
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\dao\UserDao.java">
+<violation beginline="3" endline="3" begincolumn="1" endcolumn="27" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.dao" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.util.ArrayList'
+</violation>
+<violation beginline="7" endline="7" begincolumn="1" endcolumn="40" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.dao" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'org.hibernate.HibernateException'
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\exception\ExpencesTrackerRunTimeException.java">
+<violation beginline="8" endline="8" begincolumn="27" endcolumn="31" rule="UnusedPrivateField" ruleset="Unused Code" package="com.expensetracker.exception" class="ExpencesTrackerRunTimeException" variable="cause" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'cause'.
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\gui\controller\DashboardScreenController.java">
+<violation beginline="88" endline="88" begincolumn="25" endcolumn="38" rule="UnusedPrivateField" ruleset="Unused Code" package="com.expensetracker.gui.controller" class="DashboardScreenController" variable="operationCombo" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'operationCombo'.
+</violation>
+<violation beginline="91" endline="91" begincolumn="57" endcolumn="67" rule="UnusedPrivateField" ruleset="Unused Code" package="com.expensetracker.gui.controller" class="DashboardScreenController" variable="downloadBtn" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'downloadBtn'.
+</violation>
+<violation beginline="91" endline="91" begincolumn="70" endcolumn="77" rule="UnusedPrivateField" ruleset="Unused Code" package="com.expensetracker.gui.controller" class="DashboardScreenController" variable="emailBtn" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'emailBtn'.
+</violation>
+<violation beginline="93" endline="93" begincolumn="56" endcolumn="71" rule="UnusedPrivateField" ruleset="Unused Code" package="com.expensetracker.gui.controller" class="DashboardScreenController" variable="creditorPieChart" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'creditorPieChart'.
+</violation>
+<violation beginline="93" endline="93" begincolumn="74" endcolumn="87" rule="UnusedPrivateField" ruleset="Unused Code" package="com.expensetracker.gui.controller" class="DashboardScreenController" variable="debtorPieChart" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'debtorPieChart'.
+</violation>
+<violation beginline="103" endline="103" begincolumn="44" endcolumn="61" rule="UnusedPrivateField" ruleset="Unused Code" package="com.expensetracker.gui.controller" class="DashboardScreenController" variable="individualShareTip" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'individualShareTip'.
+</violation>
+<violation beginline="103" endline="103" begincolumn="25" endcolumn="41" rule="UnusedPrivateField" ruleset="Unused Code" package="com.expensetracker.gui.controller" class="DashboardScreenController" variable="multipleChoiceTip" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'multipleChoiceTip'.
+</violation>
+<violation beginline="273" endline="278" begincolumn="25" endcolumn="25" rule="CollapsibleIfStatements" ruleset="Basic" package="com.expensetracker.gui.controller" class="DashboardScreenController" method="onOperationSelection" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/basic.html#CollapsibleIfStatements" priority="3">
+These nested if statements could be combined
+</violation>
+<violation beginline="472" endline="485" begincolumn="25" endcolumn="25" rule="BrokenNullCheck" ruleset="Basic" package="com.expensetracker.gui.controller" class="DashboardScreenController" method="validatePurchaseInput" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/basic.html#BrokenNullCheck" priority="2">
+Method call on object which may be null
+</violation>
+<violation beginline="552" endline="554" begincolumn="112" endcolumn="41" rule="EmptyIfStmt" ruleset="Empty Code" package="com.expensetracker.gui.controller" class="DashboardScreenController" method="validateReportInput" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/empty.html#EmptyIfStmt" priority="3">
+Avoid empty if statements
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\gui\controller\EditProfileController.java">
+<violation beginline="3" endline="3" begincolumn="1" endcolumn="27" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.gui.controller" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.awt.Graphics2D'
+</violation>
+<violation beginline="4" endline="4" begincolumn="1" endcolumn="31" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.gui.controller" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.awt.RenderingHints'
+</violation>
+<violation beginline="5" endline="5" begincolumn="1" endcolumn="29" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.gui.controller" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.awt.Transparency'
+</violation>
+<violation beginline="30" endline="30" begincolumn="1" endcolumn="50" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.gui.controller" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'com.expensetracker.gui.util.ControllerUtil'
+</violation>
+<violation beginline="52" endline="52" begincolumn="24" endcolumn="37" rule="UnusedPrivateField" ruleset="Unused Code" package="com.expensetracker.gui.controller" class="EditProfileController" variable="saveProfileBtn" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'saveProfileBtn'.
+</violation>
+<violation beginline="92" endline="92" begincolumn="17" endcolumn="17" rule="EmptyStatementNotInLoop" ruleset="Empty Code" package="com.expensetracker.gui.controller" class="EditProfileController" method="setContactTxt" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/empty.html#EmptyStatementNotInLoop" priority="3">
+An empty statement (semicolon) not part of a loop
+</violation>
+<violation beginline="101" endline="101" begincolumn="17" endcolumn="17" rule="EmptyStatementNotInLoop" ruleset="Empty Code" package="com.expensetracker.gui.controller" class="EditProfileController" method="setEmailIdTxt" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/empty.html#EmptyStatementNotInLoop" priority="3">
+An empty statement (semicolon) not part of a loop
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\gui\controller\LoginScreenController.java">
+<violation beginline="31" endline="31" begincolumn="35" endcolumn="50" rule="UnusedPrivateField" ruleset="Unused Code" package="com.expensetracker.gui.controller" class="LoginScreenController" variable="problemSignInBtn" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'problemSignInBtn'.
+</violation>
+<violation beginline="31" endline="31" begincolumn="24" endcolumn="32" rule="UnusedPrivateField" ruleset="Unused Code" package="com.expensetracker.gui.controller" class="LoginScreenController" variable="signInBtn" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'signInBtn'.
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\gui\controller\ProfileScreenController.java">
+<violation beginline="36" endline="36" begincolumn="33" endcolumn="41" rule="UnusedPrivateField" ruleset="Unused Code" package="com.expensetracker.gui.controller" class="ProfileScreenController" variable="cancelBtn" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'cancelBtn'.
+</violation>
+<violation beginline="36" endline="36" begincolumn="24" endcolumn="30" rule="UnusedPrivateField" ruleset="Unused Code" package="com.expensetracker.gui.controller" class="ProfileScreenController" variable="saveBtn" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'saveBtn'.
+</violation>
+<violation beginline="177" endline="179" begincolumn="19" endcolumn="17" rule="EmptyCatchBlock" ruleset="Empty Code" package="com.expensetracker.gui.controller" class="ProfileScreenController" method="validateEmail" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/empty.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\gui\controller\ResetPasswordController.java">
+<violation beginline="111" endline="111" begincolumn="30" endcolumn="49" rule="UselessParentheses" ruleset="Unnecessary" package="com.expensetracker.gui.controller" class="ResetPasswordController" method="resetPassword" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unnecessary.html#UselessParentheses" priority="4">
+Useless parentheses.
+</violation>
+<violation beginline="111" endline="111" begincolumn="57" endcolumn="84" rule="UselessParentheses" ruleset="Unnecessary" package="com.expensetracker.gui.controller" class="ResetPasswordController" method="resetPassword" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unnecessary.html#UselessParentheses" priority="4">
+Useless parentheses.
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\gui\controller\ScreenController.java">
+<violation beginline="43" endline="43" begincolumn="28" endcolumn="37" rule="UnusedPrivateField" ruleset="Unused Code" package="com.expensetracker.gui.controller" class="ScreenController" variable="rootLayout" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'rootLayout'.
+</violation>
+<violation beginline="89" endline="89" begincolumn="32" endcolumn="36" rule="UnusedLocalVariable" ruleset="Unused Code" package="com.expensetracker.gui.controller" class="ScreenController" method="showMainScreen" variable="width" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedLocalVariable" priority="3">
+Avoid unused local variables such as 'width'.
+</violation>
+<violation beginline="90" endline="90" begincolumn="32" endcolumn="37" rule="UnusedLocalVariable" ruleset="Unused Code" package="com.expensetracker.gui.controller" class="ScreenController" method="showMainScreen" variable="height" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedLocalVariable" priority="3">
+Avoid unused local variables such as 'height'.
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\gui\controller\WelcomeScreenController.java">
+<violation beginline="11" endline="11" begincolumn="1" endcolumn="32" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.gui.controller" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javafx.scene.image.Image'
+</violation>
+<violation beginline="12" endline="12" begincolumn="1" endcolumn="36" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.gui.controller" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javafx.scene.image.ImageView'
+</violation>
+<violation beginline="15" endline="15" begincolumn="1" endcolumn="48" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.gui.controller" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'com.expensetracker.gui.popup.PopupWindow'
+</violation>
+<violation beginline="21" endline="21" begincolumn="1" endcolumn="45" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.gui.controller" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'com.expensetracker.gui.util.ImageUtil'
+</violation>
+<violation beginline="44" endline="44" begincolumn="51" endcolumn="58" rule="UnusedPrivateField" ruleset="Unused Code" package="com.expensetracker.gui.controller" class="WelcomeScreenController" variable="helpMenu" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'helpMenu'.
+</violation>
+<violation beginline="44" endline="44" begincolumn="25" endcolumn="35" rule="UnusedPrivateField" ruleset="Unused Code" package="com.expensetracker.gui.controller" class="WelcomeScreenController" variable="homeMenuBar" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'homeMenuBar'.
+</violation>
+<violation beginline="44" endline="44" begincolumn="38" endcolumn="48" rule="UnusedPrivateField" ruleset="Unused Code" package="com.expensetracker.gui.controller" class="WelcomeScreenController" variable="profileMenu" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'profileMenu'.
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\gui\entry\EntryPoint.java">
+<violation beginline="87" endline="88" begincolumn="19" endcolumn="17" rule="EmptyCatchBlock" ruleset="Empty Code" package="com.expensetracker.gui.entry" class="EntryPoint" method="closeLock" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/empty.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+<violation beginline="91" endline="92" begincolumn="19" endcolumn="17" rule="EmptyCatchBlock" ruleset="Empty Code" package="com.expensetracker.gui.entry" class="EntryPoint" method="closeLock" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/empty.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+<violation beginline="98" endline="99" begincolumn="19" endcolumn="17" rule="EmptyCatchBlock" ruleset="Empty Code" package="com.expensetracker.gui.entry" class="EntryPoint" method="deleteFile" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/empty.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\gui\pojo\Purchase.java">
+<violation beginline="5" endline="5" begincolumn="1" endcolumn="22" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.gui.pojo" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.util.Date'
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\gui\pojo\ReportRequest.java">
+<violation beginline="4" endline="4" begincolumn="1" endcolumn="22" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.gui.pojo" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.util.Date'
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\gui\popup\PopupWindow.java">
+<violation beginline="8" endline="8" begincolumn="1" endcolumn="26" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.gui.popup" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javafx.stage.Stage'
+</violation>
+<violation beginline="9" endline="9" begincolumn="1" endcolumn="31" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.gui.popup" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javafx.stage.StageStyle'
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\gui\screen\LoginScreen.java">
+<violation beginline="5" endline="5" begincolumn="1" endcolumn="24" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.gui.screen" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javafx.fxml.FXML'
+</violation>
+<violation beginline="6" endline="6" begincolumn="1" endcolumn="35" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.gui.screen" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javafx.scene.control.Button'
+</violation>
+<violation beginline="7" endline="7" begincolumn="1" endcolumn="37" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.gui.screen" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javafx.scene.control.CheckBox'
+</violation>
+<violation beginline="8" endline="8" begincolumn="1" endcolumn="42" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.gui.screen" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javafx.scene.control.PasswordField'
+</violation>
+<violation beginline="9" endline="9" begincolumn="1" endcolumn="38" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.gui.screen" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javafx.scene.control.TextField'
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\gui\screen\Screen.java">
+<violation beginline="8" endline="8" begincolumn="34" endcolumn="49" rule="UnusedPrivateField" ruleset="Unused Code" package="com.expensetracker.gui.screen" class="Screen" variable="screenController" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'screenController'.
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\gui\screen\WelcomeScreen.java">
+<violation beginline="5" endline="5" begincolumn="1" endcolumn="32" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.gui.screen" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javafx.event.ActionEvent'
+</violation>
+<violation beginline="6" endline="6" begincolumn="1" endcolumn="24" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.gui.screen" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javafx.fxml.FXML'
+</violation>
+<violation beginline="7" endline="7" begincolumn="1" endcolumn="35" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.gui.screen" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javafx.scene.control.Button'
+</violation>
+<violation beginline="8" endline="8" begincolumn="1" endcolumn="36" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.gui.screen" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javafx.scene.control.MenuBar'
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\gui\util\DatabaseUtil.java">
+<violation beginline="10" endline="10" begincolumn="1" endcolumn="42" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.gui.util" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.servlet.jsp.jstl.core.Config'
+</violation>
+<violation beginline="19" endline="19" begincolumn="1" endcolumn="42" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.gui.util" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'com.expensetracker.service.Service'
+</violation>
+<violation beginline="49" endline="50" begincolumn="75" endcolumn="73" rule="UselessParentheses" ruleset="Unnecessary" package="com.expensetracker.gui.util" class="DatabaseUtil" method="convertPurchaseModelToReportData" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unnecessary.html#UselessParentheses" priority="4">
+Useless parentheses.
+</violation>
+<violation beginline="52" endline="53" begincolumn="82" endcolumn="80" rule="UselessParentheses" ruleset="Unnecessary" package="com.expensetracker.gui.util" class="DatabaseUtil" method="convertPurchaseModelToReportData" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unnecessary.html#UselessParentheses" priority="4">
+Useless parentheses.
+</violation>
+<violation beginline="54" endline="55" begincolumn="83" endcolumn="81" rule="UselessParentheses" ruleset="Unnecessary" package="com.expensetracker.gui.util" class="DatabaseUtil" method="convertPurchaseModelToReportData" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unnecessary.html#UselessParentheses" priority="4">
+Useless parentheses.
+</violation>
+<violation beginline="219" endline="222" begincolumn="19" endcolumn="17" rule="EmptyCatchBlock" ruleset="Empty Code" package="com.expensetracker.gui.util" class="DatabaseUtil" method="openConnection" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/empty.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\gui\util\DateUtil.java">
+<violation beginline="113" endline="113" begincolumn="72" endcolumn="101" rule="UselessParentheses" ruleset="Unnecessary" package="com.expensetracker.gui.util" class="DateUtil" method="validateDate" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unnecessary.html#UselessParentheses" priority="4">
+Useless parentheses.
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\gui\util\Validation.java">
+<violation beginline="3" endline="3" begincolumn="1" endcolumn="22" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.gui.util" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.util.Date'
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\handler\ScheduledReportGenerator.java">
+<violation beginline="29" endline="31" begincolumn="29" endcolumn="25" rule="EmptyTryBlock" ruleset="Empty Code" package="com.expensetracker.handler" class="ScheduledReportGenerator$ProcessScheduleReport" method="run" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/empty.html#EmptyTryBlock" priority="3">
+Avoid empty try blocks
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\logger\Logger.java">
+<violation beginline="4" endline="4" begincolumn="1" endcolumn="37" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.logger" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.io.FileNotFoundException'
+</violation>
+<violation beginline="6" endline="6" begincolumn="1" endcolumn="27" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.logger" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.io.PrintWriter'
+</violation>
+<violation beginline="20" endline="20" begincolumn="25" endcolumn="29" rule="UnusedPrivateField" ruleset="Unused Code" package="com.expensetracker.logger" class="Logger" variable="debug" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'debug'.
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\manager\UserManager.java">
+<violation beginline="3" endline="3" begincolumn="1" endcolumn="27" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.manager" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.util.ArrayList'
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\model\IndividualShare.java">
+<violation beginline="17" endline="17" begincolumn="1" endcolumn="41" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.model" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'org.hibernate.annotations.Cascade'
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\model\Purchase.java">
+<violation beginline="3" endline="3" begincolumn="1" endcolumn="22" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.model" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.util.Date'
+</violation>
+<violation beginline="11" endline="11" begincolumn="1" endcolumn="34" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.model" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.persistence.Temporal'
+</violation>
+<violation beginline="12" endline="12" begincolumn="1" endcolumn="38" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.model" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.persistence.TemporalType'
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\service\Service.java">
+<violation beginline="48" endline="48" begincolumn="91" endcolumn="98" rule="UnusedNullCheckInEquals" ruleset="Unnecessary" package="com.expensetracker.service" class="Service" method="userAuthentication" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unnecessary.html#UnusedNullCheckInEquals" priority="3">
+Invoke equals() on the object you've already ensured is not null
+</violation>
+<violation beginline="48" endline="52" begincolumn="41" endcolumn="41" rule="CollapsibleIfStatements" ruleset="Basic" package="com.expensetracker.service" class="Service" method="userAuthentication" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/basic.html#CollapsibleIfStatements" priority="3">
+These nested if statements could be combined
+</violation>
+<violation beginline="250" endline="251" begincolumn="79" endcolumn="87" rule="UselessParentheses" ruleset="Unnecessary" package="com.expensetracker.service" class="Service" method="saveIndividualShare" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/unnecessary.html#UselessParentheses" priority="4">
+Useless parentheses.
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\util\ConvertUtil.java">
+<violation beginline="6" endline="6" begincolumn="1" endcolumn="44" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.util" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'com.expensetracker.gui.util.DateUtil'
+</violation>
+</file>
+<file name="D:\Expense Tracker Project\MultiModuleProject\Parent\ExpenseTrackerModule\src\main\java\com\expensetracker\util\HibernateUtil.java">
+<violation beginline="3" endline="3" begincolumn="1" endcolumn="29" rule="UnusedImports" ruleset="Import Statements" package="com.expensetracker.util" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.2.3/pmd-java/rules/java/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'org.hibernate.Session'
+</violation>
+</file>
+</pmd>

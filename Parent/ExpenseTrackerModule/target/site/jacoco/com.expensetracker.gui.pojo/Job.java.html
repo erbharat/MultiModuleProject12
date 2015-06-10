@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Job.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.gui.pojo</a> &gt; <span class="el_source">Job.java</span></div><h1>Job.java</h1><pre class="source lang-java linenums">package com.expensetracker.gui.pojo;
+
+import java.io.Serializable;
+
+public class Job implements Serializable {
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4159517912120931624L;
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+<span class="nc" id="L20">		final int prime = 31;</span>
+<span class="nc" id="L21">		int result = 1;</span>
+<span class="nc bnc" id="L22" title="All 2 branches missed.">		result = prime * result + ((job == null) ? 0 : job.hashCode());</span>
+<span class="nc bnc" id="L23" title="All 2 branches missed.">		result = prime * result + ((jobType == null) ? 0 : jobType.hashCode());</span>
+<span class="nc" id="L24">		return result;</span>
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+<span class="nc bnc" id="L32" title="All 2 branches missed.">		if (this == obj)</span>
+<span class="nc" id="L33">			return true;</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">		if (obj == null)</span>
+<span class="nc" id="L35">			return false;</span>
+<span class="nc bnc" id="L36" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
+<span class="nc" id="L37">			return false;</span>
+<span class="nc" id="L38">		Job other = (Job) obj;</span>
+<span class="nc bnc" id="L39" title="All 2 branches missed.">		if (job == null) {</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">			if (other.job != null)</span>
+<span class="nc" id="L41">				return false;</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">		} else if (!job.equals(other.job))</span>
+<span class="nc" id="L43">			return false;</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">		if (jobType == null) {</span>
+<span class="nc bnc" id="L45" title="All 2 branches missed.">			if (other.jobType != null)</span>
+<span class="nc" id="L46">				return false;</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">		} else if (!jobType.equals(other.jobType))</span>
+<span class="nc" id="L48">			return false;</span>
+<span class="nc" id="L49">		return true;</span>
+	}
+
+	private String jobType;
+	private Object job;
+	
+	public Job(String jobType, Object job) {
+<span class="fc" id="L56">		super();</span>
+<span class="fc" id="L57">		this.jobType = jobType;</span>
+<span class="fc" id="L58">		this.job = job;</span>
+<span class="fc" id="L59">	} </span>
+	
+	/**
+	 * @return the jobType
+	 */
+	public String getJobType() {
+<span class="nc" id="L65">		return jobType;</span>
+	}
+	/**
+	 * @param jobType the jobType to set
+	 */
+	public void setJobType(String jobType) {
+<span class="nc" id="L71">		this.jobType = jobType;</span>
+<span class="nc" id="L72">	}</span>
+	/**
+	 * @return the job
+	 */
+	public Object getJob() {
+<span class="nc" id="L77">		return job;</span>
+	}
+	/**
+	 * @param job the job to set
+	 */
+	public void setJob(Object job) {
+<span class="nc" id="L83">		this.job = job;</span>
+<span class="nc" id="L84">	}</span>
+
+	@Override
+	public String toString() {
+<span class="nc" id="L88">		return &quot;Job [jobType=&quot; + jobType + &quot;, job=&quot; + job + &quot;]&quot;;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

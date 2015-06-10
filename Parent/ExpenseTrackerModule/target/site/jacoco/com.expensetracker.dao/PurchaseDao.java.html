@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PurchaseDao.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.dao</a> &gt; <span class="el_source">PurchaseDao.java</span></div><h1>PurchaseDao.java</h1><pre class="source lang-java linenums">package com.expensetracker.dao;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
+
+import com.expensetracker.gui.pojo.Job;
+import com.expensetracker.gui.pojo.ReportRequest;
+import com.expensetracker.gui.util.DateUtil;
+import com.expensetracker.logger.Logger;
+import com.expensetracker.model.Purchase;
+import com.expensetracker.model.User;
+import com.expensetracker.util.HibernateUtil;
+
+<span class="nc" id="L22">public class PurchaseDao implements GenericDao {</span>
+
+<span class="nc" id="L24">	private static PurchaseDao purchaseDao = new PurchaseDao();;</span>
+<span class="nc" id="L25">	SessionFactory sessionFactory = HibernateUtil.getSessionFactory();</span>
+
+	public static PurchaseDao getPurchaseDao() {
+<span class="nc" id="L28">		return purchaseDao;</span>
+	}
+
+	@Override
+	public Purchase read(Object purchaseId) throws Exception {
+<span class="nc" id="L33">		Purchase purchase = null;</span>
+<span class="nc" id="L34">		Session session = sessionFactory.openSession();</span>
+<span class="nc" id="L35">		session.beginTransaction();</span>
+		try {
+<span class="nc bnc" id="L37" title="All 2 branches missed.">			if (session != null) {</span>
+<span class="nc" id="L38">				purchase = (Purchase) session.get(Purchase.class,</span>
+<span class="nc" id="L39">						(int) purchaseId);</span>
+
+			}
+<span class="nc" id="L42">			session.getTransaction().commit();</span>
+		} finally {
+<span class="nc bnc" id="L44" title="All 4 branches missed.">			if (session != null) {</span>
+<span class="nc" id="L45">				session.close();</span>
+			}
+		}
+<span class="nc" id="L48">		return purchase;</span>
+	}
+
+	@Override
+	public void delete(String purchaseId) throws Exception {
+<span class="nc" id="L53">		Session session = sessionFactory.openSession();</span>
+<span class="nc" id="L54">		session.beginTransaction();</span>
+		try {
+<span class="nc bnc" id="L56" title="All 2 branches missed.">			if (session != null) {</span>
+<span class="nc" id="L57">				session.delete(purchaseId, Purchase.class);</span>
+			}
+<span class="nc" id="L59">			session.getTransaction().commit();</span>
+
+		} finally {
+<span class="nc bnc" id="L62" title="All 4 branches missed.">			if (session != null) {</span>
+<span class="nc" id="L63">				session.close();</span>
+			}
+		}
+
+<span class="nc" id="L67">	}</span>
+
+	@Override
+	public void update(String purchaseId, String userId) throws Exception {
+<span class="nc" id="L71">		User user = null;</span>
+<span class="nc" id="L72">		Session session = sessionFactory.openSession();</span>
+<span class="nc" id="L73">		session.beginTransaction();</span>
+		try {
+<span class="nc bnc" id="L75" title="All 2 branches missed.">			if (session != null) {</span>
+<span class="nc" id="L76">				user = (User) session.get(Purchase.class, userId);</span>
+<span class="nc" id="L77">				user.setEmailId(&quot;rajivranjan8589@gmail.com&quot;);</span>
+<span class="nc" id="L78">				session.update(user);</span>
+
+			}
+<span class="nc" id="L81">			session.getTransaction().commit();</span>
+		} finally {
+<span class="nc bnc" id="L83" title="All 4 branches missed.">			if (session != null) {</span>
+<span class="nc" id="L84">				session.close();</span>
+			}
+		}
+
+<span class="nc" id="L88">	}</span>
+
+	@Override
+	public void save(Object purchase) throws Exception {
+<span class="nc" id="L92">		Session session = sessionFactory.openSession();</span>
+<span class="nc" id="L93">		session.beginTransaction();</span>
+<span class="nc" id="L94">		Purchase purchases = (Purchase) purchase;</span>
+		try {
+<span class="nc bnc" id="L96" title="All 2 branches missed.">			if (session != null) {</span>
+<span class="nc" id="L97">				session.save(purchase);</span>
+			}
+<span class="nc" id="L99">			session.getTransaction().commit();</span>
+		} finally {
+<span class="nc bnc" id="L101" title="All 4 branches missed.">			if (session != null) {</span>
+<span class="nc" id="L102">				session.close();</span>
+			}
+		}
+<span class="nc" id="L105">	}</span>
+
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public List&lt;Purchase&gt; getPurchaseReport(Job job) throws Exception {
+<span class="nc" id="L109">		Session session = sessionFactory.openSession();</span>
+<span class="nc" id="L110">		session.beginTransaction();</span>
+<span class="nc" id="L111">		Criteria criteria = session.createCriteria(Purchase.class);</span>
+
+<span class="nc" id="L113">		List&lt;Purchase&gt; purchaseList = null;</span>
+
+		try {
+<span class="nc bnc" id="L116" title="All 2 branches missed.">			if (session != null) {</span>
+<span class="nc" id="L117">				String from = ((ReportRequest) job.getJob()).getFromDate();</span>
+<span class="nc" id="L118">				String to = ((ReportRequest) job.getJob()).getToDate();</span>
+			/*	String from = DateFormatUtils.format(fromdate, &quot;yyyy-mm-dd&quot;);
+				String to = DateFormatUtils.format(todate, &quot;yyyy-mm-dd&quot;);
+<span class="nc" id="L121">				*/Logger.logMessage(&quot;PurchaseDao.getPurchaseList(.) : fromdate  &quot; + from + &quot; to date &quot; + to );</span>
+<span class="nc" id="L122">				purchaseList = (List&lt;Purchase&gt;) criteria.add(</span>
+<span class="nc" id="L123">						Restrictions.between(&quot;purchaseDate&quot;, from, to)).list();</span>
+
+			}
+		} finally {
+<span class="nc bnc" id="L127" title="All 4 branches missed.">			if (session != null) {</span>
+<span class="nc" id="L128">				session.close();</span>
+			}
+		}
+<span class="nc" id="L131">		return purchaseList;</span>
+	}
+
+	@Override
+	public void update(Object object) {
+		// TODO Auto-generated method stub
+		
+<span class="nc" id="L138">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

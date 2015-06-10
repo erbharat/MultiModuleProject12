@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Service.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.service</a> &gt; <span class="el_source">Service.java</span></div><h1>Service.java</h1><pre class="source lang-java linenums">package com.expensetracker.service;
+
+import java.sql.Connection;
+import java.util.List;
+
+import com.expensetracker.constants.Constants;
+import com.expensetracker.dao.AggregateShareDao;
+import com.expensetracker.dao.GenericDao;
+import com.expensetracker.dao.DaoFactory;
+import com.expensetracker.dao.IndividualShareDao;
+import com.expensetracker.dao.PurchaseDao;
+import com.expensetracker.dao.UserDao;
+import com.expensetracker.gui.pojo.Job;
+import com.expensetracker.gui.pojo.UserUpdateRequest;
+import com.expensetracker.gui.util.DateUtil;
+import com.expensetracker.logger.Logger;
+import com.expensetracker.model.AggregateShare;
+import com.expensetracker.model.IndividualShare;
+import com.expensetracker.model.Purchase;
+import com.expensetracker.model.User;
+import com.expensetracker.util.ConvertUtil;
+import com.expensetracker.util.HibernateUtil;
+
+<span class="fc" id="L24">public class Service {</span>
+
+<span class="fc" id="L26">	private static final Service service = new Service();</span>
+
+	public static Service getService() {
+		// TODO Auto-generated method stub
+<span class="fc" id="L30">		return service;</span>
+	}
+
+	/**
+	 * User Login Authentication Check Up Method Start
+	 * 
+	 * @return
+	 **/
+	public boolean userAuthentication(String userName, String password) {
+
+<span class="nc" id="L40">		boolean isAuthenticated = false;</span>
+		try {
+<span class="nc" id="L42">			Logger.logMessage(&quot;Service.userAuthentication(..) : Authenticate user with username &quot;</span>
+					+ userName + &quot; and password &quot; + password);
+<span class="nc bnc" id="L44" title="All 2 branches missed.">			if (userName != null) {</span>
+<span class="nc" id="L45">				User user = (User) DaoFactory.getDao(Constants.USER_DAO).read(</span>
+						userName);
+<span class="nc bnc" id="L47" title="All 2 branches missed.">				if (user != null) {</span>
+<span class="nc bnc" id="L48" title="All 4 branches missed.">					if (password != null &amp;&amp; user.getPassword().equals(password)) {</span>
+<span class="nc" id="L49">						isAuthenticated = true;</span>
+<span class="nc" id="L50">						Logger.logMessage(&quot;Service.userAuthentication(..) : Authentication successfull for user &quot;</span>
+<span class="nc" id="L51">								+ user.getUserName());</span>
+					}
+				}
+			}
+<span class="nc" id="L55">		} catch (Exception e) {</span>
+<span class="nc" id="L56">			Logger.logMessage(&quot;Service.userAuthentication(..) : Authentication failed for user &quot;</span>
+<span class="nc" id="L57">					+ userName + &quot; error trace &quot; + e.getLocalizedMessage());</span>
+<span class="nc" id="L58">		}</span>
+
+<span class="nc bnc" id="L60" title="All 2 branches missed.">		if (!isAuthenticated) {</span>
+<span class="nc" id="L61">			Logger.logMessage(&quot;Service.userAuthentication(..) : Authentication failed for user &quot;</span>
+					+ userName);
+		}
+
+<span class="nc" id="L65">		return isAuthenticated;</span>
+	}
+
+	/** User Login Authentication Check Up Method End **/
+
+	/** User CRUD Operation Method Start : **/
+
+	public Object readUser(String id) throws Exception {
+<span class="nc" id="L73">		GenericDao userDao = DaoFactory.getDao(Constants.USER_DAO);</span>
+<span class="nc" id="L74">		User user = (User) userDao.read(id);</span>
+<span class="nc" id="L75">		return user;</span>
+	}
+
+	public void deleteUser(String id) throws Exception {
+<span class="nc" id="L79">		GenericDao userDao = DaoFactory.getDao(Constants.USER_DAO);</span>
+<span class="nc" id="L80">		userDao.delete(id);</span>
+
+<span class="nc" id="L82">	}</span>
+
+	public void updateUser(String id, String key) throws Exception {
+<span class="nc" id="L85">		GenericDao userDao = DaoFactory.getDao(Constants.USER_DAO);</span>
+<span class="nc" id="L86">		userDao.update(id, key);</span>
+<span class="nc" id="L87">	}</span>
+	
+	public void updateUserStatus(Job job) throws Exception {
+<span class="nc" id="L90">		UserDao userDao = (UserDao)DaoFactory.getDao(Constants.USER_DAO);</span>
+<span class="nc" id="L91">		UserUpdateRequest request = (UserUpdateRequest)job.getJob();</span>
+<span class="nc" id="L92">		userDao.updateUserStatus(request.getUsername(), request.getStatus());</span>
+<span class="nc" id="L93">	}</span>
+	
+	public void updateUser(Job job) {
+<span class="nc" id="L96">		GenericDao userDao = DaoFactory.getDao(Constants.USER_DAO);</span>
+<span class="nc" id="L97">		com.expensetracker.gui.pojo.User guiUser = (com.expensetracker.gui.pojo.User) job</span>
+<span class="nc" id="L98">				.getJob();</span>
+<span class="nc" id="L99">		User user = ConvertUtil.convertUserPojoToModel(guiUser);</span>
+<span class="nc" id="L100">		userDao.update(user);</span>
+<span class="nc" id="L101">		Logger.logMessage(&quot;Service.saveUser(.) : user &quot; + user.getUserName()</span>
+				+ &quot; updated successfully in database.&quot;);
+<span class="nc" id="L103">	}</span>
+
+	public void saveUser(Job job) throws Exception {
+<span class="nc" id="L106">		Logger.logMessage(&quot;Service.saveUser(.) : trying to save job.&quot;);</span>
+<span class="nc" id="L107">		GenericDao userDao = DaoFactory.getDao(Constants.USER_DAO);</span>
+<span class="nc" id="L108">		com.expensetracker.gui.pojo.User guiUser = (com.expensetracker.gui.pojo.User) job</span>
+<span class="nc" id="L109">				.getJob();</span>
+<span class="nc" id="L110">		User user = ConvertUtil.convertUserPojoToModel(guiUser);</span>
+<span class="nc" id="L111">		userDao.save(user);</span>
+<span class="nc" id="L112">		Logger.logMessage(&quot;Service.saveUser(.) : user &quot; + user.getUserName()</span>
+				+ &quot; saved successfully in database.&quot;);
+<span class="nc" id="L114">		addAggregateShare(job);</span>
+<span class="nc" id="L115">	}</span>
+
+	private void addAggregateShare(Job job) throws Exception {
+		// Adding entry for the user to aggreagate share table.
+<span class="nc" id="L119">		User user = ((UserDao) DaoFactory.getDao(Constants.USER_DAO))</span>
+<span class="nc" id="L120">				.read(((com.expensetracker.gui.pojo.User) job.getJob())</span>
+<span class="nc" id="L121">						.getUserName());</span>
+<span class="nc" id="L122">		AggregateShare share = new AggregateShare();</span>
+<span class="nc" id="L123">		share.setUserName(user.getUserName());</span>
+<span class="nc" id="L124">		share.setCurrentShare((double)0);</span>
+<span class="nc" id="L125">		(DaoFactory.getDao(Constants.AGGREGATE_SHARE_DAO)).save(share);</span>
+<span class="nc" id="L126">		Logger.logMessage(&quot;Service.addAggregateShare(.) : Aggregate share entry created successfully&quot;);</span>
+<span class="nc" id="L127">	}</span>
+
+	/** User CRUD Operation Method End : **/
+
+	/** Purchase CRUD Operation Method Start : **/
+	public Object readPurchase(Object id) throws Exception {
+<span class="nc" id="L133">		GenericDao purchaseDao = DaoFactory.getDao(Constants.PURCHASE_DAO);</span>
+<span class="nc" id="L134">		Purchase purchase = (Purchase) purchaseDao.read(id);</span>
+<span class="nc" id="L135">		return purchase;</span>
+	}
+
+	public void deletePurchase(String id) throws Exception {
+<span class="nc" id="L139">		GenericDao purchaseDao = DaoFactory.getDao(Constants.PURCHASE_DAO);</span>
+<span class="nc" id="L140">		purchaseDao.delete(id);</span>
+
+<span class="nc" id="L142">	}</span>
+
+	public void updatePurchase(String id, String key) throws Exception {
+<span class="nc" id="L145">		GenericDao purchaseDao = DaoFactory.getDao(Constants.PURCHASE_DAO);</span>
+<span class="nc" id="L146">		purchaseDao.update(id, key);</span>
+<span class="nc" id="L147">	}</span>
+
+	public void savePurchase(Job job) throws Exception {
+<span class="nc" id="L150">		Logger.logMessage(&quot;Service.savePurchase(.) : Saving purchase details to database.&quot;);</span>
+<span class="nc" id="L151">		GenericDao purchaseDao = DaoFactory.getDao(Constants.PURCHASE_DAO);</span>
+<span class="nc" id="L152">		com.expensetracker.gui.pojo.Purchase guiPurchase = (com.expensetracker.gui.pojo.Purchase) job</span>
+<span class="nc" id="L153">				.getJob();</span>
+<span class="nc" id="L154">		Purchase purchase = ConvertUtil.convertPurchasePojoToModel(guiPurchase);</span>
+<span class="nc" id="L155">		purchaseDao.save(purchase);</span>
+<span class="nc" id="L156">		Logger.logMessage(&quot;Service.savePurchase(.) : Saved purchase details to database.&quot;);</span>
+<span class="nc" id="L157">		this.saveIndividualShare(purchase, guiPurchase);</span>
+<span class="nc" id="L158">	}</span>
+
+	/** Purchase CRUD Operation Method End : **/
+
+	/** Get all User List Start : **/
+
+	public List&lt;User&gt; getUserList() throws Exception {
+<span class="nc" id="L165">		Logger.logMessage(&quot;Service.getUserList() : Getting list of users from database.&quot;);</span>
+<span class="nc" id="L166">		UserDao userDao = (UserDao) DaoFactory.getDao(Constants.USER_DAO);</span>
+<span class="nc" id="L167">		List&lt;User&gt; userList = userDao.getUserList();</span>
+<span class="nc" id="L168">		Logger.logMessage(&quot;Service.getUserList() : Returning list of users from database &quot;</span>
+				+ userList);
+<span class="nc" id="L170">		return userList;</span>
+	}
+
+	/** Get all User List End : **/
+
+	/** Get all Purchase List Start : **/
+
+	public List&lt;Purchase&gt; getPurchaseReport(Job job) throws Exception {
+<span class="nc" id="L178">		Logger.logMessage(&quot;Service.getPurchaseReport(.) : Getting purchase record from database.&quot;);</span>
+<span class="nc" id="L179">		PurchaseDao purchaseDao = (PurchaseDao) DaoFactory</span>
+<span class="nc" id="L180">				.getDao(Constants.PURCHASE_DAO);</span>
+<span class="nc" id="L181">		List&lt;Purchase&gt; purchaseList = purchaseDao.getPurchaseReport(job);</span>
+<span class="nc bnc" id="L182" title="All 2 branches missed.">		if (purchaseList != null)</span>
+<span class="nc" id="L183">			Logger.logMessage(&quot;Service.getPurchaseReport(.) : Retreived purchase record from database, size of list = &quot;</span>
+<span class="nc" id="L184">					+ purchaseList.size());</span>
+		else
+<span class="nc" id="L186">			Logger.logMessage(&quot;Service.getPurchaseReport(.) : Error retreving purchase record from database.&quot;);</span>
+<span class="nc" id="L187">		return purchaseList;</span>
+	}
+
+	/** Get all Purchase List End : **/
+
+	/** Get all Share List Start : **/
+
+	public List&lt;AggregateShare&gt; getShareReport(Job job) throws Exception {
+<span class="nc" id="L195">		Logger.logMessage(&quot;Service.getShareReport(.) : Getting share record from database.&quot;);</span>
+<span class="nc" id="L196">		AggregateShareDao aggregateShareDao = (AggregateShareDao) DaoFactory</span>
+<span class="nc" id="L197">				.getDao(Constants.AGGREGATE_SHARE_DAO);</span>
+<span class="nc" id="L198">		List&lt;AggregateShare&gt; aggregateShareList = aggregateShareDao</span>
+<span class="nc" id="L199">				.getShareReport(job);</span>
+<span class="nc bnc" id="L200" title="All 2 branches missed.">		if (aggregateShareList != null) </span>
+<span class="nc" id="L201">			Logger.logMessage(&quot;Service.getPurchaseReport(.) : Retreived share record from database, size of list = &quot; + aggregateShareList.size());</span>
+		else 
+<span class="nc" id="L203">			Logger.logMessage(&quot;Service.getPurchaseReport(.) : Error retreving share record from database.&quot;);</span>
+<span class="nc" id="L204">		return aggregateShareList;</span>
+	}
+
+	/** Get all Share List End : **/
+
+	/** Get all IndividualShare calculation Start : **/
+	private void saveIndividualShare(Purchase purchase,
+			com.expensetracker.gui.pojo.Purchase guiPurchase) throws Exception {
+		
+<span class="nc" id="L213">		Logger.logMessage(&quot;Service.saveIndividualShare(..) : Saving individual share record into database.&quot;);</span>
+
+<span class="nc" id="L215">		IndividualShareDao individualShareDao = (IndividualShareDao) DaoFactory</span>
+<span class="nc" id="L216">				.getDao(Constants.INDIVIDUAL_SHARE_DAO);</span>
+<span class="nc" id="L217">		List&lt;User&gt; list = ((UserDao) DaoFactory.getDao(Constants.USER_DAO))</span>
+<span class="nc" id="L218">				.getActiveUserList();</span>
+		
+<span class="nc" id="L220">		Logger.logMessage(&quot;Service.saveIndividualShare(..) : Active user list &quot; + list);</span>
+
+<span class="nc bnc" id="L222" title="All 2 branches missed.">		if (purchase.getPurchaseType().equals(Constants.DAILY_PURCHASE_TYPE)) {</span>
+
+<span class="nc" id="L224">			IndividualShare individualShare = new IndividualShare();</span>
+<span class="nc" id="L225">			individualShare.setPurchaseId(purchase);</span>
+<span class="nc" id="L226">			individualShare.setAmount(purchase.getTotalAmount());</span>
+<span class="nc" id="L227">			individualShare.setUserName(purchase.getUserId());</span>
+<span class="nc" id="L228">			individualShare.setDate(DateUtil.stringToDate(purchase.getPurchaseDate()));</span>
+<span class="nc" id="L229">			individualShareDao.save(individualShare);</span>
+			
+<span class="nc" id="L231">			Logger.logMessage(&quot;Service.saveIndividualShare(..) : saved individual share for daily purchase into database &quot; + individualShare);</span>
+<span class="nc" id="L232">			this.updateAggregateShare(purchase.getUserId(),</span>
+<span class="nc" id="L233">					purchase.getTotalAmount(), list);</span>
+<span class="nc bnc" id="L234" title="All 2 branches missed.">		} else if (purchase.getPurchaseType().equals(Constants.BULK_PURCHASE_TYPE)) {</span>
+<span class="nc" id="L235">			List&lt;String&gt; usersList = guiPurchase.getContributorList();</span>
+
+<span class="nc bnc" id="L237" title="All 2 branches missed.">			for (int i = 0; i &lt; usersList.size(); i++) {</span>
+<span class="nc" id="L238">				IndividualShare individualShare = new IndividualShare();</span>
+<span class="nc" id="L239">				individualShare.setPurchaseId(purchase);</span>
+<span class="nc" id="L240">				individualShare.setAmount(Integer.parseInt(guiPurchase</span>
+<span class="nc" id="L241">						.getContributionList().get(i)));</span>
+<span class="nc" id="L242">				individualShare.setUserName(guiPurchase.getContributorList()</span>
+<span class="nc" id="L243">						.get(i));</span>
+<span class="nc" id="L244">				individualShare.setDate(DateUtil.stringToDate(purchase.getPurchaseDate()));</span>
+<span class="nc" id="L245">				individualShareDao.save(individualShare);</span>
+<span class="nc" id="L246">				Logger.logMessage(&quot;Service.saveIndividualShare(..) : saved individual share for bulk purchase into database &quot; + individualShare);</span>
+
+<span class="nc" id="L248">				this.updateAggregateShare(</span>
+<span class="nc" id="L249">						guiPurchase.getContributorList().get(i), Double</span>
+<span class="nc" id="L250">								.parseDouble((guiPurchase.getContributionList()</span>
+<span class="nc" id="L251">										.get(i))), list);</span>
+			}
+<span class="nc bnc" id="L253" title="All 2 branches missed.">		} else if (purchase.getPurchaseType().equals(Constants.HOUSE_RENT_TYPE)) {</span>
+<span class="nc" id="L254">			List&lt;User&gt; allUsersList = ((UserDao) DaoFactory.getDao(Constants.USER_DAO))</span>
+<span class="nc" id="L255">					.getUserList();</span>
+			
+<span class="nc" id="L257">			IndividualShare individualShare = new IndividualShare();</span>
+<span class="nc" id="L258">			individualShare.setPurchaseId(purchase);</span>
+<span class="nc" id="L259">			individualShare.setAmount(purchase.getTotalAmount());</span>
+<span class="nc" id="L260">			individualShare.setUserName(purchase.getUserId());</span>
+<span class="nc" id="L261">			individualShare.setDate(DateUtil.stringToDate(purchase.getPurchaseDate()));</span>
+<span class="nc" id="L262">			individualShareDao.save(individualShare);</span>
+			
+<span class="nc" id="L264">			Logger.logMessage(&quot;Service.saveIndividualShare(..) : saved individual share for House rent into database &quot; + individualShare);</span>
+<span class="nc" id="L265">			this.updateAggregateShare(purchase.getUserId(),</span>
+<span class="nc" id="L266">					purchase.getTotalAmount(), allUsersList);</span>
+		}
+<span class="nc" id="L268">	}</span>
+
+	/** Get all IndividualShare calculation End : **/
+
+	/**
+	 * Get all AggregateShare calculation Start :
+	 * 
+	 * @param list
+	 **/
+	private void updateAggregateShare(String shopper, double amount,
+			List&lt;User&gt; list) {
+<span class="nc" id="L279">		Logger.logMessage(&quot;Service.updateAggregateShare(...) : Updating aggregate share for common purchase into database.&quot;);</span>
+<span class="nc" id="L280">		double individualShare = amount / list.size();</span>
+		try {
+
+<span class="nc bnc" id="L283" title="All 2 branches missed.">			for (User user : list) {</span>
+
+<span class="nc" id="L285">				AggregateShare   aggregateShare = (AggregateShare) ((AggregateShareDao) DaoFactory</span>
+<span class="nc" id="L286">						.getDao(Constants.AGGREGATE_SHARE_DAO)).read(user</span>
+<span class="nc" id="L287">						.getUserName());</span>
+<span class="nc" id="L288">				Logger.logMessage(&quot;Service.updateAggregateShare(...) : Retrived aggregate share &quot; + aggregateShare + &quot; for &quot; + user + &quot; from database &quot;);</span>
+<span class="nc bnc" id="L289" title="All 2 branches missed.">				if (user.getUserName().equals(shopper)) {</span>
+<span class="nc" id="L290">					double shopperAmount = aggregateShare.getCurrentShare();</span>
+<span class="nc" id="L291">					aggregateShare.setCurrentShare(shopperAmount</span>
+							+ (amount - individualShare));
+<span class="nc" id="L293">					((AggregateShareDao) DaoFactory</span>
+<span class="nc" id="L294">							.getDao(Constants.AGGREGATE_SHARE_DAO))</span>
+<span class="nc" id="L295">							.update(aggregateShare);</span>
+<span class="nc" id="L296">					Logger.logMessage(&quot;Service.updateAggregateShare(...) : Updated aggregated share&quot; + aggregateShare + &quot; for &quot; + user + &quot; into database &quot;);</span>
+
+<span class="nc" id="L298">				} else {</span>
+<span class="nc" id="L299">					double shopperAmount = aggregateShare.getCurrentShare();</span>
+<span class="nc" id="L300">					aggregateShare.setCurrentShare(shopperAmount</span>
+							- individualShare);
+<span class="nc" id="L302">					((AggregateShareDao) DaoFactory</span>
+<span class="nc" id="L303">							.getDao(Constants.AGGREGATE_SHARE_DAO))</span>
+<span class="nc" id="L304">							.update(aggregateShare);</span>
+					
+<span class="nc" id="L306">					Logger.logMessage(&quot;Service.updateAggregateShare(...) : Updated aggregated share&quot; + aggregateShare + &quot; for &quot; + user + &quot; into database &quot;);</span>
+				}
+<span class="nc" id="L308">			}</span>
+<span class="nc" id="L309">		} catch (Exception e) {</span>
+			// TODO Auto-generated catch block
+<span class="nc" id="L311">			e.printStackTrace();</span>
+<span class="nc" id="L312">		}</span>
+
+<span class="nc" id="L314">	}</span>
+
+	/** Get all AggregateShare calculation End : **/
+
+	public int checkDatabaseConnection() {
+<span class="nc" id="L319">		int errorCode = Constants.DATABASE_CONNECTION_SUCCESS;</span>
+
+<span class="nc" id="L321">		Connection conn = (Connection) HibernateUtil.getSessionFactory()</span>
+<span class="nc" id="L322">				.openSession().connection();</span>
+<span class="nc bnc" id="L323" title="All 2 branches missed.">		if (conn == null) {</span>
+			
+<span class="nc" id="L325">			errorCode = Constants.DATABASE_CONNECTION_ERROR;</span>
+		}
+		
+<span class="nc" id="L328">		Logger.logMessage(&quot;Service.checkDatabaseConnection() : database connection is &quot; + conn);</span>
+<span class="nc" id="L329">		return errorCode;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

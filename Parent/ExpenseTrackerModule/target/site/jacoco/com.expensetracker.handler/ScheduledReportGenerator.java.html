@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ScheduledReportGenerator.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.handler</a> &gt; <span class="el_source">ScheduledReportGenerator.java</span></div><h1>ScheduledReportGenerator.java</h1><pre class="source lang-java linenums">package com.expensetracker.handler;
+
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import com.expensetracker.constants.Constants;
+import com.expensetracker.gui.pojo.Job;
+
+<span class="nc" id="L10">public class ScheduledReportGenerator {</span>
+<span class="nc" id="L11">	private final static ScheduledReportGenerator schdldReportGenerator = new ScheduledReportGenerator();</span>
+<span class="nc" id="L12">	private Timer timer = null;</span>
+
+	public void createAndStartTimer() {
+<span class="nc" id="L15">		timer = new Timer();</span>
+<span class="nc" id="L16">		timer.schedule(new ProcessScheduleReport(), new Date(),</span>
+				Constants.REPORT_TIMER_INTERVAL);
+<span class="nc" id="L18">	}</span>
+
+	public static ScheduledReportGenerator getScheduledReportGenerator() {
+<span class="nc" id="L21">		return schdldReportGenerator;</span>
+	}
+
+
+<span class="nc" id="L25">	class ProcessScheduleReport extends TimerTask {</span>
+
+		@Override
+		public void run() {
+			try {
+
+			} catch (Exception e) {
+				if (e instanceof InterruptedException) {
+					timer.cancel();
+				}
+			}
+<span class="nc" id="L36">		}</span>
+
+		private void processJob(Job job) {
+<span class="nc bnc" id="L39" title="All 14 branches missed.">			switch (job.getJobType()) {</span>
+			case Constants.NEW_PROFILE:
+				// TODO - Call profile related service save method.
+<span class="nc" id="L42">				break;</span>
+				
+			case Constants.COMMON_PURCHASE_DETAIL:
+				// TODO - Call purchase related service save method.
+<span class="nc" id="L46">				break;</span>
+				
+			case Constants.INSTANT_REPORT_EMAIL:
+				// TODO 
+				// 1- Call instant report related service method.
+				// 2- Get list of records for from date till yesterday.
+				// 3- Call generateReport method of ReportUtil and pass this list.
+				// 4- Send the generated report in mail to the requested id.
+<span class="nc" id="L54">				break;</span>
+
+			default:
+				break;
+			}
+<span class="nc" id="L59">		}</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DatabaseUtil.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.gui.util</a> &gt; <span class="el_source">DatabaseUtil.java</span></div><h1>DatabaseUtil.java</h1><pre class="source lang-java linenums">package com.expensetracker.gui.util;
+
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ListIterator;
+
+import javax.servlet.jsp.jstl.core.Config;
+
+import com.expensetracker.config.ResourceConfig;
+import com.expensetracker.constants.Constants;
+import com.expensetracker.gui.pojo.PurchaseReportData;
+import com.expensetracker.gui.pojo.ShareReportData;
+import com.expensetracker.logger.Logger;
+import com.expensetracker.model.AggregateShare;
+import com.expensetracker.model.Purchase;
+import com.expensetracker.service.Service;
+import com.mysql.jdbc.Connection;
+
+<span class="nc" id="L22">public class DatabaseUtil {</span>
+
+<span class="fc" id="L24">	private static ResourceConfig config = ResourceConfig.getInstance();</span>
+	public static int checkDatabaseConnection() {
+<span class="fc" id="L26">		int connCode = 0;</span>
+		try {
+<span class="fc" id="L28">			connCode = openConnection();</span>
+<span class="nc" id="L29">		} catch (SQLException e) {</span>
+			// TODO Auto-generated catch block
+<span class="nc" id="L31">			e.printStackTrace();</span>
+<span class="fc" id="L32">		}</span>
+<span class="fc" id="L33">		return connCode;</span>
+	}
+
+	public static List&lt;PurchaseReportData&gt; convertPurchaseModelToReportData(
+			List&lt;Purchase&gt; list) {
+<span class="nc" id="L38">		List&lt;PurchaseReportData&gt; purchaseDataList = new ArrayList&lt;PurchaseReportData&gt;();</span>
+<span class="nc" id="L39">		PurchaseReportData purchaseReport = null;</span>
+<span class="nc" id="L40">		ListIterator&lt;Purchase&gt; purchaseItr = list.listIterator();</span>
+		try {
+<span class="nc bnc" id="L42" title="All 2 branches missed.">			while (purchaseItr.hasNext()) {</span>
+<span class="nc" id="L43">				Purchase purchaseData = purchaseItr.next();</span>
+<span class="nc" id="L44">				purchaseReport = new PurchaseReportData();</span>
+<span class="nc" id="L45">				purchaseReport.setPurchaseId(purchaseData.getPurchaseId());</span>
+<span class="nc" id="L46">				purchaseReport.setUserName(purchaseData.getUserId());</span>
+<span class="nc" id="L47">				purchaseReport.setPurchaseType(purchaseData.getPurchaseType());</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">				if (purchaseData.getPurchaseType().equals(Constants.DAILY_PURCHASE_TYPE)) {</span>
+<span class="nc" id="L49">				purchaseReport.setItemList(Arrays.asList((purchaseData</span>
+<span class="nc" id="L50">						.getItemList().split(&quot;,&quot;))));</span>
+				} else {
+<span class="nc" id="L52">				purchaseReport.setContributorList(Arrays.asList((purchaseData</span>
+<span class="nc" id="L53">						.getContributorList().split(&quot;,&quot;))));</span>
+<span class="nc" id="L54">				purchaseReport.setContributionList(Arrays.asList((purchaseData</span>
+<span class="nc" id="L55">						.getContributionList().split(&quot;,&quot;))));</span>
+				}
+<span class="nc" id="L57">				purchaseReport.setDate(DateUtil.stringToDate(purchaseData.getPurchaseDate()));</span>
+<span class="nc" id="L58">				purchaseReport.setTotalAmount(purchaseData.getTotalAmount());</span>
+<span class="nc" id="L59">				purchaseDataList.add(purchaseReport);</span>
+<span class="nc" id="L60">			}</span>
+<span class="nc" id="L61">		} catch (Exception exc) {</span>
+<span class="nc" id="L62">			exc.printStackTrace();</span>
+<span class="nc" id="L63">		}</span>
+<span class="nc" id="L64">		return purchaseDataList;</span>
+	}
+
+	public static List&lt;ShareReportData&gt; convertAggregateShareModelToShareData(
+			List&lt;AggregateShare&gt; list) {
+
+<span class="fc" id="L70">		List&lt;ShareReportData&gt; shareDataList = new ArrayList&lt;ShareReportData&gt;();</span>
+<span class="fc" id="L71">		ShareReportData aggregateShareReport = null;</span>
+<span class="fc" id="L72">		ListIterator&lt;AggregateShare&gt; aggregateShareItr = list.listIterator();</span>
+<span class="fc" id="L73">		List&lt;ShareReportData&gt; posAmntList = new ArrayList&lt;ShareReportData&gt;();</span>
+<span class="fc" id="L74">		List&lt;ShareReportData&gt; negAmntList = new ArrayList&lt;ShareReportData&gt;();</span>
+		try {
+<span class="fc bfc" id="L76" title="All 2 branches covered.">			while (aggregateShareItr.hasNext()) {</span>
+<span class="fc" id="L77">				AggregateShare shareData = aggregateShareItr.next();</span>
+<span class="fc" id="L78">				double amount = shareData.getCurrentShare();</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">				if (amount == 0) {</span>
+<span class="fc" id="L80">					aggregateShareReport = new ShareReportData();</span>
+<span class="fc" id="L81">					aggregateShareReport.setUserName(shareData.getUserName());</span>
+<span class="fc" id="L82">					aggregateShareReport.setAmount(amount);</span>
+<span class="fc" id="L83">					aggregateShareReport.getMemberFromList().add(&quot;None&quot;);</span>
+<span class="fc" id="L84">					aggregateShareReport.getAmountFromList().add(&quot;0&quot;);</span>
+<span class="fc" id="L85">					aggregateShareReport.getAmountToList().add(&quot;0&quot;);</span>
+<span class="fc" id="L86">					aggregateShareReport.getMemberToList().add(&quot;None&quot;);</span>
+<span class="fc" id="L87">					shareDataList.add(aggregateShareReport);</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">				} else if (amount &lt; 0) {</span>
+<span class="fc" id="L89">					aggregateShareReport = new ShareReportData();</span>
+<span class="fc" id="L90">					aggregateShareReport.setUserName(shareData.getUserName());</span>
+<span class="fc" id="L91">					aggregateShareReport.setAmount(amount);</span>
+<span class="fc" id="L92">					aggregateShareReport.getMemberFromList().add(&quot;None&quot;);</span>
+<span class="fc" id="L93">					aggregateShareReport.getAmountFromList().add(&quot;0&quot;);</span>
+<span class="fc" id="L94">					shareDataList.add(aggregateShareReport);</span>
+<span class="fc" id="L95">					negAmntList.add(aggregateShareReport);</span>
+				} else {
+<span class="fc" id="L97">					aggregateShareReport = new ShareReportData();</span>
+<span class="fc" id="L98">					aggregateShareReport.setUserName(shareData.getUserName());</span>
+<span class="fc" id="L99">					aggregateShareReport.setAmount(amount);</span>
+<span class="fc" id="L100">					aggregateShareReport.getAmountToList().add(&quot;0&quot;);</span>
+<span class="fc" id="L101">					aggregateShareReport.getMemberToList().add(&quot;None&quot;);</span>
+<span class="fc" id="L102">					shareDataList.add(aggregateShareReport);</span>
+<span class="fc" id="L103">					posAmntList.add(aggregateShareReport);</span>
+				}
+<span class="fc" id="L105">			}</span>
+
+<span class="fc" id="L107">			populatePositiveAndNegativeLists(posAmntList, negAmntList);</span>
+<span class="nc" id="L108">		} catch (Exception exc) {</span>
+<span class="nc" id="L109">			exc.printStackTrace();</span>
+<span class="fc" id="L110">		}</span>
+<span class="fc" id="L111">		return shareDataList;</span>
+	}
+
+	private static void populatePositiveAndNegativeLists(
+			List&lt;ShareReportData&gt; posAmntList, List&lt;ShareReportData&gt; negAmntList) {
+		// TODO Auto-generated method stub
+
+<span class="fc" id="L118">		int posListIndex = 0;</span>
+<span class="fc" id="L119">		int negListIndex = 0;</span>
+<span class="fc" id="L120">		int posListAmount = 0;</span>
+<span class="fc" id="L121">		int negListAmount = 0;</span>
+<span class="fc" id="L122">		int result = 0;</span>
+
+<span class="fc" id="L124">		boolean isResultZero = true;</span>
+<span class="fc" id="L125">		boolean isResultNegative = false;</span>
+<span class="fc" id="L126">		boolean isResultPositive = false;</span>
+		try {
+<span class="fc bfc" id="L128" title="All 2 branches covered.">			while (posAmntList.size() &gt; 0) {</span>
+
+<span class="fc bfc" id="L130" title="All 2 branches covered.">				if (isResultZero) {</span>
+<span class="fc" id="L131">					posListAmount = (int) posAmntList.get(posListIndex)</span>
+<span class="fc" id="L132">							.getAmount();</span>
+<span class="fc" id="L133">					negListAmount = (int) negAmntList.get(posListIndex)</span>
+<span class="fc" id="L134">							.getAmount();</span>
+				}
+
+<span class="pc bpc" id="L137" title="1 of 2 branches missed.">				if (isResultNegative) {</span>
+<span class="nc" id="L138">					posListAmount = (int) posAmntList.get(posListIndex)</span>
+<span class="nc" id="L139">							.getAmount();</span>
+				}
+
+<span class="fc bfc" id="L142" title="All 2 branches covered.">				if (isResultPositive) {</span>
+<span class="fc" id="L143">					negListAmount = (int) negAmntList.get(posListIndex)</span>
+<span class="fc" id="L144">							.getAmount();</span>
+				}
+
+<span class="fc" id="L147">				result = posListAmount + negListAmount;</span>
+
+<span class="pc bpc" id="L149" title="1 of 2 branches missed.">				if (result &lt; 0) {</span>
+<span class="nc" id="L150">					posAmntList.get(posListIndex).getAmountFromList()</span>
+<span class="nc" id="L151">							.add(&quot;&quot; + Math.abs(posListAmount));</span>
+<span class="nc" id="L152">					posAmntList.get(posListIndex).getMemberFromList()</span>
+<span class="nc" id="L153">							.add(negAmntList.get(negListIndex).getUserName());</span>
+<span class="nc" id="L154">					negAmntList.get(negListIndex).getAmountToList()</span>
+<span class="nc" id="L155">							.add(&quot;&quot; + Math.abs(posListAmount));</span>
+<span class="nc" id="L156">					negAmntList.get(negListIndex).getMemberToList()</span>
+<span class="nc" id="L157">							.add(posAmntList.get(posListIndex).getUserName());</span>
+<span class="nc" id="L158">					posAmntList.remove(posListIndex);</span>
+<span class="nc" id="L159">					negListAmount = result;</span>
+<span class="nc" id="L160">					isResultPositive = false;</span>
+<span class="nc" id="L161">					isResultNegative = true;</span>
+<span class="nc" id="L162">					isResultZero = false;</span>
+<span class="fc bfc" id="L163" title="All 2 branches covered.">				} else if (result &gt; 0) {</span>
+
+<span class="fc" id="L165">					posAmntList.get(posListIndex).getAmountFromList()</span>
+<span class="fc" id="L166">							.add(&quot;&quot; + Math.abs(negListAmount));</span>
+<span class="fc" id="L167">					posAmntList.get(posListIndex).getMemberFromList()</span>
+<span class="fc" id="L168">							.add(negAmntList.get(negListIndex).getUserName());</span>
+<span class="fc" id="L169">					negAmntList.get(negListIndex).getAmountToList()</span>
+<span class="fc" id="L170">							.add(&quot;&quot; + Math.abs(negListAmount));</span>
+<span class="fc" id="L171">					negAmntList.get(negListIndex).getMemberToList()</span>
+<span class="fc" id="L172">							.add(posAmntList.get(posListIndex).getUserName());</span>
+<span class="fc" id="L173">					negAmntList.remove(negListIndex);</span>
+<span class="fc" id="L174">					posListAmount = result;</span>
+<span class="fc" id="L175">					isResultPositive = true;</span>
+<span class="fc" id="L176">					isResultNegative = false;</span>
+<span class="fc" id="L177">					isResultZero = false;</span>
+
+				} else {
+
+<span class="fc" id="L181">					posAmntList.get(posListIndex).getAmountFromList()</span>
+<span class="fc" id="L182">							.add(&quot;&quot; + Math.abs(posListAmount));</span>
+<span class="fc" id="L183">					posAmntList.get(posListIndex).getMemberFromList()</span>
+<span class="fc" id="L184">							.add(negAmntList.get(negListIndex).getUserName());</span>
+<span class="fc" id="L185">					negAmntList.get(negListIndex).getAmountToList()</span>
+<span class="fc" id="L186">							.add(&quot;&quot; + Math.abs(posListAmount));</span>
+<span class="fc" id="L187">					negAmntList.get(negListIndex).getMemberToList()</span>
+<span class="fc" id="L188">							.add(posAmntList.get(posListIndex).getUserName());</span>
+<span class="fc" id="L189">					negAmntList.remove(negListIndex);</span>
+<span class="fc" id="L190">					posAmntList.remove(posListIndex);</span>
+<span class="fc" id="L191">					isResultPositive = false;</span>
+<span class="fc" id="L192">					isResultNegative = false;</span>
+<span class="fc" id="L193">					isResultZero = true;</span>
+				}
+			}
+<span class="nc" id="L196">		} catch (Exception exc) {</span>
+<span class="nc" id="L197">			exc.printStackTrace();</span>
+<span class="fc" id="L198">		}</span>
+<span class="fc" id="L199">	}</span>
+
+	private static int openConnection() throws SQLException {
+<span class="fc" id="L202">		int connStatus = Constants.DATABASE_CONNECTION_ERROR;</span>
+		
+		try {
+			
+<span class="fc" id="L206">			Class.forName(config.getDriverName());</span>
+<span class="nc" id="L207">		} catch (ClassNotFoundException e) {</span>
+			// TODO Auto-generated catch block
+<span class="nc" id="L209">			e.printStackTrace();</span>
+<span class="fc" id="L210">		}</span>
+
+<span class="fc" id="L212">		Connection conn = null;</span>
+		try {
+<span class="nc" id="L214">			Logger.logMessage(&quot;DatabaseUtil.openConnection() : jdbc connection url : &quot; + config.getDBConnectionURL());</span>
+<span class="nc" id="L215">			conn = (Connection) DriverManager.getConnection(config.getDBConnectionURL()</span>
+<span class="nc" id="L216">					, config.getDBUsername(),</span>
+<span class="nc" id="L217">					config.getDBPassword());</span>
+<span class="nc" id="L218">			connStatus = Constants.DATABASE_CONNECTION_SUCCESS;</span>
+<span class="fc" id="L219">		} catch (SQLException e) {</span>
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		} finally {
+<span class="pc bpc" id="L223" title="5 of 6 branches missed.">			if (conn != null) {</span>
+<span class="nc" id="L224">				conn.close();</span>
+			}
+		}
+
+<span class="fc" id="L228">		return connStatus;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

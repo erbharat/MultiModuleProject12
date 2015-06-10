@@ -1,0 +1,2 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<BugCollection version='3.0.1' threshold='low' effort='max'><file classname='com.accomplice.jacoco.Employee'><BugInstance type='URF_UNREAD_FIELD' priority='Normal' category='PERFORMANCE' message='Unread field: com.accomplice.jacoco.Employee.eSal' lineNumber='14'/></file><Error></Error><Project><SrcDir>D:\Expense Tracker Project\MultiModuleProject\Parent\ToolTest\src\main\java</SrcDir><SrcDir>D:\Expense Tracker Project\MultiModuleProject\Parent\ToolTest\src\test\java</SrcDir></Project></BugCollection>

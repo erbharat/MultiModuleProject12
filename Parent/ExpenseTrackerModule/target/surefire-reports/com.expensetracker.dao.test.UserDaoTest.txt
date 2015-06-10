@@ -1,0 +1,17 @@
+-------------------------------------------------------------------------------
+Test set: com.expensetracker.dao.test.UserDaoTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0 sec <<< FAILURE! - in com.expensetracker.dao.test.UserDaoTest
+testSaveUserDao(com.expensetracker.dao.test.UserDaoTest)  Time elapsed: 0 sec  <<< ERROR!
+java.lang.ExceptionInInitializerError: null
+	at org.hibernate.cfg.Configuration$MappingsImpl.addClass(Configuration.java:3179)
+	at org.hibernate.cfg.AnnotationBinder.bindClass(AnnotationBinder.java:727)
+	at org.hibernate.cfg.Configuration$MetadataSourceQueue.processAnnotatedClassesQueue(Configuration.java:4035)
+	at org.hibernate.cfg.Configuration$MetadataSourceQueue.processMetadata(Configuration.java:3989)
+	at org.hibernate.cfg.Configuration.secondPassCompile(Configuration.java:1398)
+	at org.hibernate.cfg.Configuration.buildSessionFactory(Configuration.java:1856)
+	at com.expensetracker.util.HibernateUtil.getSessionFactory(HibernateUtil.java:29)
+	at com.expensetracker.dao.UserDao.<init>(UserDao.java:19)
+	at com.expensetracker.dao.UserDao.<clinit>(UserDao.java:17)
+	at com.expensetracker.dao.test.UserDaoTest.testSaveUserDao(UserDaoTest.java:25)
+

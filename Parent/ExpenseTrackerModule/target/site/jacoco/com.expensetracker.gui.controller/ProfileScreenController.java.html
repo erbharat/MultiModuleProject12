@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ProfileScreenController.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.gui.controller</a> &gt; <span class="el_source">ProfileScreenController.java</span></div><h1>ProfileScreenController.java</h1><pre class="source lang-java linenums">package com.expensetracker.gui.controller;
+
+import javax.mail.internet.InternetAddress;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+
+import com.expensetracker.constants.Constants;
+import com.expensetracker.gui.pojo.User;
+import com.expensetracker.gui.popup.PopupWindow;
+import com.expensetracker.gui.screen.LoginScreen;
+import com.expensetracker.gui.screen.ScreenConstant;
+import com.expensetracker.gui.screen.WelcomeScreen;
+import com.expensetracker.gui.util.ControllerUtil;
+import com.expensetracker.handler.Mail;
+import com.expensetracker.logger.Logger;
+import com.expensetracker.manager.UserManager;
+
+public class ProfileScreenController {
+
+	private static final int PASSWORD_MIN_LIMIT = 6;
+	private static final int PASSWORD_MAX_LIMIT = 12;
+	private static final int FIELD_MAX_LIMIT = 15;
+
+	@FXML
+	private Label passwordErrorLabel, cnfmPasswordErrorLabel;
+
+	@FXML
+	private TextField firstNameText, lastNameText, usernameText, passwordText,
+			confirmPasswordText, emailIdText, mobileNumberText;
+
+	@FXML
+	private Button saveBtn, cancelBtn;
+
+<span class="nc" id="L38">	public ProfileScreenController() {</span>
+<span class="nc" id="L39">	}</span>
+
+	@FXML
+	public void save(ActionEvent event) {
+<span class="nc" id="L43">		passwordErrorLabel.setText(&quot;&quot;);</span>
+<span class="nc" id="L44">		cnfmPasswordErrorLabel.setText(&quot;&quot;);</span>
+<span class="nc" id="L45">		Logger.logMessage(&quot;ProfileScreenController.save(.) : Saving new profile.&quot;);</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">		if (validateInput()) {</span>
+
+<span class="nc" id="L48">			User userProfile = createUserProfile();</span>
+<span class="nc bnc" id="L49" title="All 2 branches missed.">			if (userProfile != null) {</span>
+
+<span class="nc" id="L51">				Logger.logMessage(&quot;ProfileScreenController.save(.) : User Profile created successfully : &quot;</span>
+						+ userProfile);
+
+<span class="nc bnc" id="L54" title="All 2 branches missed.">				if (UserManager.getUserManager().addUser(userProfile) == Constants.JOB_PROCESSED_SUCCESSFULLY) {</span>
+<span class="nc" id="L55">					PopupWindow.popup</span>
+<span class="nc" id="L56">							.createInformationalPopup(</span>
+									&quot;Success&quot;,
+									&quot;Congratulations &quot;
+<span class="nc" id="L59">											+ userProfile.getFirstname()</span>
+											+ &quot; you have successfully created your profile!!&quot;);
+<span class="nc" id="L61">					Mail.sendMail(</span>
+<span class="nc" id="L62">							userProfile.getEmailId(),</span>
+							&quot;Congratulations &quot;
+<span class="nc" id="L64">									+ userProfile.getFirstname()</span>
+									+ &quot;You have successfully created profile.\n Username - &quot;
+<span class="nc" id="L66">									+ userProfile.getUserName()</span>
+									+ &quot;\nPassword - &quot;
+<span class="nc" id="L68">									+ userProfile.getPassword());</span>
+				}
+<span class="nc" id="L70">				WelcomeScreen.getController().loadScreen(</span>
+						ScreenConstant.LOGIN_SCREEN,
+<span class="nc" id="L72">						LoginScreen.getLoginScreen().getFXMLResource());</span>
+<span class="nc" id="L73">				WelcomeScreenController welcomeController = ((WelcomeScreenController) ControllerUtil.controllerUtil</span>
+<span class="nc" id="L74">						.getController(ScreenConstant.WELCOME_SCREEN));</span>
+<span class="nc" id="L75">				welcomeController.getSignUpBtn().setDisable(false);</span>
+<span class="nc" id="L76">				clear();</span>
+
+			}
+		}
+<span class="nc" id="L80">	}</span>
+
+	private boolean validateInput() {
+<span class="nc" id="L83">		boolean retval = false;</span>
+<span class="nc" id="L84">		String errorMessage = &quot;&quot;;</span>
+
+<span class="nc" id="L86">		Logger.logMessage(&quot;ProfileScreenController.validateInput() : Validating input...&quot;);</span>
+
+<span class="nc bnc" id="L88" title="All 2 branches missed.">		if (firstNameText.getText() == null</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">				|| firstNameText.getText().length() == 0</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">				|| firstNameText.getText().length() &gt; FIELD_MAX_LIMIT) {</span>
+<span class="nc" id="L91">			firstNameText</span>
+<span class="nc" id="L92">					.setStyle(&quot;-fx-text-box-border: red ;  -fx-focus-color: red ;&quot;);</span>
+<span class="nc" id="L93">			errorMessage += &quot;No valid first name!\n&quot;;</span>
+		} else {
+<span class="nc" id="L95">			firstNameText.setStyle(&quot;&quot;);</span>
+		}
+<span class="nc bnc" id="L97" title="All 2 branches missed.">		if (lastNameText.getText() == null</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">				|| lastNameText.getText().length() == 0</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">				|| lastNameText.getText().length() &gt; FIELD_MAX_LIMIT) {</span>
+<span class="nc" id="L100">			lastNameText</span>
+<span class="nc" id="L101">					.setStyle(&quot;-fx-text-box-border: red ;  -fx-focus-color: red ;&quot;);</span>
+<span class="nc" id="L102">			errorMessage += &quot;No valid last name!\n&quot;;</span>
+		} else {
+<span class="nc" id="L104">			lastNameText.setStyle(&quot;&quot;);</span>
+		}
+
+<span class="nc bnc" id="L107" title="All 2 branches missed.">		if (usernameText.getText() == null</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">				|| usernameText.getText().length() == 0</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">				|| usernameText.getText().length() &gt; FIELD_MAX_LIMIT) {</span>
+<span class="nc" id="L110">			usernameText</span>
+<span class="nc" id="L111">					.setStyle(&quot;-fx-text-box-border: red ;  -fx-focus-color: red ;&quot;);</span>
+<span class="nc" id="L112">			errorMessage += &quot;No valid username!\n&quot;;</span>
+		} else {
+<span class="nc" id="L114">			usernameText.setStyle(&quot;&quot;);</span>
+		}
+<span class="nc bnc" id="L116" title="All 2 branches missed.">		if (passwordText.getText() != null</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">				&amp;&amp; passwordText.getText().length() &lt; ProfileScreenController.PASSWORD_MIN_LIMIT</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">				|| passwordText.getText().length() &gt; ProfileScreenController.PASSWORD_MAX_LIMIT) {</span>
+<span class="nc" id="L119">			passwordText</span>
+<span class="nc" id="L120">					.setStyle(&quot;-fx-text-box-border: red ;  -fx-focus-color: red ;&quot;);</span>
+<span class="nc" id="L121">			passwordErrorLabel.setText(&quot;Min length 6 and max 15&quot;);</span>
+<span class="nc" id="L122">			errorMessage += &quot;No valid Password!\n&quot;;</span>
+		} else {
+<span class="nc" id="L124">			passwordText.setStyle(&quot;&quot;);</span>
+		}
+<span class="nc bnc" id="L126" title="All 2 branches missed.">		if (!validatePassword()) {</span>
+<span class="nc" id="L127">			errorMessage += &quot;Password mismatch error!\n&quot;;</span>
+		}
+<span class="nc bnc" id="L129" title="All 2 branches missed.">		if (emailIdText.getText() == null</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">				|| emailIdText.getText().length() == 0</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">				|| !validateEmail(emailIdText.getText())) {</span>
+<span class="nc" id="L132">			emailIdText</span>
+<span class="nc" id="L133">					.setStyle(&quot;-fx-text-box-border: red ;  -fx-focus-color: red ;&quot;);</span>
+<span class="nc" id="L134">			errorMessage += &quot;No valid emailId!\n&quot;;</span>
+		} else {
+<span class="nc" id="L136">			emailIdText.setStyle(&quot;&quot;);</span>
+		}
+<span class="nc bnc" id="L138" title="All 2 branches missed.">		if (mobileNumberText.getText() == null</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">				|| mobileNumberText.getText().length() != 10) {</span>
+<span class="nc" id="L140">			mobileNumberText</span>
+<span class="nc" id="L141">					.setStyle(&quot;-fx-text-box-border: red ;  -fx-focus-color: red ;&quot;);</span>
+<span class="nc" id="L142">			errorMessage += &quot;No valid mobile number (must be 10 digit number)!\n&quot;;</span>
+		} else {
+			// try to parse the postal code into an int
+			try {
+<span class="nc" id="L146">				Long.parseLong(mobileNumberText.getText());</span>
+<span class="nc" id="L147">				mobileNumberText.setStyle(&quot;&quot;);</span>
+<span class="nc" id="L148">			} catch (NumberFormatException e) {</span>
+<span class="nc" id="L149">				mobileNumberText</span>
+<span class="nc" id="L150">						.setStyle(&quot;-fx-text-box-border: red ;  -fx-focus-color: red ;&quot;);</span>
+<span class="nc" id="L151">				errorMessage += &quot;No valid mobile number (must be 10 digit number)!\n&quot;;</span>
+<span class="nc" id="L152">			}</span>
+		}
+
+<span class="nc bnc" id="L155" title="All 2 branches missed.">		if (errorMessage.length() == 0) {</span>
+<span class="nc" id="L156">			retval = true;</span>
+		} else {
+			// Show the error message
+<span class="nc" id="L159">			PopupWindow.popup.createErrorPopup(&quot;Errors in profile &quot;,</span>
+					errorMessage);
+<span class="nc" id="L161">			retval = false;</span>
+		}
+
+<span class="nc" id="L164">		Logger.logMessage(&quot;ProfileScreenController.validateInput() : Validation input errors --&gt; &quot;</span>
+				+ errorMessage);
+
+<span class="nc" id="L167">		return retval;</span>
+	}
+
+	private boolean validateEmail(String emailId) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L172">		boolean isValid = false;</span>
+		try {
+<span class="nc" id="L174">			InternetAddress it = new InternetAddress(emailId);</span>
+<span class="nc" id="L175">			it.validate();</span>
+<span class="nc" id="L176">			isValid = true;</span>
+<span class="nc" id="L177">		} catch (Exception e) {</span>
+			// TODO: handle exception
+<span class="nc" id="L179">		}</span>
+<span class="nc" id="L180">		return isValid;</span>
+	}
+
+	private User createUserProfile() {
+
+<span class="nc" id="L185">		String firstName = firstNameText.getText();</span>
+<span class="nc" id="L186">		String secondName = lastNameText.getText();</span>
+<span class="nc" id="L187">		String username = usernameText.getText();</span>
+<span class="nc" id="L188">		String password = passwordText.getText();</span>
+<span class="nc" id="L189">		String emailId = emailIdText.getText();</span>
+<span class="nc" id="L190">		String mobileNumber = mobileNumberText.getText();</span>
+<span class="nc" id="L191">		String empty = &quot;&quot;;</span>
+<span class="nc" id="L192">		User userProfile = null;</span>
+<span class="nc bnc" id="L193" title="All 4 branches missed.">		if (firstName.equals(empty) || secondName.equals(empty)</span>
+<span class="nc bnc" id="L194" title="All 4 branches missed.">				|| username.equals(empty) || password.equals(empty)</span>
+<span class="nc bnc" id="L195" title="All 4 branches missed.">				|| emailId.equals(empty) || mobileNumber.equals(empty)) {</span>
+<span class="nc" id="L196">			Logger.logMessage(&quot;ProfileScreenController.createUserProfile() : New Profile fields are empty&quot;);</span>
+		} else {
+
+<span class="nc" id="L199">			userProfile = new User(firstName, secondName, username, password,</span>
+					emailId, mobileNumber, (byte) 0);
+		}
+
+<span class="nc" id="L203">		return userProfile;</span>
+	}
+
+	private boolean validatePassword() {
+<span class="nc" id="L207">		boolean valid = true;</span>
+
+<span class="nc bnc" id="L209" title="All 2 branches missed.">		if (!passwordText.getText().equals(confirmPasswordText.getText())) {</span>
+<span class="nc" id="L210">			confirmPasswordText.clear();</span>
+<span class="nc" id="L211">			cnfmPasswordErrorLabel.setText(&quot;Password mismatch! Re-enter&quot;);</span>
+<span class="nc" id="L212">			valid = false;</span>
+		}
+<span class="nc" id="L214">		return valid;</span>
+	}
+
+	@FXML
+	public void cancel(ActionEvent event) {
+<span class="nc" id="L219">		Logger.logMessage(&quot;ProfileScreenController.cancel(.) : Resetting profile screen fields..&quot;);</span>
+<span class="nc" id="L220">		clear();</span>
+<span class="nc" id="L221">	}</span>
+
+	private void clear() {
+<span class="nc" id="L224">		passwordErrorLabel.setText(&quot;&quot;);</span>
+<span class="nc" id="L225">		cnfmPasswordErrorLabel.setText(&quot;&quot;);</span>
+<span class="nc" id="L226">		firstNameText.clear();</span>
+<span class="nc" id="L227">		lastNameText.clear();</span>
+<span class="nc" id="L228">		usernameText.clear();</span>
+<span class="nc" id="L229">		passwordText.clear();</span>
+<span class="nc" id="L230">		confirmPasswordText.clear();</span>
+<span class="nc" id="L231">		emailIdText.clear();</span>
+<span class="nc" id="L232">		mobileNumberText.clear();</span>
+<span class="nc" id="L233">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

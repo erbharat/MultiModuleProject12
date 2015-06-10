@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PersistenceUtil.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.gui.util</a> &gt; <span class="el_source">PersistenceUtil.java</span></div><h1>PersistenceUtil.java</h1><pre class="source lang-java linenums">package com.expensetracker.gui.util;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.List;
+
+import com.expensetracker.constants.Constants;
+import com.expensetracker.gui.pojo.Job;
+
+<span class="nc" id="L14">public class PersistenceUtil {</span>
+
+<span class="nc" id="L16">	private static FileOutputStream fOut = null;</span>
+<span class="nc" id="L17">	private static FileInputStream fIn = null;</span>
+<span class="nc" id="L18">	private static ObjectOutputStream oOut = null;</span>
+<span class="nc" id="L19">	private static ObjectInputStream oIn = null;</span>
+<span class="nc" id="L20">	private static File dataDir = null;</span>
+<span class="nc" id="L21">	private static File dataFile = null;</span>
+
+	static {
+<span class="nc" id="L24">		dataDir = new File(Constants.PERSIST_DIRECTORY_PATH);</span>
+<span class="nc bnc" id="L25" title="All 2 branches missed.">		if (!dataDir.exists()) {</span>
+<span class="nc" id="L26">			dataDir.mkdir();</span>
+<span class="nc" id="L27">			dataDir = null;</span>
+		}
+<span class="nc" id="L29">		dataFile = new File(Constants.PERSIST_DIRECTORY_PATH + &quot;\\&quot;</span>
+				+ Constants.PERSIST_FILE_NAME);
+<span class="nc" id="L31">	}</span>
+
+	public static void saveObject(Object object) {
+
+		try {
+<span class="nc" id="L36">			List&lt;Job&gt; obj = (List&lt;Job&gt;) object;</span>
+<span class="nc bnc" id="L37" title="All 2 branches missed.">			if (obj.size() &gt; 0) {</span>
+<span class="nc" id="L38">				fOut = new FileOutputStream(dataFile);</span>
+
+<span class="nc" id="L40">				oOut = new ObjectOutputStream(fOut);</span>
+<span class="nc" id="L41">				oOut.writeObject(object);</span>
+<span class="nc" id="L42">				oOut.flush();</span>
+<span class="nc" id="L43">				oOut.close();</span>
+			}
+<span class="nc" id="L45">		} catch (IOException e) {</span>
+			// TODO Auto-generated catch block
+<span class="nc" id="L47">			e.printStackTrace();</span>
+<span class="nc" id="L48">		}</span>
+<span class="nc" id="L49">	}</span>
+
+	public static Object readObject() {
+
+<span class="nc" id="L53">		List&lt;Job&gt; retVal = null;</span>
+		try {
+
+<span class="nc bnc" id="L56" title="All 2 branches missed.">			if (dataFile.exists()) {</span>
+<span class="nc" id="L57">				fIn = new FileInputStream(dataFile);</span>
+<span class="nc" id="L58">				oIn = new ObjectInputStream(fIn);</span>
+<span class="nc" id="L59">				retVal = (List&lt;Job&gt;) oIn.readObject();</span>
+<span class="nc" id="L60">				oIn.close();</span>
+			}
+<span class="nc" id="L62">		} catch (Exception e) {</span>
+			// TODO Auto-generated catch block
+<span class="nc" id="L64">			e.printStackTrace();</span>
+<span class="nc" id="L65">		}</span>
+<span class="nc" id="L66">		return retVal;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

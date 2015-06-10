@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>EditProfileController.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Expense Tracker App</a> &gt; <a href="index.source.html" class="el_package">com.expensetracker.gui.controller</a> &gt; <span class="el_source">EditProfileController.java</span></div><h1>EditProfileController.java</h1><pre class="source lang-java linenums">package com.expensetracker.gui.controller;
+
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Transparency;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import javax.imageio.ImageIO;
+
+import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+import javafx.stage.FileChooser;
+
+import com.expensetracker.constants.Constants;
+import com.expensetracker.gui.pojo.Job;
+import com.expensetracker.gui.pojo.User;
+import com.expensetracker.gui.popup.PopupWindow;
+import com.expensetracker.gui.util.ControllerUtil;
+import com.expensetracker.gui.util.ImageUtil;
+import com.expensetracker.logger.Logger;
+import com.expensetracker.manager.JobManager;
+import com.expensetracker.manager.UserManager;
+
+<span class="nc" id="L36">public class EditProfileController implements Initializable {</span>
+
+	@FXML
+	private TextField usernameTxt, firstNameText, lastnameTxt, contactTxt,
+			emailIdTxt;
+
+	/**
+	 * @return the usernameTxt
+	 */
+	public void disableUsernameTextfield() {
+<span class="nc" id="L46">		usernameTxt.setEditable(false);</span>
+<span class="nc" id="L47">	}</span>
+
+
+
+	@FXML
+	private Button saveProfileBtn, changeProfilePicBtn;
+
+	@FXML
+	private StackPane userImage;
+
+	public void initialize(URL location, ResourceBundle resources) {
+<span class="nc" id="L58">		this.userImage.getChildren().add(</span>
+<span class="nc" id="L59">				new ImageView(new Image(ImageUtil.getDefaultUserPath())));</span>
+<span class="nc" id="L60">	}</span>
+
+	/**
+	 * @param usernameTxt
+	 *            the usernameTxt to set
+	 */
+	public void setUsernameTxt(String usernameTxt) {
+<span class="nc" id="L67">		this.usernameTxt.setText(usernameTxt);</span>
+<span class="nc" id="L68">	}</span>
+
+	/**
+	 * @param firstNameText
+	 *            the firstNameText to set
+	 */
+	public void setFirstNameText(String firstNameText) {
+<span class="nc" id="L75">		this.firstNameText.setText(firstNameText);</span>
+<span class="nc" id="L76">	}</span>
+
+	/**
+	 * @param lastnameTxt
+	 *            the lastnameTxt to set
+	 */
+	public void setLastnameTxt(String lastnameTxt) {
+<span class="nc" id="L83">		this.lastnameTxt.setText(lastnameTxt);</span>
+<span class="nc" id="L84">	}</span>
+
+	/**
+	 * @param contactTxt
+	 *            the contactTxt to set
+	 */
+	public void setContactTxt(String contactTxt) {
+<span class="nc" id="L91">		this.contactTxt.setText(contactTxt);</span>
+		;
+<span class="nc" id="L93">	}</span>
+
+	/**
+	 * @param emailIdTxt
+	 *            the emailIdTxt to set
+	 */
+	public void setEmailIdTxt(String emailIdTxt) {
+<span class="nc" id="L100">		this.emailIdTxt.setText(emailIdTxt);</span>
+		;
+<span class="nc" id="L102">	}</span>
+
+	/**
+	 * @param userImageView
+	 *            the userImageView to set
+	 */
+	public void setUserImageView(Image userImage) {
+<span class="nc" id="L109">		this.userImage.getChildren().add(new ImageView(userImage));</span>
+<span class="nc" id="L110">	}</span>
+
+	@FXML
+	public void onButtonAction(ActionEvent e) {
+<span class="nc" id="L114">		Button source = (Button) e.getSource();</span>
+<span class="nc" id="L115">		File file = null;</span>
+<span class="nc" id="L116">		Job job = null;</span>
+<span class="nc" id="L117">		Image image = null;</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">		if (source == changeProfilePicBtn) {</span>
+
+<span class="nc" id="L120">			FileChooser fileChooser = new FileChooser();</span>
+<span class="nc" id="L121">			fileChooser.setTitle(&quot;Open Resource File&quot;);</span>
+<span class="nc" id="L122">			fileChooser.getExtensionFilters().addAll(</span>
+					new FileChooser.ExtensionFilter(&quot;All Images&quot;, &quot;*.*&quot;),
+					new FileChooser.ExtensionFilter(&quot;JPG&quot;, &quot;*.jpg&quot;),
+					new FileChooser.ExtensionFilter(&quot;PNG&quot;, &quot;*.png&quot;));
+
+<span class="nc" id="L127">			file = fileChooser.showOpenDialog(ScreenController.stage);</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">			if (file == null) {</span>
+<span class="nc" id="L129">				Logger.logMessage(&quot;EditProfileController.onButtonAction(): User cancelled file selection &quot; + file);</span>
+<span class="nc" id="L130">				return;</span>
+			}
+<span class="nc" id="L132">			BufferedImage bufferedImage = null;</span>
+			try {
+<span class="nc" id="L134">				bufferedImage = ImageUtil.getScaledImage(ImageIO.read(file), 150, 120);</span>
+<span class="nc" id="L135">			} catch (IOException e1) {</span>
+				// TODO Auto-generated catch block
+<span class="nc" id="L137">				e1.printStackTrace();</span>
+<span class="nc" id="L138">			}</span>
+<span class="nc" id="L139">            image = SwingFXUtils.toFXImage(bufferedImage, null);</span>
+            //setUserImageView(image);
+<span class="nc" id="L141">            job = createJob(file);</span>
+
+<span class="nc" id="L143">		} else {</span>
+<span class="nc" id="L144">			job = createJob(file);</span>
+		}
+		
+		// 1- Add to job handler.
+<span class="nc" id="L148">		int ret = JobManager.getInstantJobHandler().processJob(job);</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">		if (ret == Constants.JOB_PROCESSED_SUCCESSFULLY) {</span>
+<span class="nc" id="L150">			setUserImageView(image);</span>
+<span class="nc" id="L151">			PopupWindow.popup.createInformationalPopup(&quot;Success!&quot;,</span>
+					&quot;Profile got updated successfully&quot;);
+
+		}
+<span class="nc" id="L155">	}</span>
+	
+   
+
+	private Job createJob(File file) {
+<span class="nc" id="L160">		User user = UserManager.getUserManager().getUser(usernameTxt.getText());</span>
+		// Validation required.
+<span class="nc" id="L162">		user.setFirstname(firstNameText.getText());</span>
+<span class="nc" id="L163">		user.setLastName(lastnameTxt.getText());</span>
+<span class="nc" id="L164">		user.setEmailId(emailIdTxt.getText());</span>
+<span class="nc" id="L165">		user.setMobileNumber(contactTxt.getText());</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">		if (file != null) {</span>
+/*			byte[] b = new byte[(int) file.length()];
+					
+					try {
+					    FileInputStream fileInputStream = new FileInputStream(file);
+					    fileInputStream.read(imageData);
+					    fileInputStream.close();
+					} catch (Exception e) {
+					    e.printStackTrace();
+					}*/
+<span class="nc" id="L176">			BufferedImage bufferedImage = null;</span>
+			try {
+<span class="nc" id="L178">				bufferedImage = ImageIO.read(file);</span>
+<span class="nc" id="L179">			} catch (IOException e) {</span>
+				// TODO Auto-generated catch block
+<span class="nc" id="L181">				e.printStackTrace();</span>
+<span class="nc" id="L182">			}</span>
+<span class="nc" id="L183">			byte[] b = null;</span>
+<span class="nc" id="L184">			String[] extension = file.getName().split(&quot;\\.&quot;);</span>
+<span class="nc" id="L185">            try (ByteArrayOutputStream out = new ByteArrayOutputStream(262144)) {</span>
+<span class="nc" id="L186">                ImageIO.write(bufferedImage, extension[extension.length - 1], out);</span>
+<span class="nc" id="L187">                out.flush();</span>
+<span class="nc" id="L188">                b = out.toByteArray();</span>
+<span class="nc bnc" id="L189" title="All 8 branches missed.">            } catch (IOException e) {</span>
+				// TODO Auto-generated catch block
+<span class="nc" id="L191">				e.printStackTrace();</span>
+<span class="nc" id="L192">			}</span>
+<span class="nc" id="L193">            user.setImage(b);</span>
+		}
+		
+<span class="nc" id="L196">		Job job = new Job(Constants.UPDATE_PROFILE, user);</span>
+<span class="nc" id="L197">		return job;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>
