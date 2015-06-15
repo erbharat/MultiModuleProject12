@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: com.expensetracker.dao.test.ServiceLayerTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 1.817 sec <<< FAILURE! - in com.expensetracker.dao.test.ServiceLayerTest
-testGetPurchaseList(com.expensetracker.dao.test.ServiceLayerTest)  Time elapsed: 1.773 sec  <<< ERROR!
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 2.571 sec <<< FAILURE! - in com.expensetracker.dao.test.ServiceLayerTest
+testGetPurchaseList(com.expensetracker.dao.test.ServiceLayerTest)  Time elapsed: 2.492 sec  <<< ERROR!
 java.lang.ExceptionInInitializerError: null
 	at javax.validation.Validation$GenericBootstrapImpl.configure(Validation.java:271)
 	at javax.validation.Validation.buildDefaultValidatorFactory(Validation.java:110)
