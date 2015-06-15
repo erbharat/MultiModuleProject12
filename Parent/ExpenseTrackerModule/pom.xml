@@ -265,30 +265,25 @@
 					<needShortcut>true</needShortcut>
 				</configuration>
 			</plugin>
-<!-- 			            <plugin>
-                copy all dependencies of your app to target folder
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.4</version>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>package</phase>
-                        <configuration>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>false</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
-                        </configuration>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin> -->
-			<!-- <plugin> <groupId>org.owasp</groupId> <artifactId>dependency-check-maven</artifactId> 
-				<version>1.2.9</version> <executions> <execution> <goals> <goal>check</goal> 
-				</goals> </execution> </executions> </plugin> -->
+			<!-- <plugin> copy all dependencies of your app to target folder <groupId>org.apache.maven.plugins</groupId> 
+				<artifactId>maven-dependency-plugin</artifactId> <version>2.4</version> <executions> 
+				<execution> <id>copy-dependencies</id> <phase>package</phase> <configuration> 
+				<overWriteReleases>false</overWriteReleases> <overWriteSnapshots>false</overWriteSnapshots> 
+				<overWriteIfNewer>true</overWriteIfNewer> <outputDirectory>${project.build.directory}</outputDirectory> 
+				</configuration> <goals> <goal>copy-dependencies</goal> </goals> </execution> 
+				</executions> </plugin> -->
+			<plugin>
+				<groupId>org.owasp</groupId>
+				<artifactId>dependency-check-maven</artifactId>
+				<version>1.2.11</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 </project>
