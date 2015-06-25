@@ -28,7 +28,7 @@ public class ServiceLayerTest {
 		Logger.closeLogger();
 	}
 
-	@Test
+	//@Test
 	public void testGetPurchaseList() {
 		
 		String reportType = Constants.PURCHASE_REPORT;
