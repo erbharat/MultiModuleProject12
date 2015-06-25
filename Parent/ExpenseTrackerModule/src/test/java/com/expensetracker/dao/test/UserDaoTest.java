@@ -20,7 +20,7 @@ public class UserDaoTest {
 	public void tearDown() throws Exception {
 	}
 
-	@Test
+	//@Test
 	public void testSaveUserDao() throws Exception {
 		UserDao userDao = UserDao.getUserDao();
 		User user = new User();
